@@ -28,12 +28,33 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const compressedBase64 = await compressImage(file, 1920, 1080, 0.7); // Larger for hero images
+        const compressedBase64 = await compressImage(file, 1600, 900, 0.6); // Slightly smaller to avoid 1MB limit
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);
         alert('이미지 처리 중 오류가 발생했습니다.');
       }
+    }
+  };
+
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    try {
+      setIsDownloading(true);
+      
+      // Use direct navigation for the most robust download experience
+      // The browser will handle the file download natively without leaving the page
+      window.location.href = '/api/download-source';
+      
+      // Reset downloading state after a short delay
+      setTimeout(() => {
+        setIsDownloading(false);
+      }, 2000);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('다운로드에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      setIsDownloading(false);
     }
   };
 
@@ -136,6 +157,32 @@ export default function Settings() {
                 rows={2}
                 className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
               />
+            </div>
+            <div className="pt-4 border-t border-stone-100">
+              <h3 className="text-sm font-semibold text-stone-800 mb-4">Home Page Sections</h3>
+              <div className="space-y-4">
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.showHomeAbout !== false}
+                    onChange={(e) => setFormData({ ...formData, showHomeAbout: e.target.checked })}
+                    className="w-5 h-5 text-burgundy-600 border-stone-300 rounded focus:ring-burgundy-500"
+                  />
+                  <span className="text-sm font-medium text-stone-700">Show "The Studio" section on Home page</span>
+                </label>
+                
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Portfolio Section Title</label>
+                  <input
+                    type="text"
+                    name="homePortfolioTitle"
+                    value={formData.homePortfolioTitle || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. Selected Works"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -434,17 +481,17 @@ export default function Settings() {
               <p className="text-blue-800 mb-4 text-sm leading-relaxed">
                 현재 홈페이지의 소스 코드를 다운로드하여 Vercel에 배포하고, 나만의 도메인(www.내이름.com)을 연결할 수 있습니다.
                 <br />
-                아래 버튼을 눌러 소스 코드를 다운로드한 후, Vercel(버셀)에 업로드해 주세요.
+                아래 버튼을 눌러 최신 소스 코드를 다운로드한 후, Vercel(버셀)에 업로드해 주세요.
               </p>
               
-              <a
-                href="/aging-studio-source.zip"
-                download="aging-studio-source.zip"
-                className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow-sm transition-colors"
+              <button
+                onClick={handleDownload}
+                disabled={isDownloading}
+                className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Download size={20} />
-                <span>소스 코드 다운로드 (.zip)</span>
-              </a>
+                <span>{isDownloading ? '다운로드 중...' : '소스 코드 다운로드 (.zip)'}</span>
+              </button>
               
               <div className="mt-6 pt-6 border-t border-blue-200/50">
                 <h4 className="font-medium text-blue-900 mb-2 text-sm">배포 후 데이터 관리 안내</h4>

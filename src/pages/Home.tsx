@@ -55,25 +55,27 @@ export default function Home() {
       </section>
 
       {/* About Snippet */}
-      <section className="py-32 bg-ivory-100">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="font-serif text-3xl md:text-4xl text-burgundy-900 mb-8 italic">The Studio</h2>
-          <p className="text-lg md:text-xl text-stone-600 leading-relaxed font-light">
-            {settings.aboutText}
-          </p>
-          <div className="mt-12">
-            <Link to="/about" className="text-burgundy-700 hover:text-burgundy-500 uppercase tracking-widest text-sm font-medium border-b border-burgundy-300 pb-1 transition-colors">
-              Read Our Story
-            </Link>
+      {settings.showHomeAbout !== false && (
+        <section className="py-32 bg-ivory-100">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="font-serif text-3xl md:text-4xl text-burgundy-900 mb-8 italic">The Studio</h2>
+            <p className="text-lg md:text-xl text-stone-600 leading-relaxed font-light">
+              {settings.aboutText}
+            </p>
+            <div className="mt-12">
+              <Link to="/about" className="text-burgundy-700 hover:text-burgundy-500 uppercase tracking-widest text-sm font-medium border-b border-burgundy-300 pb-1 transition-colors">
+                Read Our Story
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Featured Portfolio */}
       <section className="py-24 bg-ivory-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-16">
-            <h2 className="font-serif text-4xl text-stone-900 tracking-tight">Selected Works</h2>
+            <h2 className="font-serif text-4xl text-stone-900 tracking-tight">{settings.homePortfolioTitle || 'Selected Works'}</h2>
             <Link to="/portfolio" className="hidden md:flex items-center space-x-2 text-stone-500 hover:text-burgundy-700 transition-colors uppercase tracking-widest text-xs font-medium">
               <span>View All</span>
               <ArrowRight size={14} />

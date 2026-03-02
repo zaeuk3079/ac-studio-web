@@ -109,7 +109,8 @@ export default function PortfolioManage() {
     const files = Array.from(e.target.files || []);
     for (const file of files) {
       try {
-        const compressedBase64 = await compressImage(file, 1200, 1200, 0.7);
+        // Compress more aggressively to avoid Firestore 1MB document limit
+        const compressedBase64 = await compressImage(file, 800, 800, 0.6);
         setFormData(prev => {
           const newGallery = [...(prev.gallery || []), compressedBase64];
           return {
@@ -241,6 +242,17 @@ export default function PortfolioManage() {
                     placeholder="e.g. Wedding, Portrait"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Video URL (Optional)</label>
+                <input
+                  type="text"
+                  value={formData.videoUrl || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  placeholder="YouTube or Vimeo URL (e.g. https://www.youtube.com/watch?v=...)"
+                />
+                <p className="text-xs text-stone-500 mt-2">유튜브(YouTube) 또는 비메오(Vimeo) 영상 링크를 넣으시면 포트폴리오에 영상이 표시됩니다.</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">Images (Gallery) *</label>

@@ -1,7 +1,31 @@
 import { useState, useEffect } from 'react';
 import { useCMS, PortfolioItem } from '../store/CMSContext';
 import { motion, AnimatePresence } from 'motion/react';
-import { X } from 'lucide-react';
+import { X, Play } from 'lucide-react';
+
+// Helper function to get embed URL from YouTube or Vimeo link
+const getEmbedUrl = (url: string) => {
+  if (!url) return null;
+  
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  if (ytMatch && ytMatch[1]) {
+    return { type: 'youtube', url: `https://www.youtube.com/embed/${ytMatch[1]}` };
+  }
+  
+  // Vimeo
+  const vimeoMatch = url.match(/(?:vimeo\.com\/)(\d+)/);
+  if (vimeoMatch && vimeoMatch[1]) {
+    return { type: 'vimeo', url: `https://player.vimeo.com/video/${vimeoMatch[1]}` };
+  }
+  
+  // Direct video file
+  if (url.match(/\.(mp4|webm|ogg)$/i)) {
+    return { type: 'direct', url: url };
+  }
+  
+  return null;
+};
 
 export default function Portfolio() {
   const { portfolio, settings } = useCMS();
@@ -80,6 +104,11 @@ export default function Portfolio() {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
+                {item.videoUrl && (
+                  <div className="absolute top-4 right-4 bg-stone-900/60 backdrop-blur-sm text-white p-2 rounded-full z-10">
+                    <Play size={16} fill="currentColor" />
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-stone-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                   <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     <p className="text-ivory-100 text-sm font-light leading-relaxed">{item.description}</p>
@@ -127,6 +156,28 @@ export default function Portfolio() {
 
               <div className="p-8 md:p-12 bg-white">
                 <div className="flex flex-col gap-8">
+                  {selectedItem.videoUrl && getEmbedUrl(selectedItem.videoUrl) && (
+                    <div className="relative w-full aspect-video bg-stone-900 rounded-lg overflow-hidden shadow-lg">
+                      {getEmbedUrl(selectedItem.videoUrl)?.type === 'direct' ? (
+                        <video 
+                          src={getEmbedUrl(selectedItem.videoUrl)!.url} 
+                          controls 
+                          className="absolute top-0 left-0 w-full h-full"
+                          autoPlay
+                          muted
+                        />
+                      ) : (
+                        <iframe
+                          src={getEmbedUrl(selectedItem.videoUrl)!.url}
+                          title="Video player"
+                          className="absolute top-0 left-0 w-full h-full"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      )}
+                    </div>
+                  )}
+                  
                   {(selectedItem.gallery && selectedItem.gallery.length > 0 
                     ? selectedItem.gallery 
                     : [selectedItem.imageUrl]

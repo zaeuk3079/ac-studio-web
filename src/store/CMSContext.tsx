@@ -8,6 +8,7 @@ export interface PortfolioItem {
   category: string;
   imageUrl: string;
   gallery?: string[];
+  videoUrl?: string;
   description: string;
 }
 
@@ -17,6 +18,8 @@ export interface SiteSettings {
   heroText: string;
   heroSubText: string;
   heroImage: string;
+  showHomeAbout: boolean;
+  homePortfolioTitle: string;
   // Portfolio
   portfolioTitle: string;
   portfolioSubText: string;
@@ -111,6 +114,8 @@ const defaultSettings: SiteSettings = {
   heroText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
+  showHomeAbout: true,
+  homePortfolioTitle: 'Selected Works',
   // Portfolio
   portfolioTitle: 'Portfolio',
   portfolioSubText: 'Our Selected Works',
@@ -193,20 +198,25 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     const newItem = { ...item, id: newId };
     
     // Update local state immediately for snappy UI
-    setPortfolio([newItem, ...portfolio]);
+    setPortfolio(prev => [newItem, ...prev]);
     
     // Save to Firebase
     try {
       await setDoc(doc(db, 'portfolio', newId), newItem);
     } catch (error) {
       console.error("Error adding portfolio item:", error);
-      alert("항목 추가에 실패했습니다.");
+      alert("항목 추가에 실패했습니다. (이미지 용량이 너무 클 수 있습니다. 이미지 개수를 줄여보세요.)");
+      // Revert local state on failure
+      setPortfolio(prev => prev.filter(p => p.id !== newId));
     }
   };
 
   const updatePortfolioItem = async (id: string, updatedItem: Partial<PortfolioItem>) => {
+    // Keep original state for rollback
+    const originalPortfolio = [...portfolio];
+    
     // Update local state
-    setPortfolio(portfolio.map(item => item.id === id ? { ...item, ...updatedItem } : item));
+    setPortfolio(prev => prev.map(item => item.id === id ? { ...item, ...updatedItem } : item));
     
     // Save to Firebase
     try {
@@ -216,6 +226,9 @@ export function CMSProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error("Error updating portfolio item:", error);
+      alert("항목 수정에 실패했습니다. (이미지 용량이 너무 클 수 있습니다. 이미지 개수를 줄여보세요.)");
+      // Revert local state on failure
+      setPortfolio(originalPortfolio);
     }
   };
 
