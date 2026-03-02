@@ -28,7 +28,7 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const compressedBase64 = await compressImage(file, 1600, 900, 0.6); // Slightly smaller to avoid 1MB limit
+        const compressedBase64 = await compressImage(file, 1920, 1080, 0.8); // High quality for hero/about images
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useCMS, PortfolioItem } from '../../store/CMSContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Edit2, Trash2, X, Check, GripVertical } from 'lucide-react';
@@ -22,7 +22,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-function SortableGalleryItem({ id, url, isCover, onSetCover, onRemove }: { id: string, url: string, isCover: boolean, onSetCover: () => void, onRemove: () => void }) {
+function SortableGalleryItem({ id, url, isCover, onSetCover, onRemove }: { key?: React.Key, id: string, url: string, isCover: boolean, onSetCover: () => void, onRemove: () => void }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
   const style = { transform: CSS.Transform.toString(transform), transition };
 
@@ -45,7 +45,7 @@ function SortableGalleryItem({ id, url, isCover, onSetCover, onRemove }: { id: s
   );
 }
 
-function SortablePortfolioRow({ item, onEdit, onDelete }: { item: PortfolioItem, onEdit: () => void, onDelete: () => void }) {
+function SortablePortfolioRow({ item, onEdit, onDelete }: { key?: React.Key, item: PortfolioItem, onEdit: () => void, onDelete: () => void }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id });
   const style = { transform: CSS.Transform.toString(transform), transition };
 
@@ -106,11 +106,11 @@ export default function PortfolioManage() {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    const files = Array.from(e.target.files || []) as File[];
     for (const file of files) {
       try {
-        // Compress more aggressively to avoid Firestore 1MB document limit
-        const compressedBase64 = await compressImage(file, 800, 800, 0.6);
+        // Compress more aggressively to avoid Firestore 1MB document limit, but keep quality acceptable
+        const compressedBase64 = await compressImage(file, 1600, 1600, 0.8);
         setFormData(prev => {
           const newGallery = [...(prev.gallery || []), compressedBase64];
           return {

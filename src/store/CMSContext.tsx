@@ -174,7 +174,13 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ...doc.data()
           })) as PortfolioItem[];
           
-          // Sort by order if you add an order field later, for now just use as is
+          // Sort by orderIndex
+          loadedPortfolio.sort((a, b) => {
+            const orderA = (a as any).orderIndex ?? 9999;
+            const orderB = (b as any).orderIndex ?? 9999;
+            return orderA - orderB;
+          });
+          
           setPortfolio(loadedPortfolio);
         } else {
           // Initialize default portfolio if empty
@@ -195,14 +201,32 @@ export function CMSProvider({ children }: { children: ReactNode }) {
 
   const addPortfolioItem = async (item: Omit<PortfolioItem, 'id'>) => {
     const newId = Date.now().toString();
-    const newItem = { ...item, id: newId };
+    const newItem = { ...item, id: newId, orderIndex: 0 }; // Put it at the beginning
     
     // Update local state immediately for snappy UI
-    setPortfolio(prev => [newItem, ...prev]);
+    setPortfolio(prev => {
+      const newPortfolio = [newItem, ...prev];
+      // Re-index everything
+      newPortfolio.forEach((p, idx) => {
+        (p as any).orderIndex = idx;
+      });
+      return newPortfolio;
+    });
     
     // Save to Firebase
     try {
-      await setDoc(doc(db, 'portfolio', newId), newItem);
+      const { writeBatch } = await import('firebase/firestore');
+      const batch = writeBatch(db);
+      
+      // Add new item
+      batch.set(doc(db, 'portfolio', newId), newItem);
+      
+      // Update order of existing items
+      portfolio.forEach((p, idx) => {
+        batch.update(doc(db, 'portfolio', p.id), { orderIndex: idx + 1 });
+      });
+      
+      await batch.commit();
     } catch (error) {
       console.error("Error adding portfolio item:", error);
       alert("항목 추가에 실패했습니다. (이미지 용량이 너무 클 수 있습니다. 이미지 개수를 줄여보세요.)");
