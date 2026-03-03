@@ -30,6 +30,12 @@ export interface SiteSettings {
   aboutText2: string;
   aboutText3: string;
   aboutImage: string;
+  // Philosophy
+  showPhilosophy: boolean;
+  philosophyTitle: string;
+  philosophyItem1: string;
+  philosophyItem2: string;
+  philosophyItem3: string;
   // Contact
   contactTitle: string;
   contactSubText: string;
@@ -61,50 +67,32 @@ interface CMSContextType {
 const defaultPortfolio: PortfolioItem[] = [
   {
     id: '1',
-    title: 'Wedding in Seoul',
-    category: 'Wedding',
-    imageUrl: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
-    gallery: [
-      'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=1974&auto=format&fit=crop'
-    ],
-    description: '가장 아름다운 순간을 영원히 기록합니다.',
-  },
-  {
-    id: '2',
-    title: 'Personal Profile',
-    category: 'Portrait',
-    imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop',
-    description: '당신만의 고유한 분위기를 담아냅니다.',
-  },
-  {
-    id: '3',
-    title: 'Family Portrait',
-    category: 'Family',
-    imageUrl: 'https://images.unsplash.com/photo-1581952976147-5a1d155602e1?q=80&w=2070&auto=format&fit=crop',
-    description: '따뜻한 가족의 모습을 자연스럽게.',
-  },
-  {
-    id: '4',
-    title: 'Product Photography',
-    category: 'Commercial',
+    title: 'Commercial Product Shot',
+    category: 'PRODUCT',
     imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop',
     description: '브랜드의 가치를 높이는 상업 사진.',
   },
   {
-    id: '5',
-    title: 'Couple Snap',
-    category: 'Couple',
-    imageUrl: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=2070&auto=format&fit=crop',
-    description: '두 사람만의 특별한 이야기를 사진으로.',
+    id: '2',
+    title: 'Gourmet Food Photography',
+    category: 'FOOD&BEVERAGE',
+    imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop',
+    description: '맛과 향을 시각적으로 담아냅니다.',
   },
   {
-    id: '6',
-    title: 'Artistic Concept',
-    category: 'Art',
-    imageUrl: 'https://images.unsplash.com/photo-1516205651411-aef33a44f7c2?q=80&w=1964&auto=format&fit=crop',
-    description: '예술적인 감각을 더한 특별한 촬영.',
+    id: '3',
+    title: 'Fashion Model Profile',
+    category: 'MODEL',
+    imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop',
+    description: '인물의 고유한 매력을 포착합니다.',
+  },
+  {
+    id: '4',
+    title: 'Cinematic Video Work',
+    category: 'Video',
+    imageUrl: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop',
+    videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    description: '감각적인 영상미를 선사합니다.',
   }
 ];
 
@@ -126,6 +114,12 @@ const defaultSettings: SiteSettings = {
   aboutText2: '우리는 모든 사람이 자신만의 고유한 아름다움을 가지고 있다고 믿습니다. 그 아름다움이 가장 자연스럽게 드러나는 찰나를 포착하여, 시간이 흘러도 변하지 않는 가치 있는 결과물로 만들어냅니다.',
   aboutText3: '단순히 셔터를 누르는 것을 넘어, 당신과 소통하고 교감하며 가장 편안한 분위기 속에서 촬영을 진행합니다. 우리의 프레임 안에서 당신의 이야기가 예술이 됩니다.',
   aboutImage: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=2069&auto=format&fit=crop',
+  // Philosophy
+  showPhilosophy: true,
+  philosophyTitle: 'Our Philosophy',
+  philosophyItem1: '자연스러움: 꾸며지지 않은 본연의 모습을 담습니다.',
+  philosophyItem2: '시간의 가치: 유행을 타지 않는 클래식한 아름다움을 추구합니다.',
+  philosophyItem3: '소통: 고객과의 깊은 교감을 통해 최상의 결과물을 만듭니다.',
   // Contact
   contactTitle: 'Contact',
   contactSubText: 'Get in touch & Booking',

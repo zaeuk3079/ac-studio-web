@@ -27,10 +27,17 @@ const getEmbedUrl = (url: string) => {
   return null;
 };
 
-export default function Portfolio() {
+export default function Portfolio({ type }: { type?: 'photography' | 'video' }) {
   const { portfolio, settings } = useCMS();
   const [filter, setFilter] = useState<string>('All');
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+
+  // Filter portfolio based on type (photography or video)
+  const basePortfolio = portfolio.filter(item => {
+    if (type === 'video') return !!item.videoUrl;
+    if (type === 'photography') return !item.videoUrl || item.category !== 'Video';
+    return true;
+  });
 
   useEffect(() => {
     if (selectedItem) {
@@ -41,11 +48,12 @@ export default function Portfolio() {
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedItem]);
 
-  const categories = ['All', ...Array.from(new Set(portfolio.map(item => item.category)))];
+  // For photography, we want specific categories: PRODUCT, FOOD&BEVERAGE, MODEL
+  const categories = ['All', ...Array.from(new Set(basePortfolio.map(item => item.category)))];
 
   const filteredPortfolio = filter === 'All' 
-    ? portfolio 
-    : portfolio.filter(item => item.category === filter);
+    ? basePortfolio 
+    : basePortfolio.filter(item => item.category === filter);
 
   return (
     <div className="bg-ivory-100 min-h-screen py-24">
@@ -55,33 +63,39 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-serif text-5xl md:text-6xl text-burgundy-900 mb-6 tracking-tight"
+            className="font-sans text-4xl md:text-5xl text-burgundy-900 mb-6 tracking-[0.2em] uppercase font-bold"
           >
-            {settings.portfolioTitle}
+            {type === 'video' ? 'VIDEO' : (type === 'photography' ? 'PHOTOGRAPHY' : settings.portfolioTitle)}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-stone-500 tracking-widest uppercase text-sm"
+            className="text-stone-500 tracking-[0.3em] uppercase text-xs font-light"
           >
-            {settings.portfolioSubText}
+            {type === 'video' ? 'Motion Works' : (type === 'photography' ? 'Still Life & Portraits' : settings.portfolioSubText)}
           </motion.p>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
+        <div className="flex flex-wrap justify-center gap-6 mb-20 border-b border-ivory-300 pb-8">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setFilter(category)}
-              className={`px-6 py-2 rounded-full text-xs tracking-widest uppercase transition-all duration-300 ${
+              className={`text-[11px] tracking-[0.2em] uppercase transition-all duration-300 relative pb-1 ${
                 filter === category
-                  ? 'bg-burgundy-800 text-ivory-100 shadow-md'
-                  : 'bg-ivory-200 text-stone-600 hover:bg-burgundy-100 hover:text-burgundy-900'
+                  ? 'text-burgundy-800 font-bold'
+                  : 'text-stone-400 hover:text-stone-600'
               }`}
             >
               {category}
+              {filter === category && (
+                <motion.div 
+                  layoutId="activeFilter"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-burgundy-800"
+                />
+              )}
             </button>
           ))}
         </div>

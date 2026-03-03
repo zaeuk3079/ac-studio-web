@@ -109,9 +109,8 @@ export default function PortfolioManage() {
     const files = Array.from(e.target.files || []) as File[];
     for (const file of files) {
       try {
-        // Compress more aggressively to avoid Firestore 1MB document limit, but keep quality acceptable
-        // For photographers, we use higher resolution (2000px) and quality (0.9)
-        const compressedBase64 = await compressImage(file, 2000, 2000, 0.9);
+        // User requested: Landscape 1920x1350, Portrait 1080x1350, Quality 80%
+        const compressedBase64 = await compressImage(file, 1920, 1350, 0.8);
         setFormData(prev => {
           const newGallery = [...(prev.gallery || []), compressedBase64];
           return {
@@ -313,7 +312,7 @@ export default function PortfolioManage() {
                 <p className="text-xs text-stone-500 mb-4">
                   여러 장의 사진을 추가할 수 있습니다. 대표 이미지를 지정해주세요. 이미지를 드래그하여 순서를 변경할 수 있습니다.
                   <br />
-                  <span className="text-burgundy-600 font-medium">* 고화질 팁: 가로 2000px 정도의 JPG 파일을 권장하며, 게시물당 사진은 5장 이내로 올려주세요.</span>
+                  <span className="text-burgundy-600 font-medium">* 고화질 팁: 가로 1920px(세로 1350px) 정도의 JPG 파일을 권장하며, 게시물당 사진은 5장 이내로 올려주세요.</span>
                 </p>
                 
                 {(formData.gallery && formData.gallery.length > 0) ? (

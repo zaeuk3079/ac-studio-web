@@ -19,34 +19,84 @@ export default function Layout({ children }: { children: ReactNode }) {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-ivory-100/90 backdrop-blur-md border-b border-ivory-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="font-sans text-xl tracking-widest text-burgundy-800 font-semibold uppercase">
+          {/* Desktop Header */}
+          <div className="hidden md:grid grid-cols-3 items-center h-24">
+            {/* Left Nav */}
+            <nav className="flex space-x-10 justify-start">
+              <Link
+                to="/photography"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
+                  location.pathname === '/photography' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
+                }`}
+              >
+                Photography
+              </Link>
+              <Link
+                to="/video"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
+                  location.pathname === '/video' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
+                }`}
+              >
+                Video
+              </Link>
+            </nav>
+
+            {/* Center Logo */}
+            <div className="flex justify-center">
+              <Link to="/" className="font-sans text-2xl tracking-[0.3em] text-burgundy-900 font-bold uppercase whitespace-nowrap">
                 {settings.siteName}
               </Link>
             </div>
-            <nav className="hidden md:flex space-x-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`text-sm tracking-widest uppercase transition-colors duration-200 hover:text-burgundy-600 ${
-                    location.pathname === link.path ? 'text-burgundy-800 font-medium' : 'text-stone-500'
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
-            <div className="hidden md:flex items-center space-x-4">
-              <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-burgundy-600 transition-colors">
-                <Instagram size={20} />
-              </a>
-              <Link to="/admin" className="text-xs tracking-widest uppercase text-stone-400 hover:text-burgundy-600 transition-colors border border-stone-300 px-3 py-1 rounded-full">
-                Admin
+
+            {/* Right Nav */}
+            <nav className="flex space-x-10 justify-end items-center">
+              <Link
+                to="/"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
+                  location.pathname === '/' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
+                }`}
+              >
+                Home
               </Link>
-            </div>
-            {/* Mobile menu button could go here */}
+              <Link
+                to="/about"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
+                  location.pathname === '/about' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
+                }`}
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
+                  location.pathname === '/contact' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
+                }`}
+              >
+                Contact
+              </Link>
+              <div className="pl-4 flex items-center space-x-4 border-l border-stone-200">
+                <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-burgundy-600 transition-colors">
+                  <Instagram size={18} />
+                </a>
+                <Link to="/admin" className="text-[10px] tracking-widest uppercase text-stone-400 hover:text-burgundy-600 transition-colors border border-stone-200 px-2 py-0.5 rounded">
+                  Admin
+                </Link>
+              </div>
+            </nav>
+          </div>
+
+          {/* Mobile Header */}
+          <div className="md:hidden flex flex-col items-center py-4 space-y-4">
+            <Link to="/" className="font-sans text-xl tracking-[0.2em] text-burgundy-900 font-bold uppercase">
+              {settings.siteName}
+            </Link>
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+              <Link to="/" className="text-[10px] tracking-widest uppercase text-stone-500">Home</Link>
+              <Link to="/photography" className="text-[10px] tracking-widest uppercase text-stone-500">Photography</Link>
+              <Link to="/video" className="text-[10px] tracking-widest uppercase text-stone-500">Video</Link>
+              <Link to="/about" className="text-[10px] tracking-widest uppercase text-stone-500">About</Link>
+              <Link to="/contact" className="text-[10px] tracking-widest uppercase text-stone-500">Contact</Link>
+            </nav>
           </div>
         </div>
       </header>

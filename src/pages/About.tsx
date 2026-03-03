@@ -47,23 +47,31 @@ export default function About() {
               </p>
             </div>
             
-            <div className="mt-12 pt-12 border-t border-ivory-300">
-              <h3 className="font-serif text-2xl text-burgundy-800 mb-6">Our Philosophy</h3>
-              <ul className="space-y-4 text-stone-600 font-light">
-                <li className="flex items-start space-x-3">
-                  <span className="text-burgundy-500 mt-1">✦</span>
-                  <span>자연스러움: 꾸며지지 않은 본연의 모습을 담습니다.</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-burgundy-500 mt-1">✦</span>
-                  <span>시간의 가치: 유행을 타지 않는 클래식한 아름다움을 추구합니다.</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-burgundy-500 mt-1">✦</span>
-                  <span>소통: 고객과의 깊은 교감을 통해 최상의 결과물을 만듭니다.</span>
-                </li>
-              </ul>
-            </div>
+            {settings.showPhilosophy !== false && (
+              <div className="mt-12 pt-12 border-t border-ivory-300">
+                <h3 className="font-serif text-2xl text-burgundy-800 mb-6">{settings.philosophyTitle || 'Our Philosophy'}</h3>
+                <ul className="space-y-4 text-stone-600 font-light">
+                  {settings.philosophyItem1 && (
+                    <li className="flex items-start space-x-3">
+                      <span className="text-burgundy-500 mt-1">✦</span>
+                      <span>{settings.philosophyItem1}</span>
+                    </li>
+                  )}
+                  {settings.philosophyItem2 && (
+                    <li className="flex items-start space-x-3">
+                      <span className="text-burgundy-500 mt-1">✦</span>
+                      <span>{settings.philosophyItem2}</span>
+                    </li>
+                  )}
+                  {settings.philosophyItem3 && (
+                    <li className="flex items-start space-x-3">
+                      <span className="text-burgundy-500 mt-1">✦</span>
+                      <span>{settings.philosophyItem3}</span>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>

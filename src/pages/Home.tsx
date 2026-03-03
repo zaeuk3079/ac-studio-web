@@ -44,7 +44,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
             <Link
-              to="/portfolio"
+              to="/photography"
               className="inline-flex items-center space-x-2 bg-burgundy-700 hover:bg-burgundy-600 text-ivory-100 px-8 py-4 rounded-full transition-all duration-300 uppercase tracking-widest text-sm font-medium shadow-lg shadow-burgundy-900/20"
             >
               <span>View Portfolio</span>
@@ -76,7 +76,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-16">
             <h2 className="font-serif text-4xl text-stone-900 tracking-tight">{settings.homePortfolioTitle || 'Selected Works'}</h2>
-            <Link to="/portfolio" className="hidden md:flex items-center space-x-2 text-stone-500 hover:text-burgundy-700 transition-colors uppercase tracking-widest text-xs font-medium">
+            <Link to="/photography" className="hidden md:flex items-center space-x-2 text-stone-500 hover:text-burgundy-700 transition-colors uppercase tracking-widest text-xs font-medium">
               <span>View All</span>
               <ArrowRight size={14} />
             </Link>
@@ -112,7 +112,7 @@ export default function Home() {
           </div>
           
           <div className="mt-12 text-center md:hidden">
-            <Link to="/portfolio" className="inline-flex items-center space-x-2 text-stone-600 hover:text-burgundy-700 transition-colors uppercase tracking-widest text-sm font-medium border-b border-stone-300 pb-1">
+            <Link to="/photography" className="inline-flex items-center space-x-2 text-stone-600 hover:text-burgundy-700 transition-colors uppercase tracking-widest text-sm font-medium border-b border-stone-300 pb-1">
               <span>View All Works</span>
             </Link>
           </div>

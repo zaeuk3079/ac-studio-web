@@ -49,9 +49,11 @@ export default function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Layout><Home /></Layout>} />
-          <Route path="/portfolio" element={<Layout><Portfolio /></Layout>} />
+          <Route path="/photography" element={<Layout><Portfolio type="photography" /></Layout>} />
+          <Route path="/video" element={<Layout><Portfolio type="video" /></Layout>} />
           <Route path="/about" element={<Layout><About /></Layout>} />
           <Route path="/contact" element={<Layout><Contact /></Layout>} />
+          <Route path="/portfolio" element={<Layout><Portfolio /></Layout>} />
 
           {/* Admin Routes */}
           <Route path="/admin/login" element={<Login />} />

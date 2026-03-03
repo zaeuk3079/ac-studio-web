@@ -28,8 +28,9 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        // High quality for hero/about images (2560px for 2K/4K displays)
-        const compressedBase64 = await compressImage(file, 2560, 1440, 0.9);
+        // User requested: Landscape 1920x1350, Portrait 1080x1350, Quality 80%
+        // Note: Settings document stores multiple images (Hero + About), so we use 0.75 quality to stay under 1MB limit
+        const compressedBase64 = await compressImage(file, 1920, 1350, 0.75);
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);
@@ -133,7 +134,7 @@ export default function Settings() {
                   </button>
                 </div>
               </div>
-              <p className="text-[10px] text-stone-400 mt-2">* 고화질 팁: 메인 배경은 가로 2560px 이상의 고해상도 사진을 권장합니다.</p>
+              <p className="text-[10px] text-stone-400 mt-2">* 고화질 팁: 메인 배경은 1920x1350 이상의 고해상도 사진을 권장합니다. (파일당 약 500KB 내외 권장)</p>
               {formData.heroImage && (
                 <div className="mt-4 w-full h-48 rounded-lg overflow-hidden border border-stone-200">
                   <img src={formData.heroImage} alt="Hero Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
@@ -295,6 +296,66 @@ export default function Settings() {
                 rows={3}
                 className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
               />
+            </div>
+
+            <div className="pt-6 border-t border-stone-100">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-semibold text-stone-800 uppercase tracking-wider">Philosophy Section</h3>
+                <label className="flex items-center space-x-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.showPhilosophy !== false}
+                    onChange={(e) => setFormData({ ...formData, showPhilosophy: e.target.checked })}
+                    className="w-5 h-5 text-burgundy-600 border-stone-300 rounded focus:ring-burgundy-500"
+                  />
+                  <span className="text-sm font-medium text-stone-700">Show Philosophy Section</span>
+                </label>
+              </div>
+
+              {formData.showPhilosophy !== false && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Title</label>
+                    <input
+                      type="text"
+                      name="philosophyTitle"
+                      value={formData.philosophyTitle || ''}
+                      onChange={handleChange}
+                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Item 1</label>
+                    <input
+                      type="text"
+                      name="philosophyItem1"
+                      value={formData.philosophyItem1 || ''}
+                      onChange={handleChange}
+                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Item 2</label>
+                    <input
+                      type="text"
+                      name="philosophyItem2"
+                      value={formData.philosophyItem2 || ''}
+                      onChange={handleChange}
+                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Item 3</label>
+                    <input
+                      type="text"
+                      name="philosophyItem3"
+                      value={formData.philosophyItem3 || ''}
+                      onChange={handleChange}
+                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
