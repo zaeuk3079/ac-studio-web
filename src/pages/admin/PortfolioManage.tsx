@@ -234,13 +234,17 @@ export default function PortfolioManage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-stone-700 mb-2">Category *</label>
-                  <input
-                    type="text"
+                  <select
                     value={formData.category || ''}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                    placeholder="e.g. Wedding, Portrait"
-                  />
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
+                  >
+                    <option value="">카테고리 선택</option>
+                    <option value="PRODUCT">PRODUCT</option>
+                    <option value="FOOD&BEVERAGE">FOOD&BEVERAGE</option>
+                    <option value="MODEL">MODEL</option>
+                    <option value="Video">VIDEO (영상)</option>
+                  </select>
                 </div>
               </div>
               <div>

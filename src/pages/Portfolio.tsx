@@ -49,7 +49,9 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
   }, [selectedItem]);
 
   // For photography, we want specific categories: PRODUCT, FOOD&BEVERAGE, MODEL
-  const categories = ['All', ...Array.from(new Set(basePortfolio.map(item => item.category)))];
+  const categories = type === 'photography' 
+    ? ['All', 'PRODUCT', 'FOOD&BEVERAGE', 'MODEL']
+    : ['All', ...Array.from(new Set(basePortfolio.map(item => item.category)))];
 
   const filteredPortfolio = filter === 'All' 
     ? basePortfolio 
@@ -73,7 +75,7 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-stone-500 tracking-[0.3em] uppercase text-xs font-light"
           >
-            {type === 'video' ? 'Motion Works' : (type === 'photography' ? 'Still Life & Portraits' : settings.portfolioSubText)}
+            {type === 'video' ? 'Motion Works' : (type === 'photography' ? 'PRODUCT, FOOD&BEVERAGE, MODEL' : settings.portfolioSubText)}
           </motion.p>
         </div>
 
