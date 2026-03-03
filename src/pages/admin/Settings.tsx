@@ -28,7 +28,8 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const compressedBase64 = await compressImage(file, 1920, 1080, 0.8); // High quality for hero/about images
+        // High quality for hero/about images (2560px for 2K/4K displays)
+        const compressedBase64 = await compressImage(file, 2560, 1440, 0.9);
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);
@@ -132,6 +133,7 @@ export default function Settings() {
                   </button>
                 </div>
               </div>
+              <p className="text-[10px] text-stone-400 mt-2">* 고화질 팁: 메인 배경은 가로 2560px 이상의 고해상도 사진을 권장합니다.</p>
               {formData.heroImage && (
                 <div className="mt-4 w-full h-48 rounded-lg overflow-hidden border border-stone-200">
                   <img src={formData.heroImage} alt="Hero Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />

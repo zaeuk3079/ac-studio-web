@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="font-serif text-2xl tracking-widest text-burgundy-800 font-semibold uppercase">
+              <Link to="/" className="font-sans text-xl tracking-widest text-burgundy-800 font-semibold uppercase">
                 {settings.siteName}
               </Link>
             </div>
@@ -61,7 +61,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-serif text-xl tracking-widest uppercase mb-4 text-ivory-100">{settings.siteName}</h3>
+              <h3 className="font-sans text-lg tracking-widest uppercase mb-4 text-ivory-100">{settings.siteName}</h3>
               <p className="text-sm text-stone-400 leading-relaxed max-w-xs">
                 당신의 가장 빛나는 순간을 기록합니다. 시간이 흘러도 변하지 않는 가치를 선사합니다.
               </p>

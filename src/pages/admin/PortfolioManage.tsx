@@ -110,7 +110,8 @@ export default function PortfolioManage() {
     for (const file of files) {
       try {
         // Compress more aggressively to avoid Firestore 1MB document limit, but keep quality acceptable
-        const compressedBase64 = await compressImage(file, 1600, 1600, 0.8);
+        // For photographers, we use higher resolution (2000px) and quality (0.9)
+        const compressedBase64 = await compressImage(file, 2000, 2000, 0.9);
         setFormData(prev => {
           const newGallery = [...(prev.gallery || []), compressedBase64];
           return {
@@ -309,7 +310,11 @@ export default function PortfolioManage() {
                     </button>
                   </div>
                 </div>
-                <p className="text-xs text-stone-500 mb-4">여러 장의 사진을 추가할 수 있습니다. 대표 이미지를 지정해주세요. 이미지를 드래그하여 순서를 변경할 수 있습니다.</p>
+                <p className="text-xs text-stone-500 mb-4">
+                  여러 장의 사진을 추가할 수 있습니다. 대표 이미지를 지정해주세요. 이미지를 드래그하여 순서를 변경할 수 있습니다.
+                  <br />
+                  <span className="text-burgundy-600 font-medium">* 고화질 팁: 가로 2000px 정도의 JPG 파일을 권장하며, 게시물당 사진은 5장 이내로 올려주세요.</span>
+                </p>
                 
                 {(formData.gallery && formData.gallery.length > 0) ? (
                   <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndGallery}>
