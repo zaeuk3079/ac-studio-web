@@ -28,9 +28,25 @@ const getEmbedUrl = (url: string) => {
 };
 
 export default function Portfolio({ type }: { type?: 'photography' | 'video' }) {
-  const { portfolio, settings } = useCMS();
+  const { portfolio, settings, getGalleryImages } = useCMS();
   const [filter, setFilter] = useState<string>('All');
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [isLoadingGallery, setIsLoadingGallery] = useState(false);
+
+  const handleItemClick = async (item: PortfolioItem) => {
+    setSelectedItem(item);
+    setIsLoadingGallery(true);
+    try {
+      const images = await getGalleryImages(item.id);
+      setGalleryImages(images.length > 0 ? images : [item.imageUrl]);
+    } catch (error) {
+      console.error("Error loading gallery:", error);
+      setGalleryImages([item.imageUrl]);
+    } finally {
+      setIsLoadingGallery(false);
+    }
+  };
 
   // Filter portfolio based on type (photography or video)
   const basePortfolio = portfolio.filter(item => {
@@ -111,7 +127,7 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.05 }}
               className="group cursor-pointer"
-              onClick={() => setSelectedItem(item)}
+              onClick={() => handleItemClick(item)}
             >
               <div className="relative aspect-[4/5] overflow-hidden rounded-sm mb-4 bg-stone-200">
                 <img
@@ -194,19 +210,22 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
                     </div>
                   )}
                   
-                  {(selectedItem.gallery && selectedItem.gallery.length > 0 
-                    ? selectedItem.gallery 
-                    : [selectedItem.imageUrl]
-                  ).map((imgUrl, idx) => (
-                    <div key={idx} className="relative w-full flex justify-center bg-stone-50 rounded-lg overflow-hidden p-4 md:p-8">
-                      <img
-                        src={imgUrl}
-                        alt={`${selectedItem.title} - ${idx + 1}`}
-                        className="max-w-full max-h-[85vh] object-contain"
-                        referrerPolicy="no-referrer"
-                      />
+                  {isLoadingGallery ? (
+                    <div className="flex justify-center items-center py-20">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-burgundy-700"></div>
                     </div>
-                  ))}
+                  ) : (
+                    galleryImages.map((imgUrl, idx) => (
+                      <div key={idx} className="relative w-full flex justify-center bg-stone-50 rounded-lg overflow-hidden p-4 md:p-8">
+                        <img
+                          src={imgUrl}
+                          alt={`${selectedItem.title} - ${idx + 1}`}
+                          className="max-w-full max-h-[85vh] object-contain"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </motion.div>

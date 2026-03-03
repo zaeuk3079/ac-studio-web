@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCMS, PortfolioItem } from '../../store/CMSContext';
 import { motion, AnimatePresence } from 'motion/react';
-import { Plus, Edit2, Trash2, X, Check, GripVertical } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Check, GripVertical, Loader2 } from 'lucide-react';
 import { compressImage } from '../../utils/imageUtils';
 import {
   DndContext,
@@ -83,20 +83,31 @@ function SortablePortfolioRow({ item, onEdit, onDelete }: { key?: React.Key, ite
 }
 
 export default function PortfolioManage() {
-  const { portfolio, addPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolio } = useCMS();
+  const { portfolio, addPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolio, getGalleryImages } = useCMS();
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<PortfolioItem>>({});
   const [tempUrl, setTempUrl] = useState('');
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const handleEdit = (item: PortfolioItem) => {
-    setIsEditing(item.id);
-    setFormData(item);
+  const handleEdit = async (item: PortfolioItem) => {
+    setIsProcessing(true);
+    try {
+      const gallery = await getGalleryImages(item.id);
+      setIsEditing(item.id);
+      setFormData({ ...item, gallery });
+    } catch (error) {
+      console.error("Error loading gallery for edit:", error);
+      setIsEditing(item.id);
+      setFormData(item);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -107,10 +118,14 @@ export default function PortfolioManage() {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []) as File[];
-    for (const file of files) {
-      try {
-        // User requested: Landscape 1920x1350, Portrait 1080x1350, Quality 80%
-        const compressedBase64 = await compressImage(file, 1920, 1350, 0.8);
+    if (files.length === 0) return;
+
+    setIsProcessing(true);
+    try {
+      for (const file of files) {
+        // 2K resolution (2560px), quality 0.7 for optimal size/quality balance in Firestore
+        const compressedBase64 = await compressImage(file, 2560, 1800, 0.7);
+        
         setFormData(prev => {
           const newGallery = [...(prev.gallery || []), compressedBase64];
           return {
@@ -119,10 +134,12 @@ export default function PortfolioManage() {
             imageUrl: prev.imageUrl || compressedBase64
           };
         });
-      } catch (error) {
-        console.error('Error compressing image:', error);
-        alert('이미지 처리 중 오류가 발생했습니다.');
       }
+    } catch (error) {
+      console.error('Error processing image:', error);
+      alert('이미지 처리 중 오류가 발생했습니다.');
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -162,21 +179,29 @@ export default function PortfolioManage() {
     }
   };
 
-  const handleSave = () => {
-    if (isEditing) {
-      updatePortfolioItem(isEditing, formData);
-      setIsEditing(null);
-    } else if (isAdding) {
-      if (formData.title && formData.category && formData.imageUrl) {
-        addPortfolioItem(formData as Omit<PortfolioItem, 'id'>);
-        setIsAdding(false);
-      } else {
-        alert('필수 항목(Title, Category, Image)을 모두 입력해주세요.');
-        return;
+  const handleSave = async () => {
+    setIsProcessing(true);
+    try {
+      if (isEditing) {
+        await updatePortfolioItem(isEditing, formData);
+        setIsEditing(null);
+      } else if (isAdding) {
+        if (formData.title && formData.category && formData.imageUrl) {
+          await addPortfolioItem(formData as Omit<PortfolioItem, 'id'>);
+          setIsAdding(false);
+        } else {
+          alert('필수 항목(Title, Category, Image)을 모두 입력해주세요.');
+          setIsProcessing(false);
+          return;
+        }
       }
+      setFormData({});
+      setTempUrl('');
+    } catch (error) {
+      console.error("Error saving portfolio item:", error);
+    } finally {
+      setIsProcessing(false);
     }
-    setFormData({});
-    setTempUrl('');
   };
 
   const handleCancel = () => {
@@ -302,21 +327,30 @@ export default function PortfolioManage() {
                       type="file"
                       accept="image/*"
                       multiple
+                      disabled={isProcessing}
                       onChange={handleImageUpload}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
                     />
                     <button
                       type="button"
-                      className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap"
+                      disabled={isProcessing}
+                      className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap flex items-center space-x-2 disabled:opacity-50"
                     >
-                      + PC에서 찾기
+                      {isProcessing ? (
+                        <>
+                          <Loader2 size={16} className="animate-spin" />
+                          <span>처리 중...</span>
+                        </>
+                      ) : (
+                        <span>+ PC에서 찾기</span>
+                      )}
                     </button>
                   </div>
                 </div>
                 <p className="text-xs text-stone-500 mb-4">
                   여러 장의 사진을 추가할 수 있습니다. 대표 이미지를 지정해주세요. 이미지를 드래그하여 순서를 변경할 수 있습니다.
                   <br />
-                  <span className="text-burgundy-600 font-medium">* 고화질 팁: 가로 1920px(세로 1350px) 정도의 JPG 파일을 권장하며, 게시물당 사진은 5장 이내로 올려주세요.</span>
+                  <span className="text-burgundy-600 font-medium">* 무료 고화질 모드: 2K 고해상도로 최대 8장까지 무제한 업로드 가능합니다.</span>
                 </p>
                 
                 {(formData.gallery && formData.gallery.length > 0) ? (
@@ -363,10 +397,20 @@ export default function PortfolioManage() {
                 </button>
                 <button
                   onClick={handleSave}
-                  className="flex items-center space-x-2 bg-burgundy-700 hover:bg-burgundy-600 text-white px-6 py-2.5 rounded-lg font-medium shadow-sm transition-colors"
+                  disabled={isProcessing}
+                  className="flex items-center space-x-2 bg-burgundy-700 hover:bg-burgundy-600 text-white px-6 py-2.5 rounded-lg font-medium shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Check size={18} />
-                  <span>Save Item</span>
+                  {isProcessing ? (
+                    <>
+                      <Loader2 size={18} className="animate-spin" />
+                      <span>저장 중...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Check size={18} />
+                      <span>Save Item</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

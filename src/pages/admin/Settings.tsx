@@ -28,9 +28,8 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        // User requested: Landscape 1920x1350, Portrait 1080x1350, Quality 80%
-        // Note: Settings document stores multiple images (Hero + About), so we use 0.75 quality to stay under 1MB limit
-        const compressedBase64 = await compressImage(file, 1920, 1350, 0.75);
+        // 2K resolution (2560px), quality 0.6 to stay under Firestore 1MB limit for the settings doc
+        const compressedBase64 = await compressImage(file, 2560, 1800, 0.6);
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);
@@ -134,7 +133,7 @@ export default function Settings() {
                   </button>
                 </div>
               </div>
-              <p className="text-[10px] text-stone-400 mt-2">* 고화질 팁: 메인 배경은 1920x1350 이상의 고해상도 사진을 권장합니다. (파일당 약 500KB 내외 권장)</p>
+              <p className="text-[10px] text-stone-400 mt-2">* 고화질 팁: 메인 배경은 2560px(2K) 이상의 고해상도 사진을 권장합니다.</p>
               {formData.heroImage && (
                 <div className="mt-4 w-full h-48 rounded-lg overflow-hidden border border-stone-200">
                   <img src={formData.heroImage} alt="Hero Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />

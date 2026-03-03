@@ -57,11 +57,12 @@ export interface SiteSettings {
 interface CMSContextType {
   portfolio: PortfolioItem[];
   settings: SiteSettings;
-  addPortfolioItem: (item: Omit<PortfolioItem, 'id'>) => void;
-  updatePortfolioItem: (id: string, item: Partial<PortfolioItem>) => void;
-  deletePortfolioItem: (id: string) => void;
-  reorderPortfolio: (newPortfolio: PortfolioItem[]) => void;
-  updateSettings: (settings: Partial<SiteSettings>) => void;
+  addPortfolioItem: (item: Omit<PortfolioItem, 'id'>) => Promise<void>;
+  updatePortfolioItem: (id: string, item: Partial<PortfolioItem>) => Promise<void>;
+  deletePortfolioItem: (id: string) => Promise<void>;
+  reorderPortfolio: (newPortfolio: PortfolioItem[]) => Promise<void>;
+  updateSettings: (settings: Partial<SiteSettings>) => Promise<void>;
+  getGalleryImages: (id: string) => Promise<string[]>;
 }
 
 const defaultPortfolio: PortfolioItem[] = [
@@ -195,27 +196,27 @@ export function CMSProvider({ children }: { children: ReactNode }) {
 
   const addPortfolioItem = async (item: Omit<PortfolioItem, 'id'>) => {
     const newId = Date.now().toString();
-    const newItem = { ...item, id: newId, orderIndex: 0 }; // Put it at the beginning
+    const { gallery, ...rest } = item;
+    const newItem = { ...rest, id: newId, orderIndex: 0 };
     
-    // Update local state immediately for snappy UI
     setPortfolio(prev => {
-      const newPortfolio = [newItem, ...prev];
-      // Re-index everything
-      newPortfolio.forEach((p, idx) => {
-        (p as any).orderIndex = idx;
-      });
+      const newPortfolio = [{ ...item, id: newId }, ...prev];
       return newPortfolio;
     });
     
-    // Save to Firebase
     try {
-      const { writeBatch } = await import('firebase/firestore');
+      const { writeBatch, collection, doc } = await import('firebase/firestore');
       const batch = writeBatch(db);
       
-      // Add new item
       batch.set(doc(db, 'portfolio', newId), newItem);
       
-      // Update order of existing items
+      if (gallery && gallery.length > 0) {
+        gallery.forEach((img, idx) => {
+          const galleryDocRef = doc(collection(db, 'portfolio', newId, 'gallery'));
+          batch.set(galleryDocRef, { url: img, order: idx });
+        });
+      }
+      
       portfolio.forEach((p, idx) => {
         batch.update(doc(db, 'portfolio', p.id), { orderIndex: idx + 1 });
       });
@@ -223,30 +224,55 @@ export function CMSProvider({ children }: { children: ReactNode }) {
       await batch.commit();
     } catch (error) {
       console.error("Error adding portfolio item:", error);
-      alert("항목 추가에 실패했습니다. (이미지 용량이 너무 클 수 있습니다. 이미지 개수를 줄여보세요.)");
-      // Revert local state on failure
+      alert("항목 추가에 실패했습니다.");
       setPortfolio(prev => prev.filter(p => p.id !== newId));
     }
   };
 
   const updatePortfolioItem = async (id: string, updatedItem: Partial<PortfolioItem>) => {
-    // Keep original state for rollback
     const originalPortfolio = [...portfolio];
+    const { gallery, ...rest } = updatedItem;
     
-    // Update local state
     setPortfolio(prev => prev.map(item => item.id === id ? { ...item, ...updatedItem } : item));
     
-    // Save to Firebase
     try {
-      const itemToUpdate = portfolio.find(item => item.id === id);
-      if (itemToUpdate) {
-        await setDoc(doc(db, 'portfolio', id), { ...itemToUpdate, ...updatedItem }, { merge: true });
+      const { writeBatch, collection, getDocs, deleteDoc, doc } = await import('firebase/firestore');
+      const batch = writeBatch(db);
+      
+      batch.update(doc(db, 'portfolio', id), rest);
+      
+      if (gallery) {
+        const gallerySnap = await getDocs(collection(db, 'portfolio', id, 'gallery'));
+        gallerySnap.forEach((d) => {
+          batch.delete(d.ref);
+        });
+        
+        gallery.forEach((img, idx) => {
+          const galleryDocRef = doc(collection(db, 'portfolio', id, 'gallery'));
+          batch.set(galleryDocRef, { url: img, order: idx });
+        });
       }
+      
+      await batch.commit();
     } catch (error) {
       console.error("Error updating portfolio item:", error);
-      alert("항목 수정에 실패했습니다. (이미지 용량이 너무 클 수 있습니다. 이미지 개수를 줄여보세요.)");
-      // Revert local state on failure
+      alert("항목 수정에 실패했습니다.");
       setPortfolio(originalPortfolio);
+    }
+  };
+
+  const getGalleryImages = async (id: string): Promise<string[]> => {
+    try {
+      const { collection, getDocs, query, orderBy } = await import('firebase/firestore');
+      const galleryRef = collection(db, 'portfolio', id, 'gallery');
+      const q = query(galleryRef, orderBy('order'));
+      const snap = await getDocs(q);
+      
+      if (snap.empty) return [];
+      return snap.docs.map(doc => doc.data().url);
+    } catch (error) {
+      console.error("Error fetching gallery:", error);
+      return [];
     }
   };
 
@@ -307,7 +333,7 @@ export function CMSProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <CMSContext.Provider value={{ portfolio, settings, addPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolio, updateSettings }}>
+    <CMSContext.Provider value={{ portfolio, settings, addPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolio, updateSettings, getGalleryImages }}>
       {children}
     </CMSContext.Provider>
   );
