@@ -64,9 +64,9 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedItem]);
 
-  // For photography, we want specific categories: PRODUCT, FOOD&BEVERAGE, MODEL
+  // For photography, we want specific categories: PRODUCT, FOOD&BEVERAGE, MODEL, AI
   const categories = type === 'photography' 
-    ? ['All', 'PRODUCT', 'FOOD&BEVERAGE', 'MODEL']
+    ? ['All', 'PRODUCT', 'FOOD&BEVERAGE', 'MODEL', 'AI']
     : ['All', ...Array.from(new Set(basePortfolio.map(item => item.category)))];
 
   const filteredPortfolio = filter === 'All' 
@@ -163,14 +163,14 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/95 backdrop-blur-sm p-4 md:p-8 overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/95 backdrop-blur-sm p-0 md:p-8 overflow-y-auto"
             onClick={() => setSelectedItem(null)}
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="bg-ivory-100 w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl my-auto relative"
+              className="bg-ivory-100 w-full max-w-5xl md:rounded-2xl overflow-hidden shadow-2xl my-auto relative min-h-screen md:min-h-0"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -186,10 +186,10 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
                 <p className="text-stone-600 font-light leading-relaxed max-w-2xl">{selectedItem.description}</p>
               </div>
 
-              <div className="p-8 md:p-12 bg-white">
-                <div className="flex flex-col gap-8">
+              <div className="p-4 md:p-12 bg-white">
+                <div className="flex flex-col gap-4 md:gap-8">
                   {selectedItem.videoUrl && getEmbedUrl(selectedItem.videoUrl) && (
-                    <div className="relative w-full aspect-video bg-stone-900 rounded-lg overflow-hidden shadow-lg">
+                    <div className="relative w-full aspect-video bg-stone-900 md:rounded-lg overflow-hidden shadow-lg">
                       {getEmbedUrl(selectedItem.videoUrl)?.type === 'direct' ? (
                         <video 
                           src={getEmbedUrl(selectedItem.videoUrl)!.url} 
@@ -216,11 +216,11 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
                     </div>
                   ) : (
                     galleryImages.map((imgUrl, idx) => (
-                      <div key={idx} className="relative w-full flex justify-center bg-stone-50 rounded-lg overflow-hidden p-4 md:p-8">
+                      <div key={idx} className="relative w-full flex justify-center bg-stone-50 md:rounded-lg overflow-hidden">
                         <img
                           src={imgUrl}
                           alt={`${selectedItem.title} - ${idx + 1}`}
-                          className="max-w-full max-h-[85vh] object-contain"
+                          className="w-full h-auto object-contain"
                           referrerPolicy="no-referrer"
                         />
                       </div>

@@ -30,7 +30,12 @@ const getEmbedUrl = (url: string) => {
 
 export default function Home() {
   const { settings, portfolio, getGalleryImages } = useCMS();
-  const featuredPortfolio = portfolio.slice(0, 3);
+  
+  // Photography items only, already sorted by isPinned in CMSContext
+  const displayPortfolio = portfolio
+    .filter(item => item.category !== 'Video')
+    .slice(0, 6);
+
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
@@ -61,8 +66,8 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-stone-900">
-        <div className="absolute inset-0 z-0 opacity-40">
+      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden bg-white">
+        <div className="absolute inset-0 z-0">
           <img
             src={settings.heroImage}
             alt="Hero Background"
@@ -70,14 +75,13 @@ export default function Home() {
             referrerPolicy="no-referrer"
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-900 via-transparent to-stone-900/50 z-10" />
         
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="font-serif text-5xl md:text-7xl lg:text-8xl text-ivory-100 font-light tracking-tight mb-6 leading-tight"
+            className="font-serif text-5xl md:text-7xl lg:text-8xl text-stone-900 font-light tracking-tight mb-6 leading-tight drop-shadow-sm"
           >
             {settings.heroText}
           </motion.h1>
@@ -85,7 +89,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-lg md:text-xl text-ivory-300 font-light tracking-wide mb-12 max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-stone-700 font-light tracking-wide mb-12 max-w-2xl mx-auto"
           >
             {settings.heroSubText}
           </motion.p>
@@ -134,7 +138,7 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredPortfolio.map((item, index) => (
+            {displayPortfolio.map((item, index) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -149,6 +153,7 @@ export default function Home() {
                     src={item.imageUrl}
                     alt={item.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    style={{ objectPosition: item.objectPosition || 'center' }}
                     referrerPolicy="no-referrer"
                   />
                   {item.videoUrl && (
@@ -183,14 +188,14 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/95 backdrop-blur-sm p-4 md:p-8 overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/95 backdrop-blur-sm p-0 md:p-8 overflow-y-auto"
             onClick={() => setSelectedItem(null)}
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="bg-ivory-100 w-full max-w-5xl rounded-2xl overflow-hidden shadow-2xl my-auto relative"
+              className="bg-ivory-100 w-full max-w-5xl md:rounded-2xl overflow-hidden shadow-2xl my-auto relative min-h-screen md:min-h-0"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -206,10 +211,10 @@ export default function Home() {
                 <p className="text-stone-600 font-light leading-relaxed max-w-2xl">{selectedItem.description}</p>
               </div>
 
-              <div className="p-8 md:p-12 bg-white">
-                <div className="flex flex-col gap-8">
+              <div className="p-4 md:p-12 bg-white">
+                <div className="flex flex-col gap-4 md:gap-8">
                   {selectedItem.videoUrl && getEmbedUrl(selectedItem.videoUrl) && (
-                    <div className="relative w-full aspect-video bg-stone-900 rounded-lg overflow-hidden shadow-lg">
+                    <div className="relative w-full aspect-video bg-stone-900 md:rounded-lg overflow-hidden shadow-lg">
                       {getEmbedUrl(selectedItem.videoUrl)?.type === 'direct' ? (
                         <video 
                           src={getEmbedUrl(selectedItem.videoUrl)!.url} 
@@ -236,11 +241,11 @@ export default function Home() {
                     </div>
                   ) : (
                     galleryImages.map((imgUrl, idx) => (
-                      <div key={idx} className="relative w-full flex justify-center bg-stone-50 rounded-lg overflow-hidden p-4 md:p-8">
+                      <div key={idx} className="relative w-full flex justify-center bg-stone-50 md:rounded-lg overflow-hidden">
                         <img
                           src={imgUrl}
                           alt={`${selectedItem.title} - ${idx + 1}`}
-                          className="max-w-full max-h-[85vh] object-contain"
+                          className="w-full h-auto object-contain"
                           referrerPolicy="no-referrer"
                         />
                       </div>

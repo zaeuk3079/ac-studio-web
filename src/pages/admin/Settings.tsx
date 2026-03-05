@@ -161,6 +161,33 @@ export default function Settings() {
               />
             </div>
             <div className="pt-4 border-t border-stone-100">
+              <h3 className="text-sm font-semibold text-stone-800 mb-4">Footer Settings</h3>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Footer Title</label>
+                  <input
+                    type="text"
+                    name="footerTitle"
+                    value={formData.footerTitle || ''}
+                    onChange={handleChange}
+                    placeholder="e.g. aging studio"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Footer Text</label>
+                  <textarea
+                    name="footerText"
+                    value={formData.footerText || ''}
+                    onChange={handleChange}
+                    rows={2}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-stone-100">
               <h3 className="text-sm font-semibold text-stone-800 mb-4">Home Page Sections</h3>
               <div className="space-y-4">
                 <label className="flex items-center space-x-3 cursor-pointer">

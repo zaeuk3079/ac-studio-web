@@ -51,14 +51,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             {/* Right Nav */}
             <nav className="flex space-x-10 justify-end items-center">
               <Link
-                to="/"
-                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
-                  location.pathname === '/' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
-                }`}
-              >
-                Home
-              </Link>
-              <Link
                 to="/about"
                 className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
                   location.pathname === '/about' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
@@ -91,7 +83,6 @@ export default function Layout({ children }: { children: ReactNode }) {
               {settings.siteName}
             </Link>
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-              <Link to="/" className="text-[10px] tracking-widest uppercase text-stone-500">Home</Link>
               <Link to="/photography" className="text-[10px] tracking-widest uppercase text-stone-500">Photography</Link>
               <Link to="/video" className="text-[10px] tracking-widest uppercase text-stone-500">Video</Link>
               <Link to="/about" className="text-[10px] tracking-widest uppercase text-stone-500">About</Link>
@@ -111,9 +102,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-sans text-lg tracking-widest uppercase mb-4 text-ivory-100">{settings.siteName}</h3>
+              <h3 className="font-sans text-lg tracking-widest uppercase mb-4 text-ivory-100">{settings.footerTitle || settings.siteName}</h3>
               <p className="text-sm text-stone-400 leading-relaxed max-w-xs">
-                당신의 가장 빛나는 순간을 기록합니다. 시간이 흘러도 변하지 않는 가치를 선사합니다.
+                {settings.footerText}
               </p>
             </div>
             <div>

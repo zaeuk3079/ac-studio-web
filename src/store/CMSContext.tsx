@@ -10,6 +10,8 @@ export interface PortfolioItem {
   gallery?: string[];
   videoUrl?: string;
   description: string;
+  isPinned?: boolean;
+  objectPosition?: 'top' | 'center' | 'bottom';
 }
 
 export interface SiteSettings {
@@ -52,6 +54,9 @@ export interface SiteSettings {
   accentColor: string; // 'burgundy' or other
   headingFont: string;
   bodyFont: string;
+  // Footer
+  footerTitle: string;
+  footerText: string;
 }
 
 interface CMSContextType {
@@ -137,6 +142,9 @@ const defaultSettings: SiteSettings = {
   accentColor: 'burgundy',
   headingFont: 'Playfair Display',
   bodyFont: 'Inter',
+  // Footer
+  footerTitle: 'aging studio',
+  footerText: '당신의 가장 빛나는 순간을 기록합니다. 시간이 흘러도 변하지 않는 가치를 선사합니다.',
 };
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -169,8 +177,10 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ...doc.data()
           })) as PortfolioItem[];
           
-          // Sort by orderIndex
+          // Sort by isPinned (desc) then orderIndex (asc)
           loadedPortfolio.sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
             const orderA = (a as any).orderIndex ?? 9999;
             const orderB = (b as any).orderIndex ?? 9999;
             return orderA - orderB;
@@ -201,7 +211,13 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     
     setPortfolio(prev => {
       const newPortfolio = [{ ...item, id: newId }, ...prev];
-      return newPortfolio;
+      return newPortfolio.sort((a, b) => {
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        const orderA = (a as any).orderIndex ?? 9999;
+        const orderB = (b as any).orderIndex ?? 9999;
+        return orderA - orderB;
+      });
     });
     
     try {
@@ -233,7 +249,16 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     const originalPortfolio = [...portfolio];
     const { gallery, ...rest } = updatedItem;
     
-    setPortfolio(prev => prev.map(item => item.id === id ? { ...item, ...updatedItem } : item));
+    setPortfolio(prev => {
+      const updated = prev.map(item => item.id === id ? { ...item, ...updatedItem } : item);
+      return updated.sort((a, b) => {
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        const orderA = (a as any).orderIndex ?? 9999;
+        const orderB = (b as any).orderIndex ?? 9999;
+        return orderA - orderB;
+      });
+    });
     
     try {
       const { writeBatch, collection, getDocs, deleteDoc, doc } = await import('firebase/firestore');

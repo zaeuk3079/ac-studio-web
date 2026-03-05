@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCMS, PortfolioItem } from '../../store/CMSContext';
 import { motion, AnimatePresence } from 'motion/react';
-import { Plus, Edit2, Trash2, X, Check, GripVertical, Loader2 } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Check, GripVertical, Loader2, Pin } from 'lucide-react';
 import { compressImage } from '../../utils/imageUtils';
 import {
   DndContext,
@@ -62,7 +62,10 @@ function SortablePortfolioRow({ item, onEdit, onDelete }: { key?: React.Key, ite
         </div>
       </td>
       <td className="px-6 py-4">
-        <div className="text-sm font-medium text-stone-900">{item.title}</div>
+        <div className="flex items-center space-x-2">
+          <div className="text-sm font-medium text-stone-900">{item.title}</div>
+          {item.isPinned && <Pin size={14} className="text-burgundy-600 fill-burgundy-600" />}
+        </div>
         <div className="text-sm text-stone-500 truncate max-w-xs mt-1">{item.description}</div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
@@ -268,8 +271,38 @@ export default function PortfolioManage() {
                     <option value="PRODUCT">PRODUCT</option>
                     <option value="FOOD&BEVERAGE">FOOD&BEVERAGE</option>
                     <option value="MODEL">MODEL</option>
+                    <option value="AI">AI</option>
                     <option value="Video">VIDEO (영상)</option>
                   </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex items-center space-x-4">
+                  <label className="flex items-center space-x-3 cursor-pointer bg-stone-50 px-4 py-2.5 rounded-lg border border-stone-200 flex-1">
+                    <input
+                      type="checkbox"
+                      checked={formData.isPinned || false}
+                      onChange={(e) => setFormData(prev => ({ ...prev, isPinned: e.target.checked }))}
+                      className="w-5 h-5 text-burgundy-600 border-stone-300 rounded focus:ring-burgundy-500"
+                    />
+                    <span className="text-sm font-medium text-stone-700 flex items-center gap-2">
+                      <Pin size={16} />
+                      메인 화면에 고정 (Pin to Home)
+                    </span>
+                  </label>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">대표 이미지 위치 (Object Position)</label>
+                  <select
+                    value={formData.objectPosition || 'center'}
+                    onChange={(e) => setFormData(prev => ({ ...prev, objectPosition: e.target.value as any }))}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
+                  >
+                    <option value="top">상단 (Top)</option>
+                    <option value="center">중앙 (Center)</option>
+                    <option value="bottom">하단 (Bottom)</option>
+                  </select>
+                  <p className="text-[10px] text-stone-500 mt-1">가로/세로 비율에 따라 이미지가 잘릴 때 보여줄 기준점을 설정합니다.</p>
                 </div>
               </div>
               <div>
