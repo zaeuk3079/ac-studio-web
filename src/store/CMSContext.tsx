@@ -49,6 +49,7 @@ export interface SiteSettings {
   instagramUrl: string;
   googleFormUrl: string;
   formDownloadUrl: string;
+  web3FormsKey?: string;
   // Appearance
   themeColor: string; // 'ivory' or other
   accentColor: string; // 'burgundy' or other
@@ -137,6 +138,7 @@ const defaultSettings: SiteSettings = {
   instagramUrl: 'https://instagram.com/agingstudio',
   googleFormUrl: 'https://docs.google.com/forms',
   formDownloadUrl: '#',
+  web3FormsKey: '',
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',

@@ -493,6 +493,25 @@ export default function Settings() {
                 className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
               />
             </div>
+            <div className="pt-4 border-t border-stone-100">
+              <label className="block text-sm font-medium text-stone-700 mb-2">Web3Forms Access Key (이메일 자동 발송용 키)</label>
+              <input
+                type="text"
+                name="web3FormsKey"
+                value={formData.web3FormsKey || ''}
+                onChange={handleChange}
+                placeholder="예: 1234abcd-1234-abcd-1234-abcd1234abcd"
+                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-mono text-sm"
+              />
+              <div className="mt-3 bg-stone-50 border border-stone-200 rounded-lg p-4 text-xs text-stone-600 leading-relaxed">
+                <p className="font-semibold text-stone-700 mb-1">💡 웹사이트에서 견적 문의 메일을 받는 방법:</p>
+                <ol className="list-decimal list-inside space-y-1">
+                  <li><a href="https://web3forms.com/" target="_blank" rel="noopener noreferrer" className="text-burgundy-700 underline font-medium hover:text-burgundy-600">Web3Forms 홈페이지</a>에 접속합니다.</li>
+                  <li>견적 문의를 받을 <strong>본인의 이메일 주소</strong>를 입력하고 Access Key를 신청합니다.</li>
+                  <li>입력한 이메일로 즉시 발송되는 <strong>Access Key</strong>를 복사하여 위 입력란에 붙여넣고 저장하세요.</li>
+                </ol>
+              </div>
+            </div>
           </motion.div>
         )}
 
