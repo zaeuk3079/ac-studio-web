@@ -72,53 +72,98 @@ export default function Home() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ivory-400/50 rounded-full filter blur-3xl" style={{ animationDelay: '2s' }} />
 
         {/* Floating Nuki Images (mix-blend-mode: multiply) */}
-        {/* Left Floating Camera */}
-        <motion.div
-          initial={{ opacity: 0, x: -100, y: 0 }}
-          animate={{ 
-            opacity: 1, 
-            x: 0,
-            y: [0, -20, 0],
-            rotate: [0, 3, -1, 0]
-          }}
-          transition={{
-            x: { duration: 1.2, ease: "easeOut" },
-            opacity: { duration: 1.2 },
-            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" }
-          }}
-          className="absolute left-8 md:left-16 lg:left-24 bottom-12 md:bottom-24 w-40 md:w-64 lg:w-80 pointer-events-none select-none z-10 hidden sm:block"
-        >
-          <img
-            src="/camera_white.jpg"
-            alt="Camera Model"
-            className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
-          />
-        </motion.div>
+        {settings.heroNukiImages && settings.heroNukiImages.length > 0 ? (
+          settings.heroNukiImages.map((imgUrl, index) => {
+            const isLeft = index % 2 === 0;
+            const step = Math.floor(index / 2);
+            
+            // Distribute coordinates elegantly based on index
+            const style = isLeft 
+              ? { left: `${8 + step * 8}%`, bottom: `${12 + step * 18}%` }
+              : { right: `${8 + step * 8}%`, top: `${12 + step * 18}%` };
+              
+            const duration = 5 + (index * 1.2);
+            const rotateDir = isLeft ? 1 : -1;
+            
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: isLeft ? -100 : 100, y: 0 }}
+                animate={{ 
+                  opacity: 1, 
+                  x: 0,
+                  y: [0, isLeft ? -20 : 20, 0],
+                  rotate: [0, rotateDir * 3, rotateDir * -1, 0]
+                }}
+                transition={{
+                  x: { duration: 1.2, ease: "easeOut" },
+                  opacity: { duration: 1.2 },
+                  y: { duration: duration, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: duration + 2, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="absolute w-24 md:w-44 lg:w-60 pointer-events-none select-none z-10 hidden sm:block"
+                style={style}
+              >
+                <img
+                  src={imgUrl}
+                  alt={`Nuki Object ${index + 1}`}
+                  className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.06)]"
+                  referrerPolicy="no-referrer"
+                />
+              </motion.div>
+            );
+          })
+        ) : (
+          <>
+            {/* Left Floating Camera */}
+            <motion.div
+              initial={{ opacity: 0, x: -100, y: 0 }}
+              animate={{ 
+                opacity: 1, 
+                x: 0,
+                y: [0, -20, 0],
+                rotate: [0, 3, -1, 0]
+              }}
+              transition={{
+                x: { duration: 1.2, ease: "easeOut" },
+                opacity: { duration: 1.2 },
+                y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+                rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+              }}
+              className="absolute left-8 md:left-16 lg:left-24 bottom-12 md:bottom-24 w-40 md:w-64 lg:w-80 pointer-events-none select-none z-10 hidden sm:block"
+            >
+              <img
+                src="/camera_white.jpg"
+                alt="Camera Model"
+                className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
+              />
+            </motion.div>
 
-        {/* Right Floating Lens */}
-        <motion.div
-          initial={{ opacity: 0, x: 100, y: 0 }}
-          animate={{ 
-            opacity: 1, 
-            x: 0,
-            y: [0, 20, 0],
-            rotate: [0, -2, 2, 0]
-          }}
-          transition={{
-            x: { duration: 1.2, ease: "easeOut" },
-            opacity: { duration: 1.2 },
-            y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
-            rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" }
-          }}
-          className="absolute right-8 md:right-16 lg:right-24 top-12 md:top-24 w-36 md:w-56 lg:w-72 pointer-events-none select-none z-10 hidden sm:block"
-        >
-          <img
-            src="/lens_white.jpg"
-            alt="Camera Lens"
-            className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
-          />
-        </motion.div>
+            {/* Right Floating Lens */}
+            <motion.div
+              initial={{ opacity: 0, x: 100, y: 0 }}
+              animate={{ 
+                opacity: 1, 
+                x: 0,
+                y: [0, 20, 0],
+                rotate: [0, -2, 2, 0]
+              }}
+              transition={{
+                x: { duration: 1.2, ease: "easeOut" },
+                opacity: { duration: 1.2 },
+                y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
+                rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" }
+              }}
+              className="absolute right-8 md:right-16 lg:right-24 top-12 md:top-24 w-36 md:w-56 lg:w-72 pointer-events-none select-none z-10 hidden sm:block"
+            >
+              <img
+                src="/lens_white.jpg"
+                alt="Camera Lens"
+                className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
+              />
+            </motion.div>
+          </>
+        )}
 
         {/* Hero Content */}
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">

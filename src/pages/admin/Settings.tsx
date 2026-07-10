@@ -38,6 +38,37 @@ export default function Settings() {
     }
   };
 
+  const handleNukiImagesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      try {
+        const newImages: string[] = [];
+        for (let i = 0; i < files.length; i++) {
+          // Keep resolution around 800px to prevent Firestore document size limit issues.
+          const compressed = await compressImage(files[i], 800, 800, 0.5);
+          newImages.push(compressed);
+        }
+        
+        const currentNukiImages = formData.heroNukiImages || [];
+        setFormData({
+          ...formData,
+          heroNukiImages: [...currentNukiImages, ...newImages]
+        });
+      } catch (error) {
+        console.error('Error compressing nuki images:', error);
+        alert('누끼 이미지 처리 중 오류가 발생했습니다.');
+      }
+    }
+  };
+
+  const handleRemoveNukiImage = (indexToRemove: number) => {
+    const currentNukiImages = formData.heroNukiImages || [];
+    setFormData({
+      ...formData,
+      heroNukiImages: currentNukiImages.filter((_, idx) => idx !== indexToRemove)
+    });
+  };
+
   const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
@@ -189,6 +220,52 @@ export default function Settings() {
                 rows={2}
                 className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
               />
+            </div>
+            
+            {/* 메인 플로팅 누끼 이미지 관리 */}
+            <div className="pt-4 border-t border-stone-100">
+              <label className="block text-sm font-semibold text-stone-800 mb-1">메인 플로팅 누끼 이미지 관리 (여러 장)</label>
+              <p className="text-xs text-stone-500 mb-4">* 메인 화면에 둥실둥실 떠다니는 오브젝트 사진들을 추가할 수 있습니다. (배경이 투명한 PNG 형식 권장)</p>
+              
+              <div className="space-y-4">
+                <div className="flex space-x-3">
+                  <div className="relative overflow-hidden flex-1">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleNukiImagesUpload}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    />
+                    <button type="button" className="w-full bg-burgundy-50 hover:bg-burgundy-100 text-burgundy-800 border border-burgundy-200/50 py-3 rounded-lg font-medium transition-colors text-sm flex items-center justify-center space-x-2 cursor-pointer">
+                      <span>누끼 이미지 추가 (복수 선택 가능)</span>
+                    </button>
+                  </div>
+                </div>
+
+                {formData.heroNukiImages && formData.heroNukiImages.length > 0 ? (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                    {formData.heroNukiImages.map((imgUrl, idx) => (
+                      <div key={idx} className="relative group border border-stone-200 rounded-lg overflow-hidden bg-stone-50 aspect-square flex flex-col justify-between p-2">
+                        <div className="flex-1 flex items-center justify-center p-2">
+                          <img src={imgUrl} alt={`Nuki Preview ${idx + 1}`} className="max-h-20 max-w-full object-contain mix-blend-multiply" referrerPolicy="no-referrer" />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveNukiImage(idx)}
+                          className="w-full bg-red-50 hover:bg-red-100 text-red-700 py-1.5 rounded text-xs font-semibold transition-colors mt-2"
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 border border-dashed border-stone-200 rounded-lg bg-stone-50 text-stone-400 text-xs">
+                    등록된 누끼 이미지가 없습니다. (비어있을 경우 카메라와 렌즈 이미지가 기본으로 제공됩니다.)
+                  </div>
+                )}
+              </div>
             </div>
             <div className="pt-4 border-t border-stone-100">
               <h3 className="text-sm font-semibold text-stone-800 mb-4">Footer Settings</h3>
