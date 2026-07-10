@@ -8,10 +8,12 @@ export default function Service() {
 
   return (
     <div className="bg-white min-h-screen py-16 md:py-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Content Section (Wide Image Only Layout) */}
-        <div className="flex flex-col items-center space-y-12">
+        {/* Content Section (Vertical Stack: Image followed by Process details) */}
+        <div className="flex flex-col items-center space-y-16">
+          
+          {/* Top: Wide Service Image */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -26,11 +28,28 @@ export default function Service() {
             />
           </motion.div>
 
+          {/* Bottom: Process details (Render only if serviceText2 exists) */}
+          {settings.serviceText2 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="w-full max-w-4xl space-y-6 pt-4"
+            >
+              <h2 className="text-xl font-bold text-stone-900 tracking-widest uppercase border-b border-stone-100 pb-4 text-center">
+                Service Process
+              </h2>
+              <div className="bg-stone-50/50 p-8 md:p-12 rounded-2xl border border-stone-100 leading-relaxed text-stone-700 whitespace-pre-line text-sm md:text-base font-light shadow-sm">
+                {settings.serviceText2}
+              </div>
+            </motion.div>
+          )}
+
           {/* Call to Action */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="pt-6"
           >
             <Link

@@ -446,23 +446,14 @@ export default function Settings() {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Service Description 1 (서비스 상세 설명 1)</label>
-              <textarea
-                name="serviceText"
-                value={formData.serviceText || ''}
-                onChange={handleChange}
-                rows={4}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Service Description 2 (촬영 진행 과정 등 설명 2)</label>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Service Process (촬영 진행 과정 상세)</label>
               <textarea
                 name="serviceText2"
                 value={formData.serviceText2 || ''}
                 onChange={handleChange}
-                rows={6}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
+                rows={8}
+                placeholder="예:&#13;&#10;1. 상담 및 콘셉트 조율&#13;&#10;2. 일정 확정 및 예약금 확인&#13;&#10;3. 촬영 진행 (2~3시간)&#13;&#10;4. 1차 셀렉본 공유&#13;&#10;5. 최종 보정본 제공 (2주 소요)"
+                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none font-mono text-sm leading-relaxed"
               />
             </div>
           </motion.div>
