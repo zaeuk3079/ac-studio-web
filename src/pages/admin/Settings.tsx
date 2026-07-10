@@ -111,6 +111,36 @@ export default function Settings() {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Site Logo (로고 이미지)</label>
+              <div className="flex space-x-3">
+                <input
+                  type="text"
+                  name="logoUrl"
+                  value={formData.logoUrl || ''}
+                  onChange={handleChange}
+                  className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  placeholder="https://example.com/logo.png"
+                />
+                <div className="relative overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e, 'logoUrl')}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
+                    PC에서 찾기
+                  </button>
+                </div>
+              </div>
+              <p className="text-[10px] text-stone-400 mt-2">* 팁: 배경이 투명한 PNG 형식의 가로형 로고(높이 60px 내외)를 권장합니다.</p>
+              {formData.logoUrl && (
+                <div className="mt-4 p-4 bg-stone-50 rounded-lg border border-stone-200 flex justify-center items-center">
+                  <img src={formData.logoUrl} alt="Logo Preview" className="max-h-12 object-contain" referrerPolicy="no-referrer" />
+                </div>
+              )}
+            </div>
+            <div>
               <label className="block text-sm font-medium text-stone-700 mb-2">Hero Background Image</label>
               <div className="flex space-x-3">
                 <input

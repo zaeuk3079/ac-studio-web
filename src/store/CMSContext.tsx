@@ -16,6 +16,7 @@ export interface PortfolioItem {
 
 export interface SiteSettings {
   siteName: string;
+  logoUrl?: string;
   // Home
   heroText: string;
   heroSubText: string;
@@ -105,6 +106,7 @@ const defaultPortfolio: PortfolioItem[] = [
 
 const defaultSettings: SiteSettings = {
   siteName: 'aging studio',
+  logoUrl: '',
   // Home
   heroText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',

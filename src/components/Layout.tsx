@@ -43,8 +43,14 @@ export default function Layout({ children }: { children: ReactNode }) {
 
             {/* Center Logo */}
             <div className="flex justify-center">
-              <Link to="/" className="font-sans text-2xl tracking-[0.3em] text-burgundy-900 font-bold uppercase whitespace-nowrap">
-                {settings.siteName}
+              <Link to="/" className="flex items-center justify-center">
+                {settings.logoUrl ? (
+                  <img src={settings.logoUrl} alt={settings.siteName} className="max-h-12 w-auto object-contain" referrerPolicy="no-referrer" />
+                ) : (
+                  <span className="font-sans text-2xl tracking-[0.3em] text-burgundy-900 font-bold uppercase whitespace-nowrap">
+                    {settings.siteName}
+                  </span>
+                )}
               </Link>
             </div>
 
@@ -79,8 +85,14 @@ export default function Layout({ children }: { children: ReactNode }) {
 
           {/* Mobile Header */}
           <div className="md:hidden flex flex-col items-center py-4 space-y-4">
-            <Link to="/" className="font-sans text-xl tracking-[0.2em] text-burgundy-900 font-bold uppercase">
-              {settings.siteName}
+            <Link to="/" className="flex items-center justify-center">
+              {settings.logoUrl ? (
+                <img src={settings.logoUrl} alt={settings.siteName} className="max-h-10 w-auto object-contain" referrerPolicy="no-referrer" />
+              ) : (
+                <span className="font-sans text-xl tracking-[0.2em] text-burgundy-900 font-bold uppercase">
+                  {settings.siteName}
+                </span>
+              )}
             </Link>
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               <Link to="/photography" className="text-[10px] tracking-widest uppercase text-stone-500">Photography</Link>
