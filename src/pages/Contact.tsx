@@ -90,7 +90,7 @@ export default function Contact() {
 
   return (
     <div className="bg-ivory-100 min-h-screen py-24">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -110,17 +110,79 @@ export default function Contact() {
           </motion.p>
         </div>
 
-        {/* Centered Contact Inquiry Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="bg-white p-10 md:p-12 rounded-2xl shadow-sm border border-ivory-300 w-full"
-        >
-          <h2 className="font-serif text-3xl text-stone-900 mb-2 text-center">온라인 견적 문의</h2>
-          <p className="text-stone-500 font-light text-sm mb-8 leading-relaxed text-center">
-            원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 견적 안내를 드리겠습니다.
-          </p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Contact Info (Left Side) */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="bg-white p-12 rounded-2xl shadow-sm border border-ivory-300 flex flex-col justify-between"
+          >
+            <div>
+              <h2 className="font-serif text-3xl text-stone-900 mb-8">{settings.contactMessageTitle}</h2>
+              <p className="text-stone-600 font-light leading-relaxed mb-12">
+                {settings.contactMessageText}
+              </p>
+
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-burgundy-50 p-3 rounded-full text-burgundy-700">
+                    <Phone size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Phone</h3>
+                    <p className="text-stone-600 font-light">{settings.contactPhone}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="bg-burgundy-50 p-3 rounded-full text-burgundy-700">
+                    <Mail size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Email</h3>
+                    <p className="text-stone-600 font-light">{settings.contactEmail}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-burgundy-50 p-3 rounded-full text-burgundy-700">
+                    <MapPin size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Studio</h3>
+                    <p className="text-stone-600 font-light whitespace-pre-line">
+                      {settings.contactAddress}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-burgundy-50 p-3 rounded-full text-burgundy-700">
+                    <Instagram size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Instagram</h3>
+                    <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-600 font-light hover:text-burgundy-600 transition-colors">
+                      {getInstagramHandle(settings.instagramUrl)}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Contact Inquiry Form (Right Side) */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="bg-white p-10 md:p-12 rounded-2xl shadow-sm border border-ivory-300 w-full"
+          >
+            <h2 className="font-serif text-3xl text-stone-900 mb-2">온라인 견적 문의</h2>
+            <p className="text-stone-500 font-light text-sm mb-8 leading-relaxed">
+              원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 견적 안내를 드리겠습니다.
+            </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
