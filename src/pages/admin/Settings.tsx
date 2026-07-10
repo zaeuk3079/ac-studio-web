@@ -42,17 +42,32 @@ export default function Settings() {
     const files = e.target.files;
     if (files && files.length > 0) {
       try {
+        const newConfigs: any[] = [];
         const newImages: string[] = [];
+        const currentConfigs = formData.heroNukiConfigs || [];
+        const currentImages = formData.heroNukiImages || [];
+        
         for (let i = 0; i < files.length; i++) {
-          // Keep resolution around 800px to prevent Firestore document size limit issues.
           const compressed = await compressImage(files[i], 800, 800, 0.5);
           newImages.push(compressed);
+          
+          // Spread positions evenly based on index
+          const baseIndex = currentConfigs.length + i;
+          const leftVal = baseIndex % 2 === 0 ? 10 + (Math.floor(baseIndex / 2) * 15) : 75 - (Math.floor(baseIndex / 2) * 15);
+          const topVal = baseIndex % 2 === 0 ? 25 + (Math.floor(baseIndex / 2) * 10) : 55 - (Math.floor(baseIndex / 2) * 10);
+          
+          newConfigs.push({
+            url: compressed,
+            left: Math.max(5, Math.min(95, leftVal)),
+            top: Math.max(5, Math.min(95, topVal)),
+            size: 120
+          });
         }
         
-        const currentNukiImages = formData.heroNukiImages || [];
         setFormData({
           ...formData,
-          heroNukiImages: [...currentNukiImages, ...newImages]
+          heroNukiImages: [...currentImages, ...newImages],
+          heroNukiConfigs: [...currentConfigs, ...newConfigs]
         });
       } catch (error) {
         console.error('Error compressing nuki images:', error);
@@ -62,11 +77,27 @@ export default function Settings() {
   };
 
   const handleRemoveNukiImage = (indexToRemove: number) => {
-    const currentNukiImages = formData.heroNukiImages || [];
+    const currentConfigs = formData.heroNukiConfigs || [];
+    const currentImages = formData.heroNukiImages || [];
     setFormData({
       ...formData,
-      heroNukiImages: currentNukiImages.filter((_, idx) => idx !== indexToRemove)
+      heroNukiImages: currentImages.filter((_, idx) => idx !== indexToRemove),
+      heroNukiConfigs: currentConfigs.filter((_, idx) => idx !== indexToRemove)
     });
+  };
+
+  const handleNukiConfigChange = (index: number, field: 'left' | 'top' | 'size', value: number) => {
+    const currentConfigs = [...(formData.heroNukiConfigs || [])];
+    if (currentConfigs[index]) {
+      currentConfigs[index] = {
+        ...currentConfigs[index],
+        [field]: value
+      };
+      setFormData({
+        ...formData,
+        heroNukiConfigs: currentConfigs
+      });
+    }
   };
 
   const [isDownloading, setIsDownloading] = useState(false);
@@ -223,10 +254,12 @@ export default function Settings() {
             </div>
             
             {/* 메인 플로팅 누끼 이미지 관리 */}
-            <div className="pt-4 border-t border-stone-100">
-              <label className="block text-sm font-semibold text-stone-800 mb-1">메인 플로팅 누끼 이미지 관리 (여러 장)</label>
-              <p className="text-xs text-stone-500 mb-4">* 메인 화면에 둥실둥실 떠다니는 오브젝트 사진들을 추가할 수 있습니다. (배경이 투명한 PNG 형식 권장)</p>
-              
+            <div className="pt-6 border-t border-stone-200 space-y-6">
+              <div>
+                <label className="block text-base font-bold text-stone-900 mb-1">메인 플로팅 누끼 이미지 배치 설정 (여러 장)</label>
+                <p className="text-xs text-stone-500">* 메인 화면의 여백에 둥실둥실 배치할 누끼 컷들을 올리고 각 기기의 위치 및 크기를 조절할 수 있습니다.</p>
+              </div>
+
               <div className="space-y-4">
                 <div className="flex space-x-3">
                   <div className="relative overflow-hidden flex-1">
@@ -237,32 +270,130 @@ export default function Settings() {
                       onChange={handleNukiImagesUpload}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     />
-                    <button type="button" className="w-full bg-burgundy-50 hover:bg-burgundy-100 text-burgundy-800 border border-burgundy-200/50 py-3 rounded-lg font-medium transition-colors text-sm flex items-center justify-center space-x-2 cursor-pointer">
-                      <span>누끼 이미지 추가 (복수 선택 가능)</span>
+                    <button type="button" className="w-full bg-burgundy-50 hover:bg-burgundy-100 text-burgundy-800 border border-burgundy-200/50 py-3 rounded-lg font-semibold transition-colors text-sm flex items-center justify-center space-x-2 cursor-pointer shadow-sm">
+                      <span>누끼 이미지 파일 추가 (PNG 추천)</span>
                     </button>
                   </div>
                 </div>
 
-                {formData.heroNukiImages && formData.heroNukiImages.length > 0 ? (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                    {formData.heroNukiImages.map((imgUrl, idx) => (
-                      <div key={idx} className="relative group border border-stone-200 rounded-lg overflow-hidden bg-stone-50 aspect-square flex flex-col justify-between p-2">
-                        <div className="flex-1 flex items-center justify-center p-2">
-                          <img src={imgUrl} alt={`Nuki Preview ${idx + 1}`} className="max-h-20 max-w-full object-contain mix-blend-multiply" referrerPolicy="no-referrer" />
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveNukiImage(idx)}
-                          className="w-full bg-red-50 hover:bg-red-100 text-red-700 py-1.5 rounded text-xs font-semibold transition-colors mt-2"
-                        >
-                          삭제
-                        </button>
+                {formData.heroNukiConfigs && formData.heroNukiConfigs.length > 0 ? (
+                  <div className="space-y-6">
+                    {/* 실시간 위치 미니맵 보드 */}
+                    <div className="border border-stone-200 rounded-xl overflow-hidden shadow-inner">
+                      <div className="bg-stone-50 px-4 py-2 border-b border-stone-200 flex justify-between items-center text-xs font-semibold text-stone-500">
+                        <span>실시간 배치 미니맵 (가로 100% * 세로 50vh 비율)</span>
+                        <span className="text-burgundy-700">점선 영역 = 메인 텍스트 영역 (피해서 배치하세요!)</span>
                       </div>
-                    ))}
+                      
+                      <div className="relative w-full aspect-[2/1] bg-gradient-to-tr from-ivory-200 via-white to-ivory-100 overflow-hidden select-none">
+                        {/* Apple-style floating blurred circles (mock) */}
+                        <div className="absolute top-1/4 left-1/4 w-1/4 h-1/4 bg-burgundy-100/30 rounded-full filter blur-xl" />
+                        <div className="absolute bottom-1/4 right-1/4 w-1/3 h-1/3 bg-ivory-300/40 rounded-full filter blur-xl" />
+                        
+                        {/* Mock Text Area */}
+                        <div className="absolute inset-x-[20%] top-[30%] bottom-[30%] border-2 border-dashed border-burgundy-900/10 rounded-lg flex items-center justify-center bg-white/20 backdrop-blur-[2px] z-20">
+                          <span className="text-[10px] md:text-xs font-serif text-stone-900 font-semibold tracking-wider select-none">TEXT AREA</span>
+                        </div>
+
+                        {/* Rendering config objects dynamically */}
+                        {formData.heroNukiConfigs.map((config, idx) => (
+                          <div
+                            key={idx}
+                            className="absolute pointer-events-none"
+                            style={{
+                              left: `${config.left}%`,
+                              top: `${config.top}%`,
+                              transform: 'translate(-50%, -50%)',
+                              width: `${(config.size / 300) * 100}%` // scale based on board width
+                            }}
+                          >
+                            <img
+                              src={config.url}
+                              alt={`Nuki ${idx + 1}`}
+                              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-[0_4px_10px_rgba(0,0,0,0.06)]"
+                              referrerPolicy="no-referrer"
+                            />
+                            <div className="absolute top-0 left-0 bg-burgundy-800 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">
+                              #{idx + 1}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 개별 이미지 편집 슬라이더 리스트 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {formData.heroNukiConfigs.map((config, idx) => (
+                        <div key={idx} className="bg-stone-50 border border-stone-200 rounded-xl p-4 space-y-3 flex flex-col justify-between">
+                          <div className="flex justify-between items-start">
+                            <span className="bg-burgundy-900 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                              이미지 #{idx + 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveNukiImage(idx)}
+                              className="text-xs text-red-600 hover:text-red-800 font-semibold transition-colors"
+                            >
+                              삭제
+                            </button>
+                          </div>
+
+                          <div className="flex space-x-3 items-center">
+                            <div className="w-16 h-16 bg-white border border-stone-200 rounded-lg flex items-center justify-center p-1.5 overflow-hidden">
+                              <img src={config.url} alt={`Thumb ${idx + 1}`} className="max-h-full max-w-full object-contain mix-blend-multiply" referrerPolicy="no-referrer" />
+                            </div>
+                            
+                            <div className="flex-1 space-y-2">
+                              {/* Left X좌표 */}
+                              <div className="flex items-center space-x-2">
+                                <span className="text-[11px] font-medium text-stone-500 w-12">가로 (X):</span>
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="100"
+                                  value={config.left}
+                                  onChange={(e) => handleNukiConfigChange(idx, 'left', parseInt(e.target.value))}
+                                  className="flex-1 accent-burgundy-800 h-1 bg-stone-200 rounded-lg cursor-pointer"
+                                />
+                                <span className="text-[11px] font-semibold text-stone-700 w-8 text-right">{config.left}%</span>
+                              </div>
+                              
+                              {/* Top Y좌표 */}
+                              <div className="flex items-center space-x-2">
+                                <span className="text-[11px] font-medium text-stone-500 w-12">세로 (Y):</span>
+                                <input
+                                  type="range"
+                                  min="0"
+                                  max="100"
+                                  value={config.top}
+                                  onChange={(e) => handleNukiConfigChange(idx, 'top', parseInt(e.target.value))}
+                                  className="flex-1 accent-burgundy-800 h-1 bg-stone-200 rounded-lg cursor-pointer"
+                                />
+                                <span className="text-[11px] font-semibold text-stone-700 w-8 text-right">{config.top}%</span>
+                              </div>
+                              
+                              {/* Size 크기 */}
+                              <div className="flex items-center space-x-2">
+                                <span className="text-[11px] font-medium text-stone-500 w-12">크기 (W):</span>
+                                <input
+                                  type="range"
+                                  min="50"
+                                  max="300"
+                                  value={config.size || 120}
+                                  onChange={(e) => handleNukiConfigChange(idx, 'size', parseInt(e.target.value))}
+                                  className="flex-1 accent-burgundy-800 h-1 bg-stone-200 rounded-lg cursor-pointer"
+                                />
+                                <span className="text-[11px] font-semibold text-stone-700 w-8 text-right">{config.size || 120}px</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : (
-                  <div className="text-center py-8 border border-dashed border-stone-200 rounded-lg bg-stone-50 text-stone-400 text-xs">
-                    등록된 누끼 이미지가 없습니다. (비어있을 경우 카메라와 렌즈 이미지가 기본으로 제공됩니다.)
+                  <div className="text-center py-10 border-2 border-dashed border-stone-200 rounded-xl bg-stone-50 text-stone-400 text-xs">
+                    등록된 플로팅 이미지가 없습니다. (비어있을 경우 카메라와 렌즈 이미지가 화면 좌우에 기본값으로 표시됩니다.)
                   </div>
                 )}
               </div>

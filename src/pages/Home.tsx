@@ -72,12 +72,53 @@ export default function Home() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ivory-400/50 rounded-full filter blur-3xl" style={{ animationDelay: '2s' }} />
 
         {/* Floating Nuki Images */}
-        {settings.heroNukiImages && settings.heroNukiImages.length > 0 ? (
+        {settings.heroNukiConfigs && settings.heroNukiConfigs.length > 0 ? (
+          settings.heroNukiConfigs.map((config, index) => {
+            const isLeft = config.left < 50;
+            
+            const style = {
+              left: `${config.left}%`,
+              top: `${config.top}%`,
+              transform: 'translate(-50%, -50%)',
+              width: `${config.size || 120}px`
+            };
+              
+            const duration = 5 + (index * 1.2);
+            const rotateDir = isLeft ? 1 : -1;
+            
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: 1,
+                  y: [0, isLeft ? -15 : 15, 0],
+                  rotate: [0, rotateDir * 2, rotateDir * -1, 0]
+                }}
+                transition={{
+                  scale: { duration: 0.8, ease: "easeOut" },
+                  opacity: { duration: 0.8 },
+                  y: { duration: duration, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: duration + 2, repeat: Infinity, ease: "easeInOut" }
+                }}
+                className="absolute pointer-events-none select-none z-10 hidden sm:block"
+                style={style}
+              >
+                <img
+                  src={config.url}
+                  alt={`Nuki Object ${index + 1}`}
+                  className="w-full h-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.06)]"
+                  referrerPolicy="no-referrer"
+                />
+              </motion.div>
+            );
+          })
+        ) : settings.heroNukiImages && settings.heroNukiImages.length > 0 ? (
           settings.heroNukiImages.map((imgUrl, index) => {
             const isLeft = index % 2 === 0;
             const step = Math.floor(index / 2);
             
-            // Distribute coordinates elegantly based on index
             const style = isLeft 
               ? { left: `${8 + step * 8}%`, bottom: `${12 + step * 18}%` }
               : { right: `${8 + step * 8}%`, top: `${12 + step * 18}%` };

@@ -2,6 +2,13 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { collection, doc, getDocs, setDoc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
+export interface NukiImageConfig {
+  url: string;
+  left: number; // 0 ~ 100 (%)
+  top: number;  // 0 ~ 100 (%)
+  size: number; // width in px (e.g. 50 ~ 300)
+}
+
 export interface PortfolioItem {
   id: string;
   title: string;
@@ -22,6 +29,7 @@ export interface SiteSettings {
   heroSubText: string;
   heroImage: string;
   heroNukiImages?: string[];
+  heroNukiConfigs?: NukiImageConfig[];
   showHomeAbout: boolean;
   homePortfolioTitle: string;
   // Portfolio
@@ -113,6 +121,7 @@ const defaultSettings: SiteSettings = {
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
   heroNukiImages: [],
+  heroNukiConfigs: [],
   showHomeAbout: true,
   homePortfolioTitle: 'Selected Works',
   // Portfolio
