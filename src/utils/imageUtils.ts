@@ -27,7 +27,7 @@ export const compressImage = (file: File, maxWidth = 1200, maxHeight = 1200, qua
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
+          resolve(canvas.toDataURL(file.type || 'image/jpeg', quality));
         } else {
           resolve(event.target?.result as string); // fallback
         }
@@ -70,7 +70,7 @@ export const compressImageToBlob = (file: File, maxWidth = 1200, maxHeight = 120
           canvas.toBlob((blob) => {
             if (blob) resolve(blob);
             else reject(new Error('Canvas to Blob failed'));
-          }, 'image/jpeg', quality);
+          }, file.type || 'image/jpeg', quality);
         } else {
           reject(new Error('Canvas context failed'));
         }
