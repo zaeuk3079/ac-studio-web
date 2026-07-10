@@ -66,16 +66,61 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center overflow-hidden bg-white">
-        <div className="absolute inset-0 z-0">
+      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-tr from-ivory-300 via-white to-ivory-100">
+        {/* Apple-style floating blurred backdrop elements */}
+        <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-burgundy-100/40 rounded-full filter blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ivory-400/50 rounded-full filter blur-3xl" style={{ animationDelay: '2s' }} />
+
+        {/* Floating Nuki Images (mix-blend-mode: multiply) */}
+        {/* Left Floating Camera */}
+        <motion.div
+          initial={{ opacity: 0, x: -100, y: 0 }}
+          animate={{ 
+            opacity: 1, 
+            x: 0,
+            y: [0, -20, 0],
+            rotate: [0, 3, -1, 0]
+          }}
+          transition={{
+            x: { duration: 1.2, ease: "easeOut" },
+            opacity: { duration: 1.2 },
+            y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+          }}
+          className="absolute left-8 md:left-16 lg:left-24 bottom-12 md:bottom-24 w-40 md:w-64 lg:w-80 pointer-events-none select-none z-10 hidden sm:block"
+        >
           <img
-            src={settings.heroImage}
-            alt="Hero Background"
-            className="w-full h-full object-cover"
-            referrerPolicy="no-referrer"
+            src="/camera_white.jpg"
+            alt="Camera Model"
+            className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
           />
-        </div>
-        
+        </motion.div>
+
+        {/* Right Floating Lens */}
+        <motion.div
+          initial={{ opacity: 0, x: 100, y: 0 }}
+          animate={{ 
+            opacity: 1, 
+            x: 0,
+            y: [0, 20, 0],
+            rotate: [0, -2, 2, 0]
+          }}
+          transition={{
+            x: { duration: 1.2, ease: "easeOut" },
+            opacity: { duration: 1.2 },
+            y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
+            rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" }
+          }}
+          className="absolute right-8 md:right-16 lg:right-24 top-12 md:top-24 w-36 md:w-56 lg:w-72 pointer-events-none select-none z-10 hidden sm:block"
+        >
+          <img
+            src="/lens_white.jpg"
+            alt="Camera Lens"
+            className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
+          />
+        </motion.div>
+
+        {/* Hero Content */}
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -89,23 +134,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            className="text-lg md:text-xl text-stone-700 font-light tracking-wide mb-12 max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-stone-700 font-light tracking-wide max-w-2xl mx-auto"
           >
             {settings.heroSubText}
           </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          >
-            <Link
-              to="/photography"
-              className="inline-flex items-center space-x-2 bg-burgundy-700 hover:bg-burgundy-600 text-ivory-100 px-8 py-4 rounded-full transition-all duration-300 uppercase tracking-widest text-sm font-medium shadow-lg shadow-burgundy-900/20"
-            >
-              <span>View Portfolio</span>
-              <ArrowRight size={16} />
-            </Link>
-          </motion.div>
         </div>
       </section>
 
