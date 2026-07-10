@@ -102,7 +102,7 @@ export default function Home() {
 
         {/* Pinterest-style Masonry Gallery Grid */}
         {filteredPortfolio.length > 0 ? (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-8 space-y-8">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
             {filteredPortfolio.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -110,7 +110,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                className="break-inside-avoid group cursor-pointer mb-8 bg-white border border-stone-100/50 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1.5"
+                className="break-inside-avoid group cursor-pointer mb-4 bg-white border border-stone-100/30 rounded-[3.5rem] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1.5 relative"
                 onClick={() => handleItemClick(item)}
               >
                 <div className="relative overflow-hidden">
@@ -120,16 +120,18 @@ export default function Home() {
                     className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     referrerPolicy="no-referrer"
                   />
+                  
+                  {/* Floating Glassmorphic Brand Name Badge */}
+                  <div className="absolute left-6 top-6 bg-white/20 backdrop-blur-md border border-white/30 px-5 py-2.5 rounded-full text-xs font-semibold text-white tracking-[0.15em] uppercase shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] transition-transform duration-500 group-hover:scale-105">
+                    {item.title}
+                  </div>
+
                   {item.videoUrl && (
-                    <div className="absolute top-6 right-6 bg-stone-900/60 backdrop-blur-sm text-white p-3 rounded-full z-10 shadow-md">
+                    <div className="absolute bottom-6 right-6 bg-stone-900/60 backdrop-blur-sm text-white p-3 rounded-full z-10 shadow-md">
                       <Play size={16} fill="currentColor" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-stone-900/[0.01] group-hover:bg-transparent transition-colors duration-500" />
-                </div>
-                <div className="p-8">
-                  <h3 className="font-serif text-xl text-stone-900 mb-1 group-hover:text-stone-600 transition-colors">{item.title}</h3>
-                  <p className="text-[11px] text-stone-400 tracking-[0.2em] uppercase font-semibold">{item.category}</p>
+                  <div className="absolute inset-0 bg-stone-900/[0.02] group-hover:bg-transparent transition-colors duration-500" />
                 </div>
               </motion.div>
             ))}
