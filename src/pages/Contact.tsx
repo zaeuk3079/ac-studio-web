@@ -10,7 +10,6 @@ export default function Contact() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [category, setCategory] = useState('PORTRAIT');
   const [purpose, setPurpose] = useState(''); // 촬영 목적 (SNS/상세페이지/숏츠 등)
   const [date, setDate] = useState(''); // 희망 일정
   const [budget, setBudget] = useState(''); // 촬영 예산
@@ -52,12 +51,12 @@ export default function Contact() {
         },
         body: JSON.stringify({
           access_key: settings.web3FormsKey,
-          subject: `[견적 문의] ${name}님 - ${category} 촬영`,
+          subject: `[견적 문의] ${name}님 - 촬영 문의`,
           from_name: name,
           name,
           phone,
           email,
-          category,
+          category: 'INQUIRY',
           purpose,
           date,
           budget: budget || '협의/미정',
@@ -72,7 +71,6 @@ export default function Contact() {
         setName('');
         setPhone('');
         setEmail('');
-        setCategory('PORTRAIT');
         setPurpose('');
         setDate('');
         setBudget('');
@@ -184,73 +182,67 @@ export default function Contact() {
               원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 견적 안내를 드리겠습니다.
             </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">브랜드명 혹은 성함 <span className="text-burgundy-700">*</span></label>
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="예: 홍길동 (또는 에이징스튜디오)"
+                    className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">연락처 <span className="text-burgundy-700">*</span></label>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="010-1234-5678"
+                    className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">브랜드명 혹은 성함 <span className="text-burgundy-700">*</span></label>
+                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">이메일 주소 <span className="text-burgundy-700">*</span></label>
                 <input
-                  type="text"
+                  type="email"
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="예: 홍길동 (또는 에이징스튜디오)"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="example@email.com"
                   className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
                 />
               </div>
-              <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">연락처 <span className="text-burgundy-700">*</span></label>
-                <input
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="010-1234-5678"
-                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
-              </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">이메일 주소 <span className="text-burgundy-700">*</span></label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@email.com"
-                className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">촬영 유형 <span className="text-burgundy-700">*</span></label>
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
-                >
-                  <option value="PORTRAIT">인물 촬영 / 프로필</option>
-                  <option value="SNAP">야외 / 데일리 스냅</option>
-                  <option value="WEDDING">웨딩 / 돌스냅</option>
-                  <option value="PRODUCT">제품 / 상업 광고</option>
-                  <option value="VIDEO">영상 제작 / 기획</option>
-                  <option value="ETC">기타 문의</option>
-                </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">희망 일정 <span className="text-burgundy-700">*</span></label>
+                  <input
+                    type="date"
+                    required
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">촬영 예산</label>
+                  <input
+                    type="text"
+                    value={budget}
+                    onChange={(e) => setBudget(e.target.value)}
+                    placeholder="예: 50만원 선, 협의 가능"
+                    className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">희망 일정 <span className="text-burgundy-700">*</span></label>
-                <input
-                  type="date"
-                  required
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">촬영 목적 <span className="text-burgundy-700">*</span></label>
                 <input
@@ -258,64 +250,53 @@ export default function Contact() {
                   required
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value)}
-                  placeholder="예: SNS 홍보 / 상세페이지 / 숏츠 등"
+                  placeholder="예: sns 컨텐츠, 상세페이지, 숏폼"
                   className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
                 />
               </div>
+
               <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">촬영 예산</label>
-                <input
-                  type="text"
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                  placeholder="예: 50만원 선, 협의 가능"
-                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">촬영 내용 (컨셉 및 분량) <span className="text-burgundy-700">*</span></label>
+                <textarea
+                  required
+                  rows={4}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="촬영하고 싶으신 컨셉과 필요한 예상 컷 수 또는 영상 분량을 적어주세요."
+                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
                 />
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">촬영 내용 (컨셉 및 분량) <span className="text-burgundy-700">*</span></label>
-              <textarea
-                required
-                rows={4}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="촬영하고 싶으신 컨셉과 필요한 예상 컷 수 또는 영상 분량을 적어주세요."
-                className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-
-            {submitStatus === 'success' && (
-              <div className="p-4 bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-lg text-sm text-center">
-                ✨ 견적 문의가 성공적으로 접수되었습니다. 지정하신 메일/연락처로 곧 연락해 드리겠습니다!
-              </div>
-            )}
-
-            {submitStatus === 'error' && (
-              <div className="p-4 bg-red-50 border border-red-100 text-red-800 rounded-lg text-sm text-center">
-                ⚠️ 문의 발송 중 문제가 발생했습니다. 번거로우시겠지만 관리자 이메일({settings.contactEmail})로 직접 발송해 주세요.
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-burgundy-800 hover:bg-burgundy-700 disabled:bg-stone-300 text-ivory-100 font-medium tracking-widest uppercase py-4 rounded-lg transition-colors duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer"
-            >
-              {isSubmitting ? (
-                <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-              ) : (
-                <>
-                  <Send size={16} />
-                  <span>견적 문의 제출하기</span>
-                </>
+              {submitStatus === 'success' && (
+                <div className="p-4 bg-emerald-50 border border-emerald-100 text-emerald-800 rounded-lg text-sm text-center">
+                  ✨ 견적 문의가 성공적으로 접수되었습니다. 지정하신 메일/연락처로 곧 연락해 드리겠습니다!
+                </div>
               )}
-            </button>
-          </form>
-        </motion.div>
+
+              {submitStatus === 'error' && (
+                <div className="p-4 bg-red-50 border border-red-100 text-red-800 rounded-lg text-sm text-center">
+                  ⚠️ 문의 발송 중 문제가 발생했습니다. 번거로우시겠지만 관리자 이메일({settings.contactEmail})로 직접 발송해 주세요.
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-burgundy-800 hover:bg-burgundy-700 disabled:bg-stone-300 text-ivory-100 font-medium tracking-widest uppercase py-4 rounded-lg transition-colors duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                ) : (
+                  <>
+                    <Send size={16} />
+                    <span>견적 문의 제출하기</span>
+                  </>
+                )}
+              </button>
+            </form>
+          </motion.div>
+        </div>
       </div>
     </div>
-  </div>
   );
 }

@@ -17,7 +17,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-ivory-100 text-stone-900 font-sans selection:bg-burgundy-200 selection:text-burgundy-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-ivory-100/90 backdrop-blur-md border-b border-ivory-300">
+      <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-stone-200/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.04)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Header */}
           <div className="hidden md:grid grid-cols-3 items-center h-24">
