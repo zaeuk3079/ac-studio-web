@@ -163,7 +163,7 @@ export default function Home() {
                   />
                   
                   {/* Glassmorphic Glossy Brand Name Badge */}
-                  <div className="absolute left-6 top-6 bg-white/30 backdrop-blur-lg border border-white/40 px-5 py-2.5 rounded-full text-xs font-semibold text-white tracking-[0.15em] uppercase shadow-[0_8px_32px_0_rgba(0,0,0,0.18),inset_0_1.5px_0_0_rgba(255,255,255,0.45)] ring-1 ring-black/5 transition-transform duration-500 group-hover:scale-105">
+                  <div className="absolute left-6 top-6 bg-white/15 backdrop-blur-lg border border-white/35 px-5 py-2.5 rounded-full text-xs font-semibold text-white tracking-[0.15em] uppercase shadow-[0_8px_32px_0_rgba(0,0,0,0.18),inset_0_1.5px_0_0_rgba(255,255,255,0.45)] ring-1 ring-black/5 transition-transform duration-500 group-hover:scale-105">
                     {item.title}
                   </div>
 
