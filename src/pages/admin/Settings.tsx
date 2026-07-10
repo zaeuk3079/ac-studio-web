@@ -133,11 +133,9 @@ export default function Settings() {
 
   const tabs = [
     { id: 'home', label: 'Home', icon: Home },
-    { id: 'portfolio', label: 'Portfolio', icon: ImageIcon },
     { id: 'about', label: 'About', icon: Info },
     { id: 'service', label: 'Service', icon: Layers },
     { id: 'contact', label: 'Contact', icon: Phone },
-    { id: 'appearance', label: 'Appearance', icon: Palette },
     { id: 'deployment', label: 'Deployment', icon: Globe },
   ];
 
@@ -213,31 +211,40 @@ export default function Settings() {
                 </div>
               )}
             </div>
-          </motion.div>
-        )}
-
-        {/* PORTFOLIO TAB */}
-        {activeTab === 'portfolio' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Portfolio Page Title</label>
-              <input
-                type="text"
-                name="portfolioTitle"
-                value={formData.portfolioTitle || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Portfolio Sub Text</label>
-              <input
-                type="text"
-                name="portfolioSubText"
-                value={formData.portfolioSubText || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
+            
+            {/* Font Settings */}
+            <div className="pt-6 border-t border-stone-200 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Heading Font (제목 폰트)</label>
+                <select
+                  name="headingFont"
+                  value={formData.headingFont || 'Pretendard'}
+                  onChange={handleChange as any}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
+                >
+                  <option value="Pretendard">Pretendard (프리텐다드/제목 및 본문 통일 추천)</option>
+                  <option value="Playfair Display">Playfair Display (클래식/영문 추천)</option>
+                  <option value="Cormorant Garamond">Cormorant Garamond (우아함/영문 추천)</option>
+                  <option value="Lora">Lora (부드러운 세리프/영문)</option>
+                  <option value="Noto Serif KR">Noto Serif KR (명조체/한글 추천)</option>
+                  <option value="Nanum Myeongjo">Nanum Myeongjo (나눔명조/한글 추천)</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Body Font (본문 폰트)</label>
+                <select
+                  name="bodyFont"
+                  value={formData.bodyFont || 'Pretendard'}
+                  onChange={handleChange as any}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
+                >
+                  <option value="Pretendard">Pretendard (프리텐다드/가장 깔끔한 한글)</option>
+                  <option value="Inter">Inter (모던/영문 추천)</option>
+                  <option value="Noto Sans KR">Noto Sans KR (고딕체/한글 추천)</option>
+                  <option value="Nanum Gothic">Nanum Gothic (나눔고딕/한글 추천)</option>
+                  <option value="Gowun Dodum">Gowun Dodum (고운돋움/감성적인 한글)</option>
+                </select>
+              </div>
             </div>
           </motion.div>
         )}
@@ -566,71 +573,6 @@ export default function Settings() {
                   <li>입력한 이메일로 즉시 발송되는 <strong>Access Key</strong>를 복사하여 위 입력란에 붙여넣고 저장하세요.</li>
                 </ol>
               </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* APPEARANCE TAB */}
-        {activeTab === 'appearance' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Theme Color</label>
-                <select
-                  name="themeColor"
-                  value={formData.themeColor || 'ivory'}
-                  onChange={handleChange as any}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
-                >
-                  <option value="ivory">Ivory (Default)</option>
-                  <option value="white">Minimal White</option>
-                  <option value="dark">Dark Mode</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Accent Color</label>
-                <select
-                  name="accentColor"
-                  value={formData.accentColor || 'burgundy'}
-                  onChange={handleChange as any}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
-                >
-                  <option value="burgundy">Burgundy (Default)</option>
-                  <option value="gold">Gold</option>
-                  <option value="forest">Forest Green</option>
-                </select>
-              </div>
-            </div>
-            <div className="pt-4 border-t border-stone-100">
-              <label className="block text-sm font-medium text-stone-700 mb-2">Heading Font (제목 폰트)</label>
-              <select
-                name="headingFont"
-                value={formData.headingFont || 'Playfair Display'}
-                onChange={handleChange as any}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
-              >
-                <option value="Pretendard">Pretendard (프리텐다드/제목 및 본문 통일 추천)</option>
-                <option value="Playfair Display">Playfair Display (클래식/영문 추천)</option>
-                <option value="Cormorant Garamond">Cormorant Garamond (우아함/영문 추천)</option>
-                <option value="Lora">Lora (부드러운 세리프/영문)</option>
-                <option value="Noto Serif KR">Noto Serif KR (명조체/한글 추천)</option>
-                <option value="Nanum Myeongjo">Nanum Myeongjo (나눔명조/한글 추천)</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Body Font (본문 폰트)</label>
-              <select
-                name="bodyFont"
-                value={formData.bodyFont || 'Inter'}
-                onChange={handleChange as any}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
-              >
-                <option value="Pretendard">Pretendard (프리텐다드/가장 깔끔한 한글)</option>
-                <option value="Inter">Inter (모던/영문 추천)</option>
-                <option value="Noto Sans KR">Noto Sans KR (고딕체/한글 추천)</option>
-                <option value="Nanum Gothic">Nanum Gothic (나눔고딕/한글 추천)</option>
-                <option value="Gowun Dodum">Gowun Dodum (고운돋움/감성적인 한글)</option>
-              </select>
             </div>
           </motion.div>
         )}
