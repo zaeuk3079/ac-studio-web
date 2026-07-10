@@ -138,7 +138,7 @@ const defaultSettings: SiteSettings = {
   instagramUrl: 'https://instagram.com/agingstudio',
   googleFormUrl: 'https://docs.google.com/forms',
   formDownloadUrl: '#',
-  web3FormsKey: '',
+  web3FormsKey: '2ad41e7e-6c9c-4c9b-b14a-d160b8fc15bf',
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',
