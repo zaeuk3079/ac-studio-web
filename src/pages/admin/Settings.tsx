@@ -163,7 +163,7 @@ export default function Settings() {
         {activeTab === 'home' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Site Name</label>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Site Name (사이트 이름)</label>
               <input
                 type="text"
                 name="siteName"
@@ -195,209 +195,15 @@ export default function Settings() {
                   </button>
                 </div>
               </div>
-              <p className="text-[10px] text-stone-400 mt-2">* 팁: 배경이 투명한 PNG 형식의 가로형 로고(높이 60px 내외)를 권장합니다.</p>
+              <p className="text-[10px] text-stone-400 mt-2">* 팁: 배경이 투명한 PNG 형식의 로고를 권장하며, 업로드 시 투명도가 보존됩니다.</p>
               {formData.logoUrl && (
                 <div className="mt-4 p-4 bg-stone-50 rounded-lg border border-stone-200 flex justify-center items-center">
-                  <img src={formData.logoUrl} alt="Logo Preview" className="max-h-12 object-contain" referrerPolicy="no-referrer" />
+                  <img src={formData.logoUrl} alt="Logo Preview" className="max-h-16 object-contain" referrerPolicy="no-referrer" />
                 </div>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Hero Background Image</label>
-              <div className="flex space-x-3">
-                <input
-                  type="text"
-                  name="heroImage"
-                  value={formData.heroImage || ''}
-                  onChange={handleChange}
-                  className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                  placeholder="https://example.com/image.jpg"
-                />
-                <div className="relative overflow-hidden">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(e, 'heroImage')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
-                    PC에서 찾기
-                  </button>
-                </div>
-              </div>
-              <p className="text-[10px] text-stone-400 mt-2">* 고화질 팁: 메인 배경은 2560px(2K) 이상의 고해상도 사진을 권장합니다.</p>
-              {formData.heroImage && (
-                <div className="mt-4 w-full h-48 rounded-lg overflow-hidden border border-stone-200">
-                  <img src={formData.heroImage} alt="Hero Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Hero Main Text</label>
-              <input
-                type="text"
-                name="heroText"
-                value={formData.heroText}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Hero Sub Text</label>
-              <textarea
-                name="heroSubText"
-                value={formData.heroSubText}
-                onChange={handleChange}
-                rows={2}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-            
-            {/* 메인 플로팅 누끼 이미지 관리 */}
-            <div className="pt-6 border-t border-stone-200 space-y-6">
-              <div>
-                <label className="block text-base font-bold text-stone-900 mb-1">메인 플로팅 누끼 이미지 배치 설정 (여러 장)</label>
-                <p className="text-xs text-stone-500">* 메인 화면의 여백에 둥실둥실 배치할 누끼 컷들을 올리고 각 기기의 위치 및 크기를 조절할 수 있습니다.</p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex space-x-3">
-                  <div className="relative overflow-hidden flex-1">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleNukiImagesUpload}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                    />
-                    <button type="button" className="w-full bg-burgundy-50 hover:bg-burgundy-100 text-burgundy-800 border border-burgundy-200/50 py-3 rounded-lg font-semibold transition-colors text-sm flex items-center justify-center space-x-2 cursor-pointer shadow-sm">
-                      <span>누끼 이미지 파일 추가 (PNG 추천)</span>
-                    </button>
-                  </div>
-                </div>
-
-                {formData.heroNukiConfigs && formData.heroNukiConfigs.length > 0 ? (
-                  <div className="space-y-6">
-                    {/* 실시간 위치 미니맵 보드 */}
-                    <div className="border border-stone-200 rounded-xl overflow-hidden shadow-inner">
-                      <div className="bg-stone-50 px-4 py-2 border-b border-stone-200 flex justify-between items-center text-xs font-semibold text-stone-500">
-                        <span>실시간 배치 미니맵 (가로 100% * 세로 50vh 비율)</span>
-                        <span className="text-burgundy-700">점선 영역 = 메인 텍스트 영역 (피해서 배치하세요!)</span>
-                      </div>
-                      
-                      <div className="relative w-full aspect-[2/1] bg-gradient-to-tr from-ivory-200 via-white to-ivory-100 overflow-hidden select-none">
-                        {/* Apple-style floating blurred circles (mock) */}
-                        <div className="absolute top-1/4 left-1/4 w-1/4 h-1/4 bg-burgundy-100/30 rounded-full filter blur-xl" />
-                        <div className="absolute bottom-1/4 right-1/4 w-1/3 h-1/3 bg-ivory-300/40 rounded-full filter blur-xl" />
-                        
-                        {/* Mock Text Area */}
-                        <div className="absolute inset-x-[20%] top-[30%] bottom-[30%] border-2 border-dashed border-burgundy-900/10 rounded-lg flex items-center justify-center bg-white/20 backdrop-blur-[2px] z-20">
-                          <span className="text-[10px] md:text-xs font-serif text-stone-900 font-semibold tracking-wider select-none">TEXT AREA</span>
-                        </div>
-
-                        {/* Rendering config objects dynamically */}
-                        {formData.heroNukiConfigs.map((config, idx) => (
-                          <div
-                            key={idx}
-                            className="absolute pointer-events-none"
-                            style={{
-                              left: `${config.left}%`,
-                              top: `${config.top}%`,
-                              transform: 'translate(-50%, -50%)',
-                              width: `${(config.size / 300) * 100}%` // scale based on board width
-                            }}
-                          >
-                            <img
-                              src={config.url}
-                              alt={`Nuki ${idx + 1}`}
-                              className="w-full h-auto object-contain mix-blend-multiply drop-shadow-[0_4px_10px_rgba(0,0,0,0.06)]"
-                              referrerPolicy="no-referrer"
-                            />
-                            <div className="absolute top-0 left-0 bg-burgundy-800 text-white text-[8px] md:text-[10px] font-bold px-1.5 py-0.5 rounded shadow-sm">
-                              #{idx + 1}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* 개별 이미지 편집 슬라이더 리스트 */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {formData.heroNukiConfigs.map((config, idx) => (
-                        <div key={idx} className="bg-stone-50 border border-stone-200 rounded-xl p-4 space-y-3 flex flex-col justify-between">
-                          <div className="flex justify-between items-start">
-                            <span className="bg-burgundy-900 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                              이미지 #{idx + 1}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveNukiImage(idx)}
-                              className="text-xs text-red-600 hover:text-red-800 font-semibold transition-colors"
-                            >
-                              삭제
-                            </button>
-                          </div>
-
-                          <div className="flex space-x-3 items-center">
-                            <div className="w-16 h-16 bg-white border border-stone-200 rounded-lg flex items-center justify-center p-1.5 overflow-hidden">
-                              <img src={config.url} alt={`Thumb ${idx + 1}`} className="max-h-full max-w-full object-contain mix-blend-multiply" referrerPolicy="no-referrer" />
-                            </div>
-                            
-                            <div className="flex-1 space-y-2">
-                              {/* Left X좌표 */}
-                              <div className="flex items-center space-x-2">
-                                <span className="text-[11px] font-medium text-stone-500 w-12">가로 (X):</span>
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="100"
-                                  value={config.left}
-                                  onChange={(e) => handleNukiConfigChange(idx, 'left', parseInt(e.target.value))}
-                                  className="flex-1 accent-burgundy-800 h-1 bg-stone-200 rounded-lg cursor-pointer"
-                                />
-                                <span className="text-[11px] font-semibold text-stone-700 w-8 text-right">{config.left}%</span>
-                              </div>
-                              
-                              {/* Top Y좌표 */}
-                              <div className="flex items-center space-x-2">
-                                <span className="text-[11px] font-medium text-stone-500 w-12">세로 (Y):</span>
-                                <input
-                                  type="range"
-                                  min="0"
-                                  max="100"
-                                  value={config.top}
-                                  onChange={(e) => handleNukiConfigChange(idx, 'top', parseInt(e.target.value))}
-                                  className="flex-1 accent-burgundy-800 h-1 bg-stone-200 rounded-lg cursor-pointer"
-                                />
-                                <span className="text-[11px] font-semibold text-stone-700 w-8 text-right">{config.top}%</span>
-                              </div>
-                              
-                              {/* Size 크기 */}
-                              <div className="flex items-center space-x-2">
-                                <span className="text-[11px] font-medium text-stone-500 w-12">크기 (W):</span>
-                                <input
-                                  type="range"
-                                  min="50"
-                                  max="300"
-                                  value={config.size || 120}
-                                  onChange={(e) => handleNukiConfigChange(idx, 'size', parseInt(e.target.value))}
-                                  className="flex-1 accent-burgundy-800 h-1 bg-stone-200 rounded-lg cursor-pointer"
-                                />
-                                <span className="text-[11px] font-semibold text-stone-700 w-8 text-right">{config.size || 120}px</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-10 border-2 border-dashed border-stone-200 rounded-xl bg-stone-50 text-stone-400 text-xs">
-                    등록된 플로팅 이미지가 없습니다. (비어있을 경우 카메라와 렌즈 이미지가 화면 좌우에 기본값으로 표시됩니다.)
-                  </div>
-                )}
-              </div>
-            </div>
+          </motion.div>
+        )}
             <div className="pt-4 border-t border-stone-100">
               <h3 className="text-sm font-semibold text-stone-800 mb-4">Footer Settings</h3>
               <div className="space-y-4">
