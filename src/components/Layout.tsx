@@ -20,26 +20,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-stone-200/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.04)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Header */}
-          <div className="hidden md:grid grid-cols-3 items-center h-24">
-            {/* Left Nav */}
-            <nav className="flex space-x-10 justify-start">
-              <Link
-                to="/photography"
-                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
-                  location.pathname === '/photography' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
-                }`}
-              >
-                Photography
-              </Link>
-              <Link
-                to="/video"
-                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
-                  location.pathname === '/video' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
-                }`}
-              >
-                Video
-              </Link>
-            </nav>
+          <div className="hidden md:grid grid-cols-3 items-center h-32">
+            {/* Left Nav (Empty for balance) */}
+            <div className="flex justify-start"></div>
 
             {/* Center Logo */}
             <div className="flex justify-center">
@@ -95,8 +78,6 @@ export default function Layout({ children }: { children: ReactNode }) {
               )}
             </Link>
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-              <Link to="/photography" className="text-[10px] tracking-widest uppercase text-stone-500">Photography</Link>
-              <Link to="/video" className="text-[10px] tracking-widest uppercase text-stone-500">Video</Link>
               <Link to="/about" className="text-[10px] tracking-widest uppercase text-stone-500">About</Link>
               <Link to="/contact" className="text-[10px] tracking-widest uppercase text-stone-500">Contact</Link>
             </nav>

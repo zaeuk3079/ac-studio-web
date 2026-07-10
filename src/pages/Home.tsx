@@ -32,16 +32,34 @@ export default function Home() {
   const { settings, portfolio, getGalleryImages } = useCMS();
   
   const [activeCategory, setActiveCategory] = useState<'Photography' | 'Video'>('Photography');
+  const [subCategory, setSubCategory] = useState<string>('ALL');
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
 
-  // Filter portfolio based on category
+  // Filter portfolio based on category & subcategory
   const filteredPortfolio = portfolio.filter(item => {
     if (activeCategory === 'Photography') {
-      return item.category !== 'Video';
+      if (item.category === 'Video') return false;
+      if (subCategory === 'ALL') return true;
+      
+      const itemCat = item.category.toUpperCase().replace(/\s+/g, '');
+      if (subCategory === 'COMMERCIAL') {
+        return itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL';
+      }
+      if (subCategory === 'FOOD & BEVERAGE') {
+        return itemCat === 'FOOD&BEVERAGE' || itemCat === 'FOOD' || itemCat === 'BEVERAGE';
+      }
+      if (subCategory === 'MODEL') {
+        return itemCat === 'MODEL' || itemCat === 'PORTRAIT' || itemCat === 'SNAP' || itemCat === 'WEDDING';
+      }
+      if (subCategory === 'AI') {
+        return itemCat === 'AI';
+      }
+      return false;
+    } else {
+      return item.category === 'Video';
     }
-    return item.category === 'Video';
   });
 
   const handleItemClick = async (item: PortfolioItem) => {
@@ -73,12 +91,16 @@ export default function Home() {
         
         {/* Category Header & Filter */}
         <div className="mb-16 mt-8">
-          <h1 className="font-sans text-5xl md:text-7xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-8">
+          <h1 className="font-sans text-3xl md:text-5xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-8">
             Work
           </h1>
+          
           <div className="flex space-x-12 text-sm font-semibold tracking-[0.25em] uppercase border-b border-stone-100 pb-4">
             <button
-              onClick={() => setActiveCategory('Photography')}
+              onClick={() => {
+                setActiveCategory('Photography');
+                setSubCategory('ALL');
+              }}
               className={`transition-all duration-300 cursor-pointer pb-4 -mb-5 border-b-2 ${
                 activeCategory === 'Photography' 
                   ? 'border-stone-900 text-stone-900 font-bold' 
@@ -98,6 +120,25 @@ export default function Home() {
               Video
             </button>
           </div>
+
+          {/* Subcategories (only under Photography) */}
+          {activeCategory === 'Photography' && (
+            <div className="flex flex-wrap gap-3 mt-8 text-[11px] tracking-wider uppercase font-semibold text-stone-500">
+              {['ALL', 'COMMERCIAL', 'FOOD & BEVERAGE', 'MODEL', 'AI'].map((sub) => (
+                <button
+                  key={sub}
+                  onClick={() => setSubCategory(sub)}
+                  className={`px-5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
+                    subCategory === sub 
+                      ? 'bg-stone-900 border-stone-900 text-white shadow-sm font-bold' 
+                      : 'bg-white border-stone-200 text-stone-500 hover:bg-stone-50'
+                  }`}
+                >
+                  {sub}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Pinterest-style Masonry Gallery Grid */}
@@ -110,7 +151,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                className="break-inside-avoid group cursor-pointer mb-4 bg-white border border-stone-100/30 rounded-[3.5rem] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1.5 relative"
+                className="break-inside-avoid group cursor-pointer mb-4 bg-white border border-stone-100/30 rounded-[1.75rem] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1.5 relative"
                 onClick={() => handleItemClick(item)}
               >
                 <div className="relative overflow-hidden">
@@ -121,8 +162,8 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                   
-                  {/* Floating Glassmorphic Brand Name Badge */}
-                  <div className="absolute left-6 top-6 bg-white/20 backdrop-blur-md border border-white/30 px-5 py-2.5 rounded-full text-xs font-semibold text-white tracking-[0.15em] uppercase shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] transition-transform duration-500 group-hover:scale-105">
+                  {/* Glassmorphic Glossy Brand Name Badge */}
+                  <div className="absolute left-6 top-6 bg-white/30 backdrop-blur-lg border border-white/40 px-5 py-2.5 rounded-full text-xs font-semibold text-white tracking-[0.15em] uppercase shadow-[0_8px_32px_0_rgba(0,0,0,0.18),inset_0_1.5px_0_0_rgba(255,255,255,0.45)] ring-1 ring-black/5 transition-transform duration-500 group-hover:scale-105">
                     {item.title}
                   </div>
 
