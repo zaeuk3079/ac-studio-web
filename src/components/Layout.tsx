@@ -43,7 +43,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
             {/* Center Logo */}
             <div className="flex justify-center">
-              <Link to="/" className="flex items-center justify-center">
+              <Link to="/" className="flex items-center justify-center p-2 hover:opacity-90 transition-opacity cursor-pointer">
                 {settings.logoUrl ? (
                   <img src={settings.logoUrl} alt={settings.siteName} className="max-h-20 w-auto object-contain" referrerPolicy="no-referrer" />
                 ) : (
@@ -77,11 +77,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
           {/* Mobile Header */}
           <div className="md:hidden flex flex-col items-center py-4 space-y-4">
-            <Link to="/" className="flex items-center justify-center">
+            <Link to="/" className="flex items-center justify-center p-1 hover:opacity-90 transition-opacity cursor-pointer">
               {settings.logoUrl ? (
                 <img src={settings.logoUrl} alt={settings.siteName} className="max-h-14 w-auto object-contain" referrerPolicy="no-referrer" />
               ) : (
-                <span className="font-sans text-xl tracking-[0.2em] text-burgundy-900 font-bold uppercase">
+                <span className="font-sans text-xl tracking-[0.2em] text-stone-900 font-bold uppercase">
                   {settings.siteName}
                 </span>
               )}
