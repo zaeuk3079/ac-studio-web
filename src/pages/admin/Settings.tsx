@@ -503,26 +503,6 @@ export default function Settings() {
                 className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Google Form URL (예약 폼)</label>
-              <input
-                type="url"
-                name="googleFormUrl"
-                value={formData.googleFormUrl || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Form Download URL (양식 다운로드 링크)</label>
-              <input
-                type="url"
-                name="formDownloadUrl"
-                value={formData.formDownloadUrl || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
             <div className="pt-4 border-t border-stone-100">
               <label className="block text-sm font-medium text-stone-700 mb-2">Web3Forms Access Key (이메일 자동 발송용 키)</label>
               <input
