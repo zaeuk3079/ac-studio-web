@@ -102,11 +102,34 @@ function SortablePortfolioRow({ item, onEdit, onDelete, onTogglePin }: { key?: R
 
 export default function PortfolioManage() {
   const { portfolio, addPortfolioItem, updatePortfolioItem, deletePortfolioItem, reorderPortfolio, getGalleryImages } = useCMS();
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState<Partial<PortfolioItem>>({});
   const [tempUrl, setTempUrl] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Normalize mapping for categories (matching Home.tsx filters)
+  const filteredPortfolio = portfolio.filter(item => {
+    if (activeCategory === 'ALL') return true;
+    
+    const itemCat = item.category.toUpperCase().replace(/\s+/g, '');
+    const activeCat = activeCategory.toUpperCase().replace(/\s+/g, '');
+    
+    if (activeCat === 'COMMERCIAL') {
+      return itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL';
+    }
+    if (activeCat === 'FOOD&BEVERAGE') {
+      return itemCat === 'FOOD&BEVERAGE' || itemCat === 'FOOD' || itemCat === 'BEVERAGE';
+    }
+    if (activeCat === 'MODEL') {
+      return itemCat === 'MODEL' || itemCat === 'PORTRAIT' || itemCat === 'SNAP' || itemCat === 'WEDDING';
+    }
+    if (activeCat === 'AI') {
+      return itemCat === 'AI';
+    }
+    return itemCat === activeCat;
+  });
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -191,9 +214,41 @@ export default function PortfolioManage() {
   const handleDragEndPortfolio = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      const oldIndex = portfolio.findIndex(item => item.id === active.id);
-      const newIndex = portfolio.findIndex(item => item.id === over.id);
-      reorderPortfolio(arrayMove(portfolio, oldIndex, newIndex));
+      const activeIndex = filteredPortfolio.findIndex(item => item.id === active.id);
+      const overIndex = filteredPortfolio.findIndex(item => item.id === over.id);
+      
+      const reorderedFiltered = arrayMove(filteredPortfolio, activeIndex, overIndex);
+      
+      let newFullPortfolio: PortfolioItem[] = [];
+      if (activeCategory === 'ALL') {
+        newFullPortfolio = reorderedFiltered;
+      } else {
+        let filteredIdx = 0;
+        newFullPortfolio = portfolio.map(item => {
+          const itemCat = item.category.toUpperCase().replace(/\s+/g, '');
+          const activeCat = activeCategory.toUpperCase().replace(/\s+/g, '');
+          let matches = false;
+          
+          if (activeCat === 'COMMERCIAL') {
+            matches = itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL';
+          } else if (activeCat === 'FOOD&BEVERAGE') {
+            matches = itemCat === 'FOOD&BEVERAGE' || itemCat === 'FOOD' || itemCat === 'BEVERAGE';
+          } else if (activeCat === 'MODEL') {
+            matches = itemCat === 'MODEL' || itemCat === 'PORTRAIT' || itemCat === 'SNAP' || itemCat === 'WEDDING';
+          } else if (activeCat === 'AI') {
+            matches = itemCat === 'AI';
+          } else {
+            matches = itemCat === activeCat;
+          }
+          
+          if (matches) {
+            return reorderedFiltered[filteredIdx++];
+          }
+          return item;
+        });
+      }
+      
+      reorderPortfolio(newFullPortfolio);
     }
   };
 
@@ -466,6 +521,23 @@ export default function PortfolioManage() {
         )}
       </AnimatePresence>
 
+      {/* Category Tabs for Sorting & Filtering */}
+      <div className="flex flex-wrap gap-2 mb-6 text-xs font-semibold uppercase tracking-wider bg-stone-50 p-3.5 rounded-xl border border-stone-200/60">
+        {['ALL', 'COMMERCIAL', 'FOOD & BEVERAGE', 'MODEL', 'AI', 'Video'].map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(cat)}
+            className={`px-4.5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
+              activeCategory === cat 
+                ? 'bg-stone-900 border-stone-900 text-white shadow-sm font-bold' 
+                : 'bg-white border-stone-200 text-stone-500 hover:bg-stone-100 hover:text-stone-700'
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
       <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -478,9 +550,9 @@ export default function PortfolioManage() {
               </tr>
             </thead>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndPortfolio}>
-              <SortableContext items={portfolio.map(p => p.id)} strategy={verticalListSortingStrategy}>
+              <SortableContext items={filteredPortfolio.map(p => p.id)} strategy={verticalListSortingStrategy}>
                 <tbody className="divide-y divide-stone-100">
-                  {portfolio.map((item) => (
+                  {filteredPortfolio.map((item) => (
                     <SortablePortfolioRow
                       key={item.id}
                       item={item}
@@ -493,7 +565,7 @@ export default function PortfolioManage() {
               </SortableContext>
             </DndContext>
           </table>
-          {portfolio.length === 0 && (
+          {filteredPortfolio.length === 0 && (
             <div className="p-12 text-center text-stone-500">
               No portfolio items found. Add some to get started.
             </div>
