@@ -7,35 +7,15 @@ export default function Service() {
   const { settings } = useCMS();
 
   return (
-    <div className="bg-white min-h-screen py-24">
+    <div className="bg-white min-h-screen py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="font-sans text-3xl md:text-5xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-6"
-          >
-            {settings.serviceTitle || 'Our Services'}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-stone-400 text-sm tracking-[0.15em] uppercase font-semibold"
-          >
-            {settings.serviceSubText || '서비스 및 촬영 과정 안내'}
-          </motion.p>
-        </div>
-
-        {/* Content Section (Wide Image Layout) */}
+        {/* Content Section (Wide Image Only Layout) */}
         <div className="flex flex-col items-center space-y-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8 }}
             className="w-full rounded-2xl overflow-hidden shadow-2xl shadow-stone-100 border border-stone-100/50"
           >
             <img
@@ -50,7 +30,7 @@ export default function Service() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="pt-6"
           >
             <Link
