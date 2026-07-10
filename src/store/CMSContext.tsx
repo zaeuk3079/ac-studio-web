@@ -142,8 +142,8 @@ const defaultSettings: SiteSettings = {
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',
-  headingFont: 'Playfair Display',
-  bodyFont: 'Inter',
+  headingFont: 'Pretendard',
+  bodyFont: 'Pretendard',
   // Footer
   footerTitle: 'aging studio',
   footerText: '당신의 가장 빛나는 순간을 기록합니다. 시간이 흘러도 변하지 않는 가치를 선사합니다.',

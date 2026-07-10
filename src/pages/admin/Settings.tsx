@@ -554,6 +554,7 @@ export default function Settings() {
                 onChange={handleChange as any}
                 className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white"
               >
+                <option value="Pretendard">Pretendard (프리텐다드/제목 및 본문 통일 추천)</option>
                 <option value="Playfair Display">Playfair Display (클래식/영문 추천)</option>
                 <option value="Cormorant Garamond">Cormorant Garamond (우아함/영문 추천)</option>
                 <option value="Lora">Lora (부드러운 세리프/영문)</option>

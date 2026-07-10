@@ -24,17 +24,17 @@ import Settings from './pages/admin/Settings';
 function ThemeApplier() {
   const { settings } = useCMS();
   
-  const headingFont = settings.headingFont || 'Playfair Display';
-  const bodyFont = settings.bodyFont || 'Inter';
+  const headingFont = settings.headingFont || 'Pretendard';
+  const bodyFont = settings.bodyFont || 'Pretendard';
 
   return (
     <style>
       {`
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        @import url('https://fonts.googleapis.com/css2?family=${headingFont.replace(/ /g, '+')}:wght@400;500;600;700&family=${bodyFont.replace(/ /g, '+')}:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
         :root {
-          --font-serif: "${headingFont}", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
-          --font-sans: "${bodyFont}", ui-sans-serif, system-ui, sans-serif !important;
+          --font-serif: "${headingFont}", "Pretendard", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
+          --font-sans: "${bodyFont}", "Pretendard", ui-sans-serif, system-ui, sans-serif !important;
         }
       `}
     </style>
