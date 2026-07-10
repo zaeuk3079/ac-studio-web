@@ -95,7 +95,7 @@ export default function Home() {
             Work
           </h1>
           
-          <div className="flex space-x-12 text-sm font-semibold tracking-[0.25em] uppercase border-b border-stone-100 pb-4">
+          <div className="flex space-x-12 text-sm font-semibold tracking-[0.2em] border-b border-stone-100 pb-4">
             <button
               onClick={() => {
                 setActiveCategory('Photography');
@@ -107,7 +107,7 @@ export default function Home() {
                   : 'border-transparent text-stone-400 hover:text-stone-700'
               }`}
             >
-              Photography
+              사진
             </button>
             <button
               onClick={() => setActiveCategory('Video')}
@@ -117,7 +117,7 @@ export default function Home() {
                   : 'border-transparent text-stone-400 hover:text-stone-700'
               }`}
             >
-              Video
+              영상
             </button>
           </div>
 
