@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Portfolio from './pages/Portfolio';
 import About from './pages/About';
+import Service from './pages/Service';
 import Contact from './pages/Contact';
 
 // Admin Pages
@@ -52,6 +53,7 @@ export default function App() {
           <Route path="/photography" element={<Layout><Portfolio type="photography" /></Layout>} />
           <Route path="/video" element={<Layout><Portfolio type="video" /></Layout>} />
           <Route path="/about" element={<Layout><About /></Layout>} />
+          <Route path="/service" element={<Layout><Service /></Layout>} />
           <Route path="/contact" element={<Layout><Contact /></Layout>} />
           <Route path="/portfolio" element={<Layout><Portfolio /></Layout>} />
 

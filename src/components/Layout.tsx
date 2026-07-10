@@ -21,8 +21,25 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop Header */}
           <div className="hidden md:grid grid-cols-3 items-center h-32">
-            {/* Left Nav (Empty for balance) */}
-            <div className="flex justify-start"></div>
+            {/* Left Nav */}
+            <nav className="flex space-x-10 justify-start">
+              <Link
+                to="/about"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-stone-900 ${
+                  location.pathname === '/about' ? 'text-stone-900 font-bold' : 'text-stone-500'
+                }`}
+              >
+                About
+              </Link>
+              <Link
+                to="/service"
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-stone-900 ${
+                  location.pathname === '/service' ? 'text-stone-900 font-bold' : 'text-stone-500'
+                }`}
+              >
+                Service
+              </Link>
+            </nav>
 
             {/* Center Logo */}
             <div className="flex justify-center">
@@ -30,7 +47,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 {settings.logoUrl ? (
                   <img src={settings.logoUrl} alt={settings.siteName} className="max-h-20 w-auto object-contain" referrerPolicy="no-referrer" />
                 ) : (
-                  <span className="font-sans text-2xl tracking-[0.3em] text-burgundy-900 font-bold uppercase whitespace-nowrap">
+                  <span className="font-sans text-2xl tracking-[0.3em] text-stone-900 font-bold uppercase whitespace-nowrap">
                     {settings.siteName}
                   </span>
                 )}
@@ -40,26 +57,18 @@ export default function Layout({ children }: { children: ReactNode }) {
             {/* Right Nav */}
             <nav className="flex space-x-10 justify-end items-center">
               <Link
-                to="/about"
-                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
-                  location.pathname === '/about' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
-                }`}
-              >
-                About
-              </Link>
-              <Link
                 to="/contact"
-                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-burgundy-600 ${
-                  location.pathname === '/contact' ? 'text-burgundy-800 font-semibold' : 'text-stone-500'
+                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-stone-900 ${
+                  location.pathname === '/contact' ? 'text-stone-900 font-bold' : 'text-stone-500'
                 }`}
               >
                 Contact
               </Link>
               <div className="pl-4 flex items-center space-x-4 border-l border-stone-200">
-                <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-burgundy-600 transition-colors">
+                <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-stone-900 transition-colors">
                   <Instagram size={18} />
                 </a>
-                <Link to="/admin" className="text-[10px] tracking-widest uppercase text-stone-400 hover:text-burgundy-600 transition-colors border border-stone-200 px-2 py-0.5 rounded">
+                <Link to="/admin" className="text-[10px] tracking-widest uppercase text-stone-400 hover:text-stone-900 transition-colors border border-stone-200 px-2 py-0.5 rounded">
                   Admin
                 </Link>
               </div>
@@ -79,6 +88,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             </Link>
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               <Link to="/about" className="text-[10px] tracking-widest uppercase text-stone-500">About</Link>
+              <Link to="/service" className="text-[10px] tracking-widest uppercase text-stone-500">Service</Link>
               <Link to="/contact" className="text-[10px] tracking-widest uppercase text-stone-500">Contact</Link>
             </nav>
           </div>

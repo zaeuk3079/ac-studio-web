@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
-import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe } from 'lucide-react';
+import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers } from 'lucide-react';
 import { compressImage } from '../../utils/imageUtils';
 
 export default function Settings() {
@@ -135,6 +135,7 @@ export default function Settings() {
     { id: 'home', label: 'Home', icon: Home },
     { id: 'portfolio', label: 'Portfolio', icon: ImageIcon },
     { id: 'about', label: 'About', icon: Info },
+    { id: 'service', label: 'Service', icon: Layers },
     { id: 'contact', label: 'Contact', icon: Phone },
     { id: 'appearance', label: 'Appearance', icon: Palette },
     { id: 'deployment', label: 'Deployment', icon: Globe },
@@ -381,6 +382,80 @@ export default function Settings() {
                   </div>
                 </div>
               )}
+            </div>
+        )}
+
+        {/* SERVICE TAB */}
+        {activeTab === 'service' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Service Page Title (서비스 대제목)</label>
+              <input
+                type="text"
+                name="serviceTitle"
+                value={formData.serviceTitle || ''}
+                onChange={handleChange}
+                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Service Sub Title (서비스 소제목)</label>
+              <input
+                type="text"
+                name="serviceSubText"
+                value={formData.serviceSubText || ''}
+                onChange={handleChange}
+                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Service Image (서비스/촬영진행 관련 이미지)</label>
+              <div className="flex space-x-3">
+                <input
+                  type="text"
+                  name="serviceImage"
+                  value={formData.serviceImage || ''}
+                  onChange={handleChange}
+                  className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  placeholder="https://example.com/image.jpg"
+                />
+                <div className="relative overflow-hidden">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e, 'serviceImage')}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  />
+                  <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
+                    PC에서 찾기
+                  </button>
+                </div>
+              </div>
+              {formData.serviceImage && (
+                <div className="mt-4 w-48 h-64 rounded-lg overflow-hidden border border-stone-200">
+                  <img src={formData.serviceImage} alt="Service Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                </div>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Service Description 1 (서비스 상세 설명 1)</label>
+              <textarea
+                name="serviceText"
+                value={formData.serviceText || ''}
+                onChange={handleChange}
+                rows={4}
+                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-stone-700 mb-2">Service Description 2 (촬영 진행 과정 등 설명 2)</label>
+              <textarea
+                name="serviceText2"
+                value={formData.serviceText2 || ''}
+                onChange={handleChange}
+                rows={6}
+                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
+              />
             </div>
           </motion.div>
         )}

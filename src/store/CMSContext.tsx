@@ -42,6 +42,12 @@ export interface SiteSettings {
   aboutText2: string;
   aboutText3: string;
   aboutImage: string;
+  // Service
+  serviceTitle: string;
+  serviceSubText: string;
+  serviceText: string;
+  serviceText2: string;
+  serviceImage: string;
   // Philosophy
   showPhilosophy: boolean;
   philosophyTitle: string;
@@ -134,6 +140,12 @@ const defaultSettings: SiteSettings = {
   aboutText2: '우리는 모든 사람이 자신만의 고유한 아름다움을 가지고 있다고 믿습니다. 그 아름다움이 가장 자연스럽게 드러나는 찰나를 포착하여, 시간이 흘러도 변하지 않는 가치 있는 결과물로 만들어냅니다.',
   aboutText3: '단순히 셔터를 누르는 것을 넘어, 당신과 소통하고 교감하며 가장 편안한 분위기 속에서 촬영을 진행합니다. 우리의 프레임 안에서 당신의 이야기가 예술이 됩니다.',
   aboutImage: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=2069&auto=format&fit=crop',
+  // Service
+  serviceTitle: 'Our Services',
+  serviceSubText: '촬영 진행 과정 및 서비스 안내',
+  serviceText: '에이징 스튜디오는 철저한 사전 기획부터 촬영, 정교한 리터칭까지 원스톱 서비스를 제공합니다. 고객의 브랜드 가치를 시각적으로 극대화하기 위해 각 단계마다 최상의 퀄리티를 지향합니다.',
+  serviceText2: '진행 과정: 1. 사전 미팅 및 기획 ➡️ 2. 촬영 준비 및 소품 세팅 ➡️ 3. 본 촬영 진행 ➡️ 4. A컷 셀렉 및 전문 보정 ➡️ 5. 최종 완성본 전달',
+  serviceImage: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop',
   // Philosophy
   showPhilosophy: true,
   philosophyTitle: 'Our Philosophy',
