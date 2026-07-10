@@ -66,7 +66,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-tr from-ivory-300 via-white to-ivory-100">
+      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-tr from-ivory-300 via-white to-ivory-100">
         {/* Apple-style floating blurred backdrop elements */}
         <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-burgundy-100/40 rounded-full filter blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ivory-400/50 rounded-full filter blur-3xl" style={{ animationDelay: '2s' }} />
