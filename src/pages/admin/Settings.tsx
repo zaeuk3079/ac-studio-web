@@ -383,6 +383,7 @@ export default function Settings() {
                 </div>
               )}
             </div>
+          </motion.div>
         )}
 
         {/* SERVICE TAB */}
