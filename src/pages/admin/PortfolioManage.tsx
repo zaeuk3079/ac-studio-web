@@ -45,7 +45,7 @@ function SortableGalleryItem({ id, url, isCover, onSetCover, onRemove }: { key?:
   );
 }
 
-function SortablePortfolioRow({ item, onEdit, onDelete }: { key?: React.Key, item: PortfolioItem, onEdit: () => void, onDelete: () => void }) {
+function SortablePortfolioRow({ item, onEdit, onDelete, onTogglePin }: { key?: React.Key, item: PortfolioItem, onEdit: () => void, onDelete: () => void, onTogglePin: () => void }) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id });
   const style = { transform: CSS.Transform.toString(transform), transition };
 
@@ -62,9 +62,24 @@ function SortablePortfolioRow({ item, onEdit, onDelete }: { key?: React.Key, ite
         </div>
       </td>
       <td className="px-6 py-4">
-        <div className="flex items-center space-x-2">
-          <div className="text-sm font-medium text-stone-900">{item.title}</div>
-          {item.isPinned && <Pin size={14} className="text-burgundy-600 fill-burgundy-600" />}
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onTogglePin();
+            }}
+            className="focus:outline-none transition-transform hover:scale-110 p-1 cursor-pointer"
+            title={item.isPinned ? "메인 상단 고정 해제" : "메인 상단 고정"}
+          >
+            <Pin
+              size={16}
+              className={item.isPinned
+                ? "text-burgundy-600 fill-burgundy-600 hover:text-stone-400 hover:fill-transparent"
+                : "text-stone-300 hover:text-burgundy-600 hover:fill-burgundy-600"
+              }
+            />
+          </button>
+          <div className="text-sm font-semibold text-stone-900">{item.title}</div>
         </div>
         <div className="text-sm text-stone-500 truncate max-w-xs mt-1">{item.description}</div>
       </td>
@@ -471,6 +486,7 @@ export default function PortfolioManage() {
                       item={item}
                       onEdit={() => handleEdit(item)}
                       onDelete={() => handleDelete(item.id)}
+                      onTogglePin={() => updatePortfolioItem(item.id, { isPinned: !item.isPinned })}
                     />
                   ))}
                 </tbody>
