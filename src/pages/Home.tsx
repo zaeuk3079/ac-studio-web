@@ -71,7 +71,7 @@ export default function Home() {
         <div className="absolute top-1/4 left-1/4 w-80 h-80 bg-burgundy-100/40 rounded-full filter blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-ivory-400/50 rounded-full filter blur-3xl" style={{ animationDelay: '2s' }} />
 
-        {/* Floating Nuki Images (mix-blend-mode: multiply) */}
+        {/* Floating Nuki Images */}
         {settings.heroNukiImages && settings.heroNukiImages.length > 0 ? (
           settings.heroNukiImages.map((imgUrl, index) => {
             const isLeft = index % 2 === 0;
@@ -101,13 +101,13 @@ export default function Home() {
                   y: { duration: duration, repeat: Infinity, ease: "easeInOut" },
                   rotate: { duration: duration + 2, repeat: Infinity, ease: "easeInOut" }
                 }}
-                className="absolute w-24 md:w-44 lg:w-60 pointer-events-none select-none z-10 hidden sm:block"
+                className="absolute w-14 md:w-24 lg:w-36 pointer-events-none select-none z-10 hidden sm:block"
                 style={style}
               >
                 <img
                   src={imgUrl}
                   alt={`Nuki Object ${index + 1}`}
-                  className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.06)]"
+                  className="w-full h-auto drop-shadow-[0_15px_30px_rgba(0,0,0,0.06)]"
                   referrerPolicy="no-referrer"
                 />
               </motion.div>
@@ -130,12 +130,12 @@ export default function Home() {
                 y: { duration: 6, repeat: Infinity, ease: "easeInOut" },
                 rotate: { duration: 8, repeat: Infinity, ease: "easeInOut" }
               }}
-              className="absolute left-8 md:left-16 lg:left-24 bottom-12 md:bottom-24 w-40 md:w-64 lg:w-80 pointer-events-none select-none z-10 hidden sm:block"
+              className="absolute left-8 md:left-16 lg:left-24 bottom-12 md:bottom-24 w-20 md:w-32 lg:w-40 pointer-events-none select-none z-10 hidden sm:block"
             >
               <img
                 src="/camera_white.jpg"
                 alt="Camera Model"
-                className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
+                className="w-full h-auto mix-blend-multiply drop-shadow-[0_15px_30px_rgba(0,0,0,0.06)]"
               />
             </motion.div>
 
@@ -154,12 +154,12 @@ export default function Home() {
                 y: { duration: 7, repeat: Infinity, ease: "easeInOut" },
                 rotate: { duration: 9, repeat: Infinity, ease: "easeInOut" }
               }}
-              className="absolute right-8 md:right-16 lg:right-24 top-12 md:top-24 w-36 md:w-56 lg:w-72 pointer-events-none select-none z-10 hidden sm:block"
+              className="absolute right-8 md:right-16 lg:right-24 top-12 md:top-24 w-18 md:w-28 lg:w-36 pointer-events-none select-none z-10 hidden sm:block"
             >
               <img
                 src="/lens_white.jpg"
                 alt="Camera Lens"
-                className="w-full h-auto mix-blend-multiply drop-shadow-[0_20px_50px_rgba(0,0,0,0.08)]"
+                className="w-full h-auto mix-blend-multiply drop-shadow-[0_15px_30px_rgba(0,0,0,0.06)]"
               />
             </motion.div>
           </>
