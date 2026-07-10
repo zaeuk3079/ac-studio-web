@@ -1,3 +1,12 @@
+const getMimeType = (file: File): string => {
+  const type = file.type || '';
+  const name = file.name || '';
+  if (type.includes('png') || name.toLowerCase().endsWith('.png')) {
+    return 'image/png';
+  }
+  return type || 'image/jpeg';
+};
+
 export const compressImage = (file: File, maxWidth = 1200, maxHeight = 1200, quality = 0.7): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -27,7 +36,7 @@ export const compressImage = (file: File, maxWidth = 1200, maxHeight = 1200, qua
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL(file.type || 'image/jpeg', quality));
+          resolve(canvas.toDataURL(getMimeType(file), quality));
         } else {
           resolve(event.target?.result as string); // fallback
         }
@@ -70,7 +79,7 @@ export const compressImageToBlob = (file: File, maxWidth = 1200, maxHeight = 120
           canvas.toBlob((blob) => {
             if (blob) resolve(blob);
             else reject(new Error('Canvas to Blob failed'));
-          }, file.type || 'image/jpeg', quality);
+          }, getMimeType(file), quality);
         } else {
           reject(new Error('Canvas context failed'));
         }
