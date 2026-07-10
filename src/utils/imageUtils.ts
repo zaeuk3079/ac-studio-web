@@ -36,7 +36,12 @@ export const compressImage = (file: File, maxWidth = 1200, maxHeight = 1200, qua
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL(getMimeType(file), quality));
+          const mime = getMimeType(file);
+          if (mime === 'image/png') {
+            resolve(canvas.toDataURL('image/png'));
+          } else {
+            resolve(canvas.toDataURL(mime, quality));
+          }
         } else {
           resolve(event.target?.result as string); // fallback
         }
@@ -76,10 +81,18 @@ export const compressImageToBlob = (file: File, maxWidth = 1200, maxHeight = 120
         const ctx = canvas.getContext('2d');
         if (ctx) {
           ctx.drawImage(img, 0, 0, width, height);
-          canvas.toBlob((blob) => {
-            if (blob) resolve(blob);
-            else reject(new Error('Canvas to Blob failed'));
-          }, getMimeType(file), quality);
+          const mime = getMimeType(file);
+          if (mime === 'image/png') {
+            canvas.toBlob((blob) => {
+              if (blob) resolve(blob);
+              else reject(new Error('Canvas to Blob failed'));
+            }, 'image/png');
+          } else {
+            canvas.toBlob((blob) => {
+              if (blob) resolve(blob);
+              else reject(new Error('Canvas to Blob failed'));
+            }, mime, quality);
+          }
         } else {
           reject(new Error('Canvas context failed'));
         }
