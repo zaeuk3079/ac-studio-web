@@ -141,9 +141,9 @@ export default function Home() {
           )}
         </div>
 
-        {/* Pinterest-style Masonry Gallery Grid */}
+        {/* Pinterest-style Grid (Row flow: Left to Right) */}
         {filteredPortfolio.length > 0 ? (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
             {filteredPortfolio.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -151,7 +151,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                className="break-inside-avoid group cursor-pointer mb-3 bg-white border border-stone-100/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
+                className="w-full group cursor-pointer bg-white border border-stone-100/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
                 onClick={() => handleItemClick(item)}
               >
                 <div className="relative overflow-hidden">
