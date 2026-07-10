@@ -12,8 +12,18 @@ export default function Settings() {
 
   const handleSave = () => {
     setIsSaving(true);
+    
+    // Clean up large unused fields to avoid Firestore 1MB document size limit
+    const cleanedData = {
+      ...formData,
+      heroImage: '',
+      heroNukiImages: [],
+      heroNukiConfigs: []
+    };
+    
     setTimeout(() => {
-      updateSettings(formData);
+      updateSettings(cleanedData);
+      setFormData(cleanedData);
       setIsSaving(false);
       alert('Settings saved successfully!');
     }, 500);
