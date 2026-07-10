@@ -143,7 +143,7 @@ export default function Home() {
 
         {/* Pinterest-style Masonry Gallery Grid */}
         {filteredPortfolio.length > 0 ? (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-3 space-y-3">
             {filteredPortfolio.map((item, index) => (
               <motion.div
                 key={item.id}
@@ -151,28 +151,23 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                className="break-inside-avoid group cursor-pointer mb-4 bg-white border border-stone-100/30 rounded-[1.75rem] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1.5 relative"
+                className="break-inside-avoid group cursor-pointer mb-3 bg-white border border-stone-100/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
                 onClick={() => handleItemClick(item)}
               >
                 <div className="relative overflow-hidden">
                   <img
                     src={item.imageUrl}
                     alt={item.title}
-                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                     referrerPolicy="no-referrer"
                   />
                   
-                  {/* Glassmorphic Glossy Brand Name Badge */}
-                  <div className="absolute left-6 top-6 bg-white/10 backdrop-blur-xl border border-white/50 px-6 py-3 rounded-full text-xs font-bold text-white tracking-[0.2em] uppercase shadow-[0_15px_35px_0_rgba(0,0,0,0.22),inset_0_2px_2px_0_rgba(255,255,255,0.6),inset_0_-2px_6px_0_rgba(255,255,255,0.25),inset_0_8px_16px_rgba(0,0,0,0.03)] ring-1 ring-black/[0.03] transition-transform duration-500 group-hover:scale-105 select-none drop-shadow-[0_1.5px_2px_rgba(0,0,0,0.65)]">
-                    {item.title}
-                  </div>
-
                   {item.videoUrl && (
-                    <div className="absolute bottom-6 right-6 bg-stone-900/60 backdrop-blur-sm text-white p-3 rounded-full z-10 shadow-md">
-                      <Play size={16} fill="currentColor" />
+                    <div className="absolute bottom-4 right-4 bg-stone-900/60 backdrop-blur-sm text-white p-2.5 rounded-full z-10 shadow-md">
+                      <Play size={14} fill="currentColor" />
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-stone-900/[0.02] group-hover:bg-transparent transition-colors duration-500" />
+                  <div className="absolute inset-0 bg-stone-900/[0.01] group-hover:bg-transparent transition-colors duration-500" />
                 </div>
               </motion.div>
             ))}
