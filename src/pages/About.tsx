@@ -41,19 +41,15 @@ export default function About() {
             >
               {settings.aboutTitle}
             </h1>
-            <h2 className="text-xl md:text-2xl text-stone-800 font-light mb-6 leading-relaxed">
-              {settings.aboutSubText}
-            </h2>
+            {settings.aboutSubText && (
+              <h2 className="text-xl md:text-2xl text-stone-800 font-light mb-6 leading-relaxed whitespace-pre-line">
+                {settings.aboutSubText}
+              </h2>
+            )}
             <div className="space-y-6 text-stone-600 font-light leading-loose">
-              <p>
-                {settings.aboutText}
-              </p>
-              <p>
-                {settings.aboutText2}
-              </p>
-              <p>
-                {settings.aboutText3}
-              </p>
+              {settings.aboutText && <p className="whitespace-pre-line">{settings.aboutText}</p>}
+              {settings.aboutText2 && <p className="whitespace-pre-line">{settings.aboutText2}</p>}
+              {settings.aboutText3 && <p className="whitespace-pre-line">{settings.aboutText3}</p>}
             </div>
             
             {settings.showPhilosophy !== false && (

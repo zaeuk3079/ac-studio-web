@@ -910,15 +910,15 @@ export default function Settings() {
                   </h1>
 
                   {formData.aboutSubText && (
-                    <h2 className="text-sm md:text-base text-stone-300 font-light leading-relaxed">
+                    <h2 className="text-sm md:text-base text-stone-300 font-light leading-relaxed whitespace-pre-line">
                       {formData.aboutSubText}
                     </h2>
                   )}
 
                   <div className="space-y-3 text-xs text-stone-400 font-light leading-relaxed">
-                    {formData.aboutText && <p>{formData.aboutText}</p>}
-                    {formData.aboutText2 && <p>{formData.aboutText2}</p>}
-                    {formData.aboutText3 && <p>{formData.aboutText3}</p>}
+                    {formData.aboutText && <p className="whitespace-pre-line">{formData.aboutText}</p>}
+                    {formData.aboutText2 && <p className="whitespace-pre-line">{formData.aboutText2}</p>}
+                    {formData.aboutText3 && <p className="whitespace-pre-line">{formData.aboutText3}</p>}
                   </div>
                 </div>
               </div>
@@ -1039,11 +1039,12 @@ export default function Settings() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-stone-700 mb-2">About Sub Title (서브 타이틀)</label>
-                  <input
-                    type="text"
+                  <textarea
                     name="aboutSubText"
                     value={formData.aboutSubText || ''}
                     onChange={handleChange}
+                    rows={2}
+                    placeholder="엔터(Enter)를 눌러 자유롭게 줄바꿈 하실 수 있습니다."
                     className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
                   />
                 </div>
