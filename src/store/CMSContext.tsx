@@ -458,12 +458,29 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     setSettings(updated);
     localStorage.setItem('ac_studio_settings', JSON.stringify(updated));
     
-    // Save to Firebase
+    // Save to Firebase with auto-retry emergency auto-shrink fallback
     try {
       await setDoc(doc(db, 'settings', 'main'), updated);
     } catch (error: any) {
-      console.error("Error updating settings in Firebase:", error);
-      throw new Error("파이어베이스 데이터 용량이 초과되었습니다. 이미지를 다시 업로드 후 시도해 주세요.");
+      console.warn("First setDoc failed, attempting emergency auto-shrink fallback...", error);
+      try {
+        const { compressBase64String } = await import('../utils/imageUtils');
+        const emergencyData = {
+          ...updated,
+          logoUrl: updated.logoUrl ? await compressBase64String(updated.logoUrl, 350, 0.65) : updated.logoUrl,
+          heroImage: updated.heroImage ? await compressBase64String(updated.heroImage, 650, 0.65) : updated.heroImage,
+          aboutImage: updated.aboutImage ? await compressBase64String(updated.aboutImage, 650, 0.65) : updated.aboutImage,
+          serviceImage: updated.serviceImage ? await compressBase64String(updated.serviceImage, 650, 0.65) : updated.serviceImage,
+          heroNukiImages: [],
+          heroNukiConfigs: []
+        };
+        await setDoc(doc(db, 'settings', 'main'), emergencyData);
+        setSettings(emergencyData);
+        localStorage.setItem('ac_studio_settings', JSON.stringify(emergencyData));
+      } catch (retryErr: any) {
+        console.error("Emergency fallback failed:", retryErr);
+        throw new Error("이미지 데이터 용량이 너무 큽니다. 이미지를 [PC에서 찾기]로 새로 선택하여 저장해 주세요.");
+      }
     }
   };
 

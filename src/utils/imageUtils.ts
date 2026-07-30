@@ -45,11 +45,11 @@ export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quali
   });
 };
 
-export const compressBase64String = (base64Str: string, maxDim = 500, quality = 0.75): Promise<string> => {
+export const compressBase64String = (base64Str: string, maxDim = 450, quality = 0.7): Promise<string> => {
   if (!base64Str || !base64Str.startsWith('data:image')) return Promise.resolve(base64Str);
-  if (base64Str.length < 250000) return Promise.resolve(base64Str);
+  if (base64Str.length < 150000) return Promise.resolve(base64Str);
 
-  const compressionPromise = new Promise<string>((resolve) => {
+  return new Promise((resolve) => {
     const img = new Image();
     img.src = base64Str;
     img.onload = () => {
@@ -85,12 +85,6 @@ export const compressBase64String = (base64Str: string, maxDim = 500, quality = 
     };
     img.onerror = () => resolve(base64Str);
   });
-
-  const timeoutPromise = new Promise<string>((resolve) => {
-    setTimeout(() => resolve(base64Str), 1000);
-  });
-
-  return Promise.race([compressionPromise, timeoutPromise]);
 };
 
 export const parseFontFamilyStyle = (fontName?: string): { fontFamily: string; fontWeight?: number } => {

@@ -65,11 +65,11 @@ export default function Settings() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Auto compress base64 images before sending to Firestore to guarantee well under 1MB limit (~200KB max)
-      const logoUrlCompressed = formData.logoUrl ? await compressBase64String(formData.logoUrl, 500, 0.75) : formData.logoUrl;
-      const heroImageCompressed = formData.heroImage ? await compressBase64String(formData.heroImage, 900, 0.7) : formData.heroImage;
-      const aboutImageCompressed = formData.aboutImage ? await compressBase64String(formData.aboutImage, 900, 0.7) : formData.aboutImage;
-      const serviceImageCompressed = formData.serviceImage ? await compressBase64String(formData.serviceImage, 900, 0.7) : formData.serviceImage;
+      // Auto compress base64 images before sending to Firestore to guarantee well under 1MB limit (~100KB max)
+      const logoUrlCompressed = formData.logoUrl ? await compressBase64String(formData.logoUrl, 400, 0.65) : formData.logoUrl;
+      const heroImageCompressed = formData.heroImage ? await compressBase64String(formData.heroImage, 700, 0.65) : formData.heroImage;
+      const aboutImageCompressed = formData.aboutImage ? await compressBase64String(formData.aboutImage, 700, 0.65) : formData.aboutImage;
+      const serviceImageCompressed = formData.serviceImage ? await compressBase64String(formData.serviceImage, 700, 0.65) : formData.serviceImage;
 
       const cleanedData = {
         ...formData,
