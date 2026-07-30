@@ -228,15 +228,13 @@ export default function Contact() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">
-                    희망 일정 <span className="text-stone-500 font-normal normal-case">(대략적으로)</span> <span className="text-burgundy-700">*</span>
-                  </label>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-700 mb-2">희망 일정 <span className="text-burgundy-700">*</span></label>
                   <input
                     type="text"
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    placeholder="예: 8월 중순 또는 9월 15일 경 (대략적인 일정)"
+                    placeholder="예: 대략적으로"
                     className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
                   />
                 </div>
