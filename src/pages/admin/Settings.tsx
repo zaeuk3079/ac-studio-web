@@ -277,8 +277,8 @@ export default function Settings() {
               </div>
               <p className="text-[10px] text-stone-400 mt-2">* 팁: 배경이 투명한 PNG 형식의 로고를 권장하며, 업로드 시 투명도가 보존됩니다.</p>
               {formData.logoUrl && (
-                <div className="mt-4 p-4 bg-stone-50 rounded-lg border border-stone-200 flex justify-center items-center">
-                  <img src={formData.logoUrl} alt="Logo Preview" className="max-h-16 object-contain" referrerPolicy="no-referrer" />
+                <div className="mt-4 p-6 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:12px_12px] bg-stone-100 rounded-xl border border-stone-200 flex justify-center items-center">
+                  <img src={formData.logoUrl} alt="Logo Preview" className="max-h-20 w-auto object-contain" referrerPolicy="no-referrer" />
                 </div>
               )}
             </div>

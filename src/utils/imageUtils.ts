@@ -1,13 +1,4 @@
-const getMimeType = (file: File): string => {
-  const type = file.type || '';
-  const name = file.name || '';
-  if (type.includes('png') || name.toLowerCase().endsWith('.png')) {
-    return 'image/png';
-  }
-  return type || 'image/jpeg';
-};
-
-export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.7): Promise<string> => {
+export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.8): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -35,15 +26,19 @@ export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quali
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (ctx) {
+          // Clear canvas to ensure transparent background is preserved (NO BLACK BACKGROUND!)
+          ctx.clearRect(0, 0, width, height);
           ctx.drawImage(img, 0, 0, width, height);
-          // Try png first, if too big fallback to jpeg to guarantee under 400KB limit
-          let dataUrl = canvas.toDataURL('image/png');
-          if (dataUrl.length > 500000) {
-            dataUrl = canvas.toDataURL('image/jpeg', quality);
+          
+          const isPng = file.type?.includes('png') || file.name?.toLowerCase().endsWith('.png');
+          if (isPng) {
+            // PNG MUST BE PRESERVED AS PNG to keep alpha transparency
+            resolve(canvas.toDataURL('image/png'));
+          } else {
+            resolve(canvas.toDataURL('image/jpeg', quality));
           }
-          resolve(dataUrl);
         } else {
-          resolve(event.target?.result as string); // fallback
+          resolve(event.target?.result as string);
         }
       };
       img.onerror = (error) => reject(error);
@@ -52,9 +47,9 @@ export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quali
   });
 };
 
-export const compressBase64String = (base64Str: string, maxDim = 600, quality = 0.7): Promise<string> => {
+export const compressBase64String = (base64Str: string, maxDim = 600, quality = 0.8): Promise<string> => {
   if (!base64Str || !base64Str.startsWith('data:image')) return Promise.resolve(base64Str);
-  if (base64Str.length < 300000) return Promise.resolve(base64Str); // Already under 300KB
+  if (base64Str.length < 300000) return Promise.resolve(base64Str);
 
   const compressionPromise = new Promise<string>((resolve) => {
     const img = new Image();
@@ -79,9 +74,14 @@ export const compressBase64String = (base64Str: string, maxDim = 600, quality = 
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (ctx) {
+          ctx.clearRect(0, 0, width, height);
           ctx.drawImage(img, 0, 0, width, height);
-          let dataUrl = canvas.toDataURL('image/jpeg', quality);
-          resolve(dataUrl);
+          const isPngStr = base64Str.startsWith('data:image/png');
+          if (isPngStr) {
+            resolve(canvas.toDataURL('image/png'));
+          } else {
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          }
         } else {
           resolve(base64Str);
         }
