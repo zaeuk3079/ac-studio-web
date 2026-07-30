@@ -28,6 +28,7 @@ export default function About() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col justify-center"
+          >
             <h1
               className="mb-8 font-bold"
               style={{
