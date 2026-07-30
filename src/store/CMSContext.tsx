@@ -350,10 +350,11 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ? cachedObj.serviceProcessSteps
             : defaultSettings.serviceProcessSteps;
 
+          // Priority: defaultSettings -> cachedObj -> fetched (Firebase DB is authoritative across domains)
           const merged: SiteSettings = {
             ...defaultSettings,
-            ...fetched,
             ...cachedObj,
+            ...fetched,
             serviceProcessSteps: mergedSteps
           };
           setSettings(merged);
