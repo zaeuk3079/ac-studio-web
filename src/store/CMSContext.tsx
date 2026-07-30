@@ -184,7 +184,11 @@ const defaultSettings: SiteSettings = {
   heroText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
-  heroImages: [],
+  heroImages: [
+    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=2069&auto=format&fit=crop'
+  ],
   heroSlideInterval: 2500,
   heroAspectRatio: '3:2',
   heroObjectPosition: 'center',
@@ -203,8 +207,8 @@ const defaultSettings: SiteSettings = {
   heroNukiConfigs: [],
   showHomeAbout: true,
   homePortfolioTitle: 'Work',
-  homePortfolioTitleLetterSpacing: 1,
-  homePortfolioSubText: '',
+  homePortfolioTitleLetterSpacing: -1,
+  homePortfolioSubText: '에이징스튜디오의 포트폴리오를 소개합니다.',
   homePortfolioSubTextFontSize: 14,
   homePortfolioSubTextLetterSpacing: 1,
   homePortfolioSubTextColor: '#78716C',
@@ -348,10 +352,15 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ? fetched.serviceProcessSteps
             : defaultSettings.serviceProcessSteps;
 
+          const mergedHeroImages = (fetched.heroImages && fetched.heroImages.length > 0)
+            ? fetched.heroImages
+            : defaultSettings.heroImages;
+
           const merged: SiteSettings = {
             ...defaultSettings,
             ...fetched,
-            serviceProcessSteps: mergedSteps
+            serviceProcessSteps: mergedSteps,
+            heroImages: mergedHeroImages
           };
           setSettings(merged);
           localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
