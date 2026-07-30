@@ -22,6 +22,15 @@ export interface PortfolioItem {
   objectPosition?: 'top' | 'center' | 'bottom';
 }
 
+export interface ProcessStep {
+  id: string;
+  stepNumber: string;
+  title: string;
+  desc1: string;
+  desc2: string;
+  image: string;
+}
+
 export interface SiteSettings {
   siteName: string;
   logoUrl?: string;
@@ -83,6 +92,8 @@ export interface SiteSettings {
   serviceTextColor?: string;
   serviceTextX?: number;
   serviceTextY?: number;
+  serviceProcessTitle?: string;
+  serviceProcessSteps?: ProcessStep[];
   // Philosophy
   showPhilosophy: boolean;
   philosophyTitle: string;
@@ -217,6 +228,41 @@ const defaultSettings: SiteSettings = {
   serviceText: '에이징 스튜디오는 철저한 사전 기획부터 촬영, 정교한 리터칭까지 원스톱 서비스를 제공합니다. 고객의 브랜드 가치를 시각적으로 극대화하기 위해 각 단계마다 최상의 퀄리티를 지향합니다.',
   serviceText2: '진행 과정: 1. 사전 미팅 및 기획 ➡️ 2. 촬영 준비 및 소품 세팅 ➡️ 3. 본 촬영 진행 ➡️ 4. A컷 셀렉 및 전문 보정 ➡️ 5. 최종 완성본 전달',
   serviceImage: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=2070&auto=format&fit=crop',
+  serviceProcessTitle: 'Process',
+  serviceProcessSteps: [
+    {
+      id: 'step_1',
+      stepNumber: '01',
+      title: '상담·기획',
+      desc1: '24시간 안에 답장합니다.',
+      desc2: '목적과 무드를 듣고 레퍼런스·세팅·견적을 제안합니다.',
+      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop'
+    },
+    {
+      id: 'step_2',
+      stepNumber: '02',
+      title: '촬영',
+      desc1: '역삼 스튜디오 또는 로케이션.',
+      desc2: '현장에서 컷을 함께 확인하며 진행합니다.',
+      image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop'
+    },
+    {
+      id: 'step_3',
+      stepNumber: '03',
+      title: '셀렉·리터칭',
+      desc1: '정리된 컷에서 고르시면,',
+      desc2: '피드백을 반영해 정성껏 보정합니다.',
+      image: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=600&auto=format&fit=crop'
+    },
+    {
+      id: 'step_4',
+      stepNumber: '04',
+      title: '전달',
+      desc1: '고해상도 완성본을 일정에 맞춰드립니다.',
+      desc2: '',
+      image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop'
+    }
+  ],
   serviceTextFontSize: 42,
   serviceTextLetterSpacing: 0,
   serviceTextFontFamily: 'Pretendard',

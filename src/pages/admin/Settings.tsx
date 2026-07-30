@@ -1098,66 +1098,225 @@ export default function Settings() {
         {/* SERVICE TAB */}
         {activeTab === 'service' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
-            {/* Interactive Visual Drag Canvas Editor for Service (Home Tab Style) */}
+            
+            {/* Live Process Preview Canvas matching Service.tsx 100% */}
             <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
               <div className="flex items-center justify-between border-b border-stone-800 pb-3">
-                <div className="flex items-center space-x-2">
-                  <Move size={18} className="text-burgundy-400" />
-                  <span className="font-semibold text-stone-200 text-sm">Service 텍스트 위치 드래그 캔버스 (Visual Canvas)</span>
-                </div>
-                <span className="text-xs text-stone-400">💡 마우스로 텍스트를 잡고 끌어서 위치를 정해보세요</span>
+                <span className="font-semibold text-stone-200 text-sm">Service Process 실시간 라이브 미리보기 (실제 화면과 100% 동일)</span>
+                <span className="text-xs text-stone-400">💡 텍스트 & 이미지 입력 시 0.1초 즉시 라이브 연동</span>
               </div>
 
-              <div
-                ref={serviceCanvasRef}
-                onMouseDown={(e) => {
-                  const updater = updateTabDragPosition(serviceCanvasRef, 'serviceTextX', 'serviceTextY');
-                  updater(e.clientX, e.clientY);
-                  const onMove = (mv: MouseEvent) => updater(mv.clientX, mv.clientY);
-                  const onUp = () => {
-                    window.removeEventListener('mousemove', onMove);
-                    window.removeEventListener('mouseup', onUp);
-                  };
-                  window.addEventListener('mousemove', onMove);
-                  window.addEventListener('mouseup', onUp);
-                }}
-                className="relative w-full aspect-[16/9] bg-stone-950 rounded-xl overflow-hidden cursor-crosshair border border-stone-800 select-none shadow-inner"
-              >
-                {formData.serviceImage ? (
-                  <img src={formData.serviceImage} alt="Service Canvas" className="w-full h-full object-cover opacity-60" referrerPolicy="no-referrer" />
-                ) : (
-                  <div className="w-full h-full bg-stone-900 flex items-center justify-center text-stone-600 text-xs">이미지 없음</div>
-                )}
-                <div className="absolute inset-0 bg-stone-950/20" />
-                
-                {/* Smart Center Grid Lines & Magnetic Snap Feedback */}
-                <div className="absolute inset-0 pointer-events-none z-10">
-                  <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
-                    activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/20'
-                  }`} />
-                  <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
-                    activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/20'
-                  }`} />
-                  {(activeSnapX || activeSnapY) && (
-                    <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
-                      🎯 중앙 50% 자석 스냅!
-                    </div>
+              <div className="bg-white p-6 rounded-xl border border-stone-200 text-stone-900 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <div className="lg:col-span-4">
+                  <h1 className="text-3xl font-black text-stone-950 tracking-tight font-sans">
+                    {formData.serviceProcessTitle || 'Process'}
+                  </h1>
+                  {formData.serviceSubText && (
+                    <p className="text-xs text-stone-500 mt-2 whitespace-pre-line">{formData.serviceSubText}</p>
                   )}
                 </div>
-                
-                {/* Positioned Text Box */}
-                <div
-                  className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
-                  style={{
-                    left: `${formData.serviceTextX ?? 50}%`,
-                    top: `${formData.serviceTextY ?? 30}%`,
-                    transform: (formData.serviceTextAlign === 'center')
-                      ? 'translate(-50%, -50%)'
-                      : (formData.serviceTextAlign === 'right')
-                      ? 'translate(-100%, -50%)'
-                      : 'translate(0%, -50%)',
+
+                <div className="lg:col-span-8 space-y-6">
+                  {(formData.serviceProcessSteps || []).map((step, idx) => (
+                    <div key={step.id || idx} className="pt-4 border-t border-stone-200 flex items-start justify-between gap-4">
+                      <div className="flex items-start space-x-3">
+                        <span className="text-[10px] font-mono font-bold text-stone-400 pt-0.5">{step.stepNumber || `0${idx + 1}`}</span>
+                        <div>
+                          <h4 className="text-sm font-bold text-stone-900">{step.title || '단계 제목'}</h4>
+                          <p className="text-xs text-stone-600 mt-1 whitespace-pre-line">{step.desc1}</p>
+                          {step.desc2 && <p className="text-xs text-stone-400 mt-0.5 whitespace-pre-line">{step.desc2}</p>}
+                        </div>
+                      </div>
+                      {step.image && (
+                        <div className="w-24 h-16 rounded-lg overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
+                          <img src={step.image} alt={step.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Process Main Title & Sub Text Controls */}
+            <div className="bg-white p-6 rounded-2xl border border-stone-200 space-y-4 shadow-sm">
+              <h3 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-3">Process 섹션 타이틀 설정</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-stone-700 mb-1">대형 타이틀 (기본: Process)</label>
+                  <input
+                    type="text"
+                    name="serviceProcessTitle"
+                    value={formData.serviceProcessTitle || 'Process'}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    placeholder="Process"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-700 mb-1">서브 설명 카피</label>
+                  <input
+                    type="text"
+                    name="serviceSubText"
+                    value={formData.serviceSubText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    placeholder="예: aging studio의 촬영 프로세스 안내입니다."
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Process Steps Management (Dynamic Cards with Custom Images) */}
+            <div className="bg-white p-6 rounded-2xl border border-stone-200 space-y-6 shadow-sm">
+              <div className="flex items-center justify-between border-b border-stone-200 pb-3">
+                <h3 className="text-base font-semibold text-stone-800">Process 단계별 상세 데이터 관리 (텍스트 & 이미지)</h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const steps = formData.serviceProcessSteps || [];
+                    const nextNum = String(steps.length + 1).padStart(2, '0');
+                    const newStep: ProcessStep = {
+                      id: `step_${Date.now()}`,
+                      stepNumber: nextNum,
+                      title: `새 단계 ${nextNum}`,
+                      desc1: '설정 문구를 입력하세요.',
+                      desc2: '',
+                      image: ''
+                    };
+                    setFormData({ ...formData, serviceProcessSteps: [...steps, newStep] });
                   }}
+                  className="bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
                 >
+                  + 새 프로세스 단계 추가
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {(formData.serviceProcessSteps || []).map((step, idx) => (
+                  <div key={step.id || idx} className="p-4 rounded-xl border border-stone-200 bg-stone-50/50 space-y-4">
+                    <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+                      <span className="text-xs font-bold text-stone-800 flex items-center space-x-2">
+                        <span className="bg-stone-800 text-white text-[10px] px-2 py-0.5 rounded font-mono">단계 {idx + 1}</span>
+                        <span>{step.title || '제목 없음'}</span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const steps = (formData.serviceProcessSteps || []).filter((_, i) => i !== idx);
+                          setFormData({ ...formData, serviceProcessSteps: steps });
+                        }}
+                        className="text-xs text-red-500 hover:underline cursor-pointer font-medium"
+                      >
+                        이 단계 삭제
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                      {/* Step Number & Title */}
+                      <div className="md:col-span-2">
+                        <label className="block text-xs font-medium text-stone-600 mb-1">번호 (01, 02..)</label>
+                        <input
+                          type="text"
+                          value={step.stepNumber}
+                          onChange={(e) => {
+                            const newSteps = [...(formData.serviceProcessSteps || [])];
+                            newSteps[idx] = { ...newSteps[idx], stepNumber: e.target.value };
+                            setFormData({ ...formData, serviceProcessSteps: newSteps });
+                          }}
+                          className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white font-mono"
+                        />
+                      </div>
+
+                      <div className="md:col-span-4">
+                        <label className="block text-xs font-medium text-stone-600 mb-1">단계 제목 (e.g. 상담·기획)</label>
+                        <input
+                          type="text"
+                          value={step.title}
+                          onChange={(e) => {
+                            const newSteps = [...(formData.serviceProcessSteps || [])];
+                            newSteps[idx] = { ...newSteps[idx], title: e.target.value };
+                            setFormData({ ...formData, serviceProcessSteps: newSteps });
+                          }}
+                          className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white font-bold text-stone-900"
+                        />
+                      </div>
+
+                      {/* Descriptions */}
+                      <div className="md:col-span-6 space-y-2">
+                        <div>
+                          <label className="block text-xs font-medium text-stone-600 mb-1">설명 문구 1 (강조 핵심 문구)</label>
+                          <input
+                            type="text"
+                            value={step.desc1}
+                            onChange={(e) => {
+                              const newSteps = [...(formData.serviceProcessSteps || [])];
+                              newSteps[idx] = { ...newSteps[idx], desc1: e.target.value };
+                              setFormData({ ...formData, serviceProcessSteps: newSteps });
+                            }}
+                            className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-stone-600 mb-1">설명 문구 2 (상세 부연 설명)</label>
+                          <input
+                            type="text"
+                            value={step.desc2}
+                            onChange={(e) => {
+                              const newSteps = [...(formData.serviceProcessSteps || [])];
+                              newSteps[idx] = { ...newSteps[idx], desc2: e.target.value };
+                              setFormData({ ...formData, serviceProcessSteps: newSteps });
+                            }}
+                            className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white text-stone-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Step Image Upload */}
+                    <div className="pt-2 border-t border-stone-200/60 flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        {step.image ? (
+                          <img src={step.image} alt={step.title} className="w-16 h-12 rounded object-cover border border-stone-300" referrerPolicy="no-referrer" />
+                        ) : (
+                          <div className="w-16 h-12 rounded bg-stone-200 flex items-center justify-center text-[10px] text-stone-400">사진 없음</div>
+                        )}
+                        <span className="text-xs text-stone-500 truncate max-w-xs">{step.image || '등록된 이미지가 없습니다.'}</span>
+                      </div>
+
+                      <div className="relative overflow-hidden">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setUploadingField(`stepImg_${idx}`);
+                              try {
+                                const url = await uploadImageToCloudCDN(file);
+                                const newSteps = [...(formData.serviceProcessSteps || [])];
+                                newSteps[idx] = { ...newSteps[idx], image: url };
+                                setFormData({ ...formData, serviceProcessSteps: newSteps });
+                              } finally {
+                                setUploadingField(null);
+                                e.target.value = '';
+                              }
+                            }
+                          }}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        />
+                        <button type="button" className="bg-stone-800 hover:bg-stone-900 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors cursor-pointer">
+                          {uploadingField === `stepImg_${idx}` ? '업로드 중...' : '[PC에서 찾기] 이미지 등록'}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </motion.div>
+        )}
                   <h1
                     className="font-bold whitespace-nowrap"
                     style={{
