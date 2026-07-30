@@ -108,6 +108,21 @@ export default function Home() {
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedItem]);
 
+  // Hero Cross-Dissolve Image Slider Logic
+  const heroImageList = (settings.heroImages && settings.heroImages.filter(Boolean).length > 0)
+    ? settings.heroImages.filter(Boolean)
+    : [settings.heroImage].filter(Boolean);
+
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  useEffect(() => {
+    if (heroImageList.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlideIndex((prev) => (prev + 1) % heroImageList.length);
+    }, settings.heroSlideInterval || 4500);
+    return () => clearInterval(interval);
+  }, [heroImageList.length, settings.heroSlideInterval]);
+
   const isSelectedVideo = selectedItem && (!!selectedItem.videoUrl || selectedItem.category === 'Video');
   const selectedVideoRatio = selectedItem ? getItemVideoAspectRatio(selectedItem) : '16:9';
 
@@ -116,7 +131,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Hero Banner (16:9 Sharp Edges with Draggable Copy Position & Detailed Typography) */}
-        {settings.heroImage && (
+        {heroImageList.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -126,13 +141,40 @@ export default function Home() {
               aspectRatio: settings.heroAspectRatio === '16:9' ? '16/9' : settings.heroAspectRatio === '4:3' ? '4/3' : '3/2'
             }}
           >
-            <img
-              src={settings.heroImage}
-              alt={settings.heroText || settings.siteName}
-              className="absolute inset-0 w-full h-full object-cover transition-all duration-500"
-              style={{ objectPosition: settings.heroObjectPosition || 'center' }}
-              referrerPolicy="no-referrer"
-            />
+            {/* Cross-Dissolve Fade Images */}
+            <div className="absolute inset-0 w-full h-full">
+              <AnimatePresence mode="sync">
+                <motion.img
+                  key={currentSlideIndex}
+                  src={heroImageList[currentSlideIndex % heroImageList.length]}
+                  alt={`${settings.heroText || settings.siteName} - ${currentSlideIndex + 1}`}
+                  initial={{ opacity: 0, scale: 1.02 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.8, ease: 'easeInOut' }}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ objectPosition: settings.heroObjectPosition || 'center' }}
+                  referrerPolicy="no-referrer"
+                />
+              </AnimatePresence>
+            </div>
+
+            {/* Slide Navigation Dots (visible when 2 or more images) */}
+            {heroImageList.length > 1 && (
+              <div className="absolute bottom-4 right-6 z-20 flex space-x-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
+                {heroImageList.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentSlideIndex(idx)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
+                      currentSlideIndex === idx ? 'bg-white w-5' : 'bg-white/50 hover:bg-white/80'
+                    }`}
+                    title={`Slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            )}
             
             {/* Positioned Brand Copy Container */}
             <div
