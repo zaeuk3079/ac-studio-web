@@ -915,7 +915,13 @@ export default function Settings() {
                     </h2>
                   )}
 
-                  <div className="space-y-3 text-xs text-stone-400 font-light leading-relaxed">
+                  <div
+                    className="space-y-3 text-stone-400 font-light leading-relaxed transition-all"
+                    style={{
+                      fontSize: `${Math.max(10, Math.round((formData.aboutBodyFontSize || 16) * 0.85))}px`,
+                      letterSpacing: `${formData.aboutBodyLetterSpacing ?? 0}px`,
+                    }}
+                  >
                     {formData.aboutText && <p className="whitespace-pre-line">{formData.aboutText}</p>}
                     {formData.aboutText2 && <p className="whitespace-pre-line">{formData.aboutText2}</p>}
                     {formData.aboutText3 && <p className="whitespace-pre-line">{formData.aboutText3}</p>}
@@ -931,7 +937,7 @@ export default function Settings() {
                   <span>🎨 About 포토샵 디테일 타이포그래피 편집기</span>
                   <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Home Style Editor</span>
                 </span>
-                <span className="text-xs text-stone-400 font-normal">위치 / 정렬 / 글자 크기 / 자간 / 폰트 / 색상</span>
+                <span className="text-xs text-stone-400 font-normal">위치 / 정렬 / 제목 크기 / 본문 크기 / 자간 / 폰트</span>
               </h4>
 
               {/* Position Controls */}
@@ -957,10 +963,14 @@ export default function Settings() {
               </div>
 
               {/* Sliders & Color */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-3 border-t border-stone-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 pt-3 border-t border-stone-800">
                 <div>
-                  <label className="block text-xs font-medium text-stone-300 mb-1">글자 크기 ({formData.aboutTextFontSize || 42}px)</label>
+                  <label className="block text-xs font-medium text-stone-300 mb-1">제목 크기 ({formData.aboutTextFontSize || 42}px)</label>
                   <input type="range" min="18" max="80" name="aboutTextFontSize" value={formData.aboutTextFontSize || 42} onChange={(e) => setFormData({ ...formData, aboutTextFontSize: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-burgundy-400 mb-1">✨ 본문 크기 ({formData.aboutBodyFontSize || 16}px)</label>
+                  <input type="range" min="12" max="36" name="aboutBodyFontSize" value={formData.aboutBodyFontSize || 16} onChange={(e) => setFormData({ ...formData, aboutBodyFontSize: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-stone-300 mb-1">자간 조절 ({formData.aboutTextLetterSpacing ?? 0}px)</label>

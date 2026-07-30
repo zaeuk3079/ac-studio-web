@@ -67,6 +67,9 @@ export interface SiteSettings {
   aboutTextColor?: string;
   aboutTextX?: number;
   aboutTextY?: number;
+  aboutBodyFontSize?: number;
+  aboutBodyLetterSpacing?: number;
+  aboutBodyTextColor?: string;
   // Service
   serviceTitle: string;
   serviceSubText: string;
@@ -206,6 +209,8 @@ const defaultSettings: SiteSettings = {
   aboutTextColor: '#1C1917',
   aboutTextX: 50,
   aboutTextY: 30,
+  aboutBodyFontSize: 16,
+  aboutBodyLetterSpacing: 0,
   // Service
   serviceTitle: 'Our Services',
   serviceSubText: '촬영 진행 과정 및 서비스 안내',

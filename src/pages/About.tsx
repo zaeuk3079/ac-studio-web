@@ -46,7 +46,14 @@ export default function About() {
                 {settings.aboutSubText}
               </h2>
             )}
-            <div className="space-y-6 text-stone-600 font-light leading-loose">
+            <div
+              className="space-y-6 text-stone-600 font-light leading-loose"
+              style={{
+                fontSize: settings.aboutBodyFontSize ? `${settings.aboutBodyFontSize}px` : '16px',
+                letterSpacing: settings.aboutBodyLetterSpacing !== undefined ? `${settings.aboutBodyLetterSpacing}px` : undefined,
+                color: settings.aboutBodyTextColor || undefined,
+              }}
+            >
               {settings.aboutText && <p className="whitespace-pre-line">{settings.aboutText}</p>}
               {settings.aboutText2 && <p className="whitespace-pre-line">{settings.aboutText2}</p>}
               {settings.aboutText3 && <p className="whitespace-pre-line">{settings.aboutText3}</p>}
