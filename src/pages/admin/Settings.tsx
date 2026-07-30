@@ -647,7 +647,18 @@ export default function Settings() {
               </div>
               <div className="bg-ivory-100 text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner max-h-[420px] overflow-y-auto space-y-6">
                 <div className="text-center">
-                  <h1 className="font-serif text-3xl font-bold text-stone-900 mb-2">{formData.aboutTitle || 'About Us'}</h1>
+                  <h1
+                    className="font-bold mb-2"
+                    style={{
+                      fontSize: `${Math.max(16, Math.round((formData.aboutTextFontSize || 42) * 0.65))}px`,
+                      letterSpacing: `${formData.aboutTextLetterSpacing ?? 0}px`,
+                      fontFamily: formData.aboutTextFontFamily || 'Pretendard',
+                      textAlign: (formData.aboutTextAlign || 'center') as any,
+                      color: formData.aboutTextColor || '#1C1917',
+                    }}
+                  >
+                    {formData.aboutTitle || 'About Us'}
+                  </h1>
                   <p className="text-stone-500 text-xs uppercase tracking-widest">{formData.aboutSubText}</p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -660,6 +671,52 @@ export default function Settings() {
                     {formData.aboutText && <p>{formData.aboutText}</p>}
                     {formData.aboutText2 && <p>{formData.aboutText2}</p>}
                     {formData.aboutText3 && <p>{formData.aboutText3}</p>}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Photoshop-style Detail Typography Controller for About */}
+            <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-6">
+              <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
+                <span>🎨 About 타이틀 디테일 편집기 (글자 크기 / 자간 / 폰트 / 정렬 / 색상)</span>
+                <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
+              </h4>
+              <div className="pt-3 border-t border-stone-200/80">
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">글자 정렬</label>
+                <div className="flex space-x-2">
+                  <button type="button" onClick={() => setFormData({ ...formData, aboutTextAlign: 'left' })} className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${(!formData.aboutTextAlign || formData.aboutTextAlign === 'left') ? 'bg-stone-900 text-white border-stone-900 shadow-sm' : 'bg-white text-stone-600 border-stone-300'}`}><AlignLeft size={14} /><span>왼쪽 정렬</span></button>
+                  <button type="button" onClick={() => setFormData({ ...formData, aboutTextAlign: 'center' })} className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${formData.aboutTextAlign === 'center' ? 'bg-stone-900 text-white border-stone-900 shadow-sm' : 'bg-white text-stone-600 border-stone-300'}`}><AlignCenter size={14} /><span>가운데 정렬</span></button>
+                  <button type="button" onClick={() => setFormData({ ...formData, aboutTextAlign: 'right' })} className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${formData.aboutTextAlign === 'right' ? 'bg-stone-900 text-white border-stone-900 shadow-sm' : 'bg-white text-stone-600 border-stone-300'}`}><AlignRight size={14} /><span>오른쪽 정렬</span></button>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-3 border-t border-stone-200/80">
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.aboutTextFontSize || 42}px)</label>
+                  <input type="range" min="18" max="80" name="aboutTextFontSize" value={formData.aboutTextFontSize || 42} onChange={(e) => setFormData({ ...formData, aboutTextFontSize: Number(e.target.value) })} className="w-full accent-stone-800 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.aboutTextLetterSpacing ?? 0}px)</label>
+                  <input type="range" min="-4" max="16" name="aboutTextLetterSpacing" value={formData.aboutTextLetterSpacing ?? 0} onChange={(e) => setFormData({ ...formData, aboutTextLetterSpacing: Number(e.target.value) })} className="w-full accent-stone-800 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류</label>
+                  <select name="aboutTextFontFamily" value={formData.aboutTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium">
+                    <option value="Pretendard">Pretendard (산세리프)</option>
+                    <option value="Playfair Display">Playfair Display (고급 Serif)</option>
+                    <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
+                    <option value="Cinzel">Cinzel (명품 비주얼)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상</label>
+                  <div className="flex items-center space-x-2">
+                    <input type="color" value={formData.aboutTextColor || '#1C1917'} onChange={(e) => setFormData({ ...formData, aboutTextColor: e.target.value })} className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0" />
+                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                      {['#1C1917', '#FFFFFF', '#D4AF37', '#800020', '#3B82F6'].map(color => (
+                        <button key={color} type="button" onClick={() => setFormData({ ...formData, aboutTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.aboutTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -758,6 +815,21 @@ export default function Settings() {
                 <span>실제 웹사이트 노출 모습</span>
               </div>
               <div className="bg-white text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner space-y-6">
+                <div className="text-center">
+                  <h1
+                    className="font-bold mb-1"
+                    style={{
+                      fontSize: `${Math.max(16, Math.round((formData.serviceTextFontSize || 42) * 0.65))}px`,
+                      letterSpacing: `${formData.serviceTextLetterSpacing ?? 0}px`,
+                      fontFamily: formData.serviceTextFontFamily || 'Pretendard',
+                      textAlign: (formData.serviceTextAlign || 'center') as any,
+                      color: formData.serviceTextColor || '#1C1917',
+                    }}
+                  >
+                    {formData.serviceTitle || 'Our Services'}
+                  </h1>
+                  <p className="text-stone-500 text-xs uppercase tracking-widest">{formData.serviceSubText}</p>
+                </div>
                 {formData.serviceImage && (
                   <div className="w-full aspect-[16/10] rounded-none overflow-hidden shadow-sm">
                     <img src={formData.serviceImage} alt="Service Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
@@ -772,6 +844,52 @@ export default function Settings() {
                     <span className="inline-flex items-center space-x-2 bg-[#5C4033] text-white px-5 py-2 rounded-full text-xs font-bold shadow">
                       <span>견적 문의하기 →</span>
                     </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Photoshop-style Detail Typography Controller for Service */}
+            <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-6">
+              <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
+                <span>🎨 Service 타이틀 디테일 편집기 (글자 크기 / 자간 / 폰트 / 정렬 / 색상)</span>
+                <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
+              </h4>
+              <div className="pt-3 border-t border-stone-200/80">
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">글자 정렬</label>
+                <div className="flex space-x-2">
+                  <button type="button" onClick={() => setFormData({ ...formData, serviceTextAlign: 'left' })} className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${(!formData.serviceTextAlign || formData.serviceTextAlign === 'left') ? 'bg-stone-900 text-white border-stone-900 shadow-sm' : 'bg-white text-stone-600 border-stone-300'}`}><AlignLeft size={14} /><span>왼쪽 정렬</span></button>
+                  <button type="button" onClick={() => setFormData({ ...formData, serviceTextAlign: 'center' })} className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${formData.serviceTextAlign === 'center' ? 'bg-stone-900 text-white border-stone-900 shadow-sm' : 'bg-white text-stone-600 border-stone-300'}`}><AlignCenter size={14} /><span>가운데 정렬</span></button>
+                  <button type="button" onClick={() => setFormData({ ...formData, serviceTextAlign: 'right' })} className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${formData.serviceTextAlign === 'right' ? 'bg-stone-900 text-white border-stone-900 shadow-sm' : 'bg-white text-stone-600 border-stone-300'}`}><AlignRight size={14} /><span>오른쪽 정렬</span></button>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-3 border-t border-stone-200/80">
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.serviceTextFontSize || 42}px)</label>
+                  <input type="range" min="18" max="80" name="serviceTextFontSize" value={formData.serviceTextFontSize || 42} onChange={(e) => setFormData({ ...formData, serviceTextFontSize: Number(e.target.value) })} className="w-full accent-stone-800 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.serviceTextLetterSpacing ?? 0}px)</label>
+                  <input type="range" min="-4" max="16" name="serviceTextLetterSpacing" value={formData.serviceTextLetterSpacing ?? 0} onChange={(e) => setFormData({ ...formData, serviceTextLetterSpacing: Number(e.target.value) })} className="w-full accent-stone-800 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류</label>
+                  <select name="serviceTextFontFamily" value={formData.serviceTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium">
+                    <option value="Pretendard">Pretendard (산세리프)</option>
+                    <option value="Playfair Display">Playfair Display (고급 Serif)</option>
+                    <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
+                    <option value="Cinzel">Cinzel (명품 비주얼)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상</label>
+                  <div className="flex items-center space-x-2">
+                    <input type="color" value={formData.serviceTextColor || '#1C1917'} onChange={(e) => setFormData({ ...formData, serviceTextColor: e.target.value })} className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0" />
+                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                      {['#1C1917', '#FFFFFF', '#D4AF37', '#800020', '#3B82F6'].map(color => (
+                        <button key={color} type="button" onClick={() => setFormData({ ...formData, serviceTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.serviceTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -850,7 +968,15 @@ export default function Settings() {
               </div>
               <div className="bg-ivory-100 text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner space-y-6">
                 <div className="text-center">
-                  <span className="inline-block bg-[#5C4033] text-white font-sans text-lg px-6 py-2 rounded-full font-bold shadow-md">
+                  <span
+                    className="inline-block bg-[#5C4033] px-6 py-2 rounded-full font-bold shadow-md"
+                    style={{
+                      fontSize: `${Math.max(14, Math.round((formData.contactTextFontSize || 42) * 0.55))}px`,
+                      letterSpacing: `${formData.contactTextLetterSpacing ?? 0}px`,
+                      fontFamily: formData.contactTextFontFamily || 'Pretendard',
+                      color: formData.contactTextColor || '#FFFFFF',
+                    }}
+                  >
                     {formData.contactTitle || '견적문의'}
                   </span>
                   <p className="text-stone-500 text-xs mt-2 uppercase tracking-wider">{formData.contactSubText || '견적 및 촬영 문의'}</p>
@@ -872,6 +998,44 @@ export default function Settings() {
                     <button type="button" className="w-full bg-[#5C4033] text-white py-2 rounded-lg text-xs font-semibold mt-3">
                       견적 문의 제출하기
                     </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Photoshop-style Detail Typography Controller for Contact */}
+            <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-6">
+              <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
+                <span>🎨 견적문의 타이틀 디테일 편집기 (글자 크기 / 자간 / 폰트 / 정렬 / 색상)</span>
+                <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-3 border-t border-stone-200/80">
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.contactTextFontSize || 42}px)</label>
+                  <input type="range" min="18" max="80" name="contactTextFontSize" value={formData.contactTextFontSize || 42} onChange={(e) => setFormData({ ...formData, contactTextFontSize: Number(e.target.value) })} className="w-full accent-stone-800 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.contactTextLetterSpacing ?? 0}px)</label>
+                  <input type="range" min="-4" max="16" name="contactTextLetterSpacing" value={formData.contactTextLetterSpacing ?? 0} onChange={(e) => setFormData({ ...formData, contactTextLetterSpacing: Number(e.target.value) })} className="w-full accent-stone-800 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류</label>
+                  <select name="contactTextFontFamily" value={formData.contactTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium">
+                    <option value="Pretendard">Pretendard (산세리프)</option>
+                    <option value="Playfair Display">Playfair Display (고급 Serif)</option>
+                    <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
+                    <option value="Cinzel">Cinzel (명품 비주얼)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상</label>
+                  <div className="flex items-center space-x-2">
+                    <input type="color" value={formData.contactTextColor || '#FFFFFF'} onChange={(e) => setFormData({ ...formData, contactTextColor: e.target.value })} className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0" />
+                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                      {['#FFFFFF', '#F5F5F0', '#D4AF37', '#18181B', '#800020', '#3B82F6'].map(color => (
+                        <button key={color} type="button" onClick={() => setFormData({ ...formData, contactTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.contactTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

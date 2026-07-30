@@ -12,7 +12,23 @@ export default function Service() {
         
         {/* Content Section (Vertical Stack: Image followed by Process details) */}
         <div className="flex flex-col items-center space-y-16">
-          
+          {/* Top Title & Sub Text */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+            <h1
+              className="mb-2 font-bold"
+              style={{
+                fontSize: settings.serviceTextFontSize ? `${settings.serviceTextFontSize}px` : undefined,
+                letterSpacing: settings.serviceTextLetterSpacing !== undefined ? `${settings.serviceTextLetterSpacing}px` : undefined,
+                fontFamily: settings.serviceTextFontFamily || 'Pretendard',
+                textAlign: (settings.serviceTextAlign || 'center') as any,
+                color: settings.serviceTextColor || '#1C1917',
+              }}
+            >
+              {settings.serviceTitle}
+            </h1>
+            <p className="text-stone-500 text-sm tracking-widest uppercase text-center">{settings.serviceSubText}</p>
+          </motion.div>
+
           {/* Top: Wide Service Image */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}

@@ -94,7 +94,13 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-block bg-[#5C4033] text-white font-sans text-3xl md:text-5xl px-10 py-3.5 rounded-full mb-6 tracking-wider shadow-lg border border-[#6E4E3D]/50"
+            className="inline-block bg-[#5C4033] px-10 py-3.5 rounded-full mb-6 shadow-lg border border-[#6E4E3D]/50 font-bold"
+            style={{
+              fontSize: settings.contactTextFontSize ? `${settings.contactTextFontSize}px` : undefined,
+              letterSpacing: settings.contactTextLetterSpacing !== undefined ? `${settings.contactTextLetterSpacing}px` : undefined,
+              fontFamily: settings.contactTextFontFamily || 'Pretendard',
+              color: settings.contactTextColor || '#FFFFFF',
+            }}
           >
             {settings.contactTitle === 'Contact' ? '견적문의' : (settings.contactTitle || '견적문의')}
           </motion.h1>

@@ -28,8 +28,16 @@ export default function About() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex flex-col justify-center"
-          >
-            <h1 className="font-serif text-5xl md:text-6xl text-burgundy-900 mb-8 tracking-tight">
+            <h1
+              className="mb-8 font-bold"
+              style={{
+                fontSize: settings.aboutTextFontSize ? `${settings.aboutTextFontSize}px` : undefined,
+                letterSpacing: settings.aboutTextLetterSpacing !== undefined ? `${settings.aboutTextLetterSpacing}px` : undefined,
+                fontFamily: settings.aboutTextFontFamily || 'Pretendard',
+                textAlign: (settings.aboutTextAlign || 'left') as any,
+                color: settings.aboutTextColor || '#1C1917',
+              }}
+            >
               {settings.aboutTitle}
             </h1>
             <h2 className="text-xl md:text-2xl text-stone-800 font-light mb-6 leading-relaxed">
