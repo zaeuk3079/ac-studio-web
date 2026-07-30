@@ -362,7 +362,8 @@ export default function Settings() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                   {[0, 1, 2, 3, 4].map((idx) => {
-                    const currentImg = (formData.heroImages && formData.heroImages[idx]) || (idx === 0 ? formData.heroImage : '');
+                    const heroArr = formData.heroImages || [];
+                    const currentImg = heroArr[idx] || (idx === 0 ? formData.heroImage : '');
                     return (
                       <div key={idx} className="bg-stone-50 p-3 rounded-xl border border-stone-200 flex flex-col items-center space-y-2">
                         <span className="text-xs font-bold text-stone-700">사진 {idx + 1}</span>
@@ -383,13 +384,18 @@ export default function Settings() {
                                 setUploadingField(`heroSlide_${idx}`);
                                 try {
                                   const url = await uploadImageToCloudCDN(file);
-                                  const newImgs = [...(formData.heroImages || [])];
-                                  newImgs[idx] = url;
-                                  setFormData(prev => ({
-                                    ...prev,
-                                    heroImages: newImgs,
-                                    heroImage: idx === 0 ? url : prev.heroImage
-                                  }));
+                                  setFormData(prev => {
+                                    const baseArr = Array.isArray(prev.heroImages) ? [...prev.heroImages] : [];
+                                    while (baseArr.length <= idx) {
+                                      baseArr.push('');
+                                    }
+                                    baseArr[idx] = url;
+                                    return {
+                                      ...prev,
+                                      heroImages: baseArr,
+                                      heroImage: idx === 0 ? url : (prev.heroImage || url)
+                                    };
+                                  });
                                 } finally {
                                   setUploadingField(null);
                                   e.target.value = '';
@@ -406,9 +412,11 @@ export default function Settings() {
                           <button
                             type="button"
                             onClick={() => {
-                              const newImgs = [...(formData.heroImages || [])];
-                              newImgs[idx] = '';
-                              setFormData({ ...formData, heroImages: newImgs });
+                              setFormData(prev => {
+                                const baseArr = Array.isArray(prev.heroImages) ? [...prev.heroImages] : [];
+                                baseArr[idx] = '';
+                                return { ...prev, heroImages: baseArr };
+                              });
                             }}
                             className="text-[10px] text-red-500 hover:underline cursor-pointer"
                           >

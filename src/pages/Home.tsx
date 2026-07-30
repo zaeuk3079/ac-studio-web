@@ -109,9 +109,11 @@ export default function Home() {
   }, [selectedItem]);
 
   // Hero Cross-Dissolve Image Slider Logic
-  const heroImageList = (settings.heroImages && settings.heroImages.filter(Boolean).length > 0)
-    ? settings.heroImages.filter(Boolean)
-    : [settings.heroImage].filter(Boolean);
+  const heroImageList = (() => {
+    const listFromArr = (settings.heroImages || []).filter(url => typeof url === 'string' && url.trim().length > 0);
+    if (listFromArr.length > 0) return listFromArr;
+    return settings.heroImage ? [settings.heroImage] : [];
+  })();
 
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
