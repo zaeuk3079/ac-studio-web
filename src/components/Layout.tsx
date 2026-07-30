@@ -55,12 +55,10 @@ export default function Layout({ children }: { children: ReactNode }) {
             </div>
 
             {/* Right Nav */}
-            <nav className="flex space-x-10 justify-end items-center">
+            <nav className="flex space-x-8 justify-end items-center">
               <Link
                 to="/contact"
-                className={`text-xs tracking-[0.2em] uppercase transition-colors duration-200 hover:text-stone-900 ${
-                  location.pathname === '/contact' ? 'text-stone-900 font-bold' : 'text-stone-500'
-                }`}
+                className="text-xs font-bold tracking-wider text-white bg-[#5C4033] hover:bg-[#4A3227] px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center border border-[#6E4E3D] cursor-pointer"
               >
                 견적문의
               </Link>
