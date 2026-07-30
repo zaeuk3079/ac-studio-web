@@ -102,21 +102,38 @@ export default function Settings() {
     };
   };
 
+  const ensureCloudUrl = async (val?: string): Promise<string> => {
+    if (!val) return '';
+    if (val.startsWith('data:image')) {
+      try {
+        const res = await fetch(val);
+        const blob = await res.blob();
+        const file = new File([blob], 'migrated_image.png', { type: blob.type || 'image/png' });
+        const cdnUrl = await uploadImageToCloudCDN(file);
+        return cdnUrl;
+      } catch (err) {
+        console.warn('Failed to auto-migrate base64 to Cloud CDN:', err);
+        return await compressBase64String(val, 350, 0.6);
+      }
+    }
+    return val;
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Auto compress base64 images before sending to Firestore to guarantee well under 1MB limit (~100KB max)
-      const logoUrlCompressed = formData.logoUrl ? await compressBase64String(formData.logoUrl, 400, 0.65) : formData.logoUrl;
-      const heroImageCompressed = formData.heroImage ? await compressBase64String(formData.heroImage, 700, 0.65) : formData.heroImage;
-      const aboutImageCompressed = formData.aboutImage ? await compressBase64String(formData.aboutImage, 700, 0.65) : formData.aboutImage;
-      const serviceImageCompressed = formData.serviceImage ? await compressBase64String(formData.serviceImage, 700, 0.65) : formData.serviceImage;
+      // Auto migrate any legacy base64 images into fast Cloud CDN URLs on save!
+      const logoUrlConverted = await ensureCloudUrl(formData.logoUrl);
+      const heroImageConverted = await ensureCloudUrl(formData.heroImage);
+      const aboutImageConverted = await ensureCloudUrl(formData.aboutImage);
+      const serviceImageConverted = await ensureCloudUrl(formData.serviceImage);
 
       const cleanedData = {
         ...formData,
-        logoUrl: logoUrlCompressed,
-        heroImage: heroImageCompressed,
-        aboutImage: aboutImageCompressed,
-        serviceImage: serviceImageCompressed,
+        logoUrl: logoUrlConverted,
+        heroImage: heroImageConverted,
+        aboutImage: aboutImageConverted,
+        serviceImage: serviceImageConverted,
         heroNukiImages: [],
         heroNukiConfigs: []
       };
