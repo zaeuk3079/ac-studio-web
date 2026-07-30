@@ -122,7 +122,9 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="w-full mb-16 rounded-none overflow-hidden relative shadow-xl shadow-stone-200/40 border border-stone-100/60"
-            style={{ aspectRatio: '16/9' }}
+            style={{
+              aspectRatio: settings.heroAspectRatio === '16:9' ? '16/9' : settings.heroAspectRatio === '4:3' ? '4/3' : '3/2'
+            }}
           >
             <img
               src={settings.heroImage}
