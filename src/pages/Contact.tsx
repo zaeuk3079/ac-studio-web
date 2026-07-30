@@ -234,7 +234,7 @@ export default function Contact() {
                     required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
-                    placeholder="예: 대략적으로"
+                    placeholder="대략적으로"
                     className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
                   />
                 </div>
