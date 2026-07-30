@@ -1246,28 +1246,30 @@ export default function Settings() {
                       <div className="md:col-span-6 space-y-2">
                         <div>
                           <label className="block text-xs font-medium text-stone-600 mb-1">설명 문구 1 (강조 핵심 문구)</label>
-                          <input
-                            type="text"
+                          <textarea
                             value={step.desc1}
                             onChange={(e) => {
                               const newSteps = [...(formData.serviceProcessSteps || [])];
                               newSteps[idx] = { ...newSteps[idx], desc1: e.target.value };
                               setFormData({ ...formData, serviceProcessSteps: newSteps });
                             }}
-                            className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white"
+                            rows={2}
+                            placeholder="엔터(Enter)를 눌러 줄바꿈 가능"
+                            className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white text-stone-800"
                           />
                         </div>
                         <div>
                           <label className="block text-xs font-medium text-stone-600 mb-1">설명 문구 2 (상세 부연 설명)</label>
-                          <input
-                            type="text"
+                          <textarea
                             value={step.desc2}
                             onChange={(e) => {
                               const newSteps = [...(formData.serviceProcessSteps || [])];
                               newSteps[idx] = { ...newSteps[idx], desc2: e.target.value };
                               setFormData({ ...formData, serviceProcessSteps: newSteps });
                             }}
-                            className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white text-stone-500"
+                            rows={2}
+                            placeholder="엔터(Enter)를 눌러 자유롭게 줄바꿈 하실 수 있습니다."
+                            className="w-full border border-stone-300 rounded-lg px-2.5 py-1.5 text-xs bg-white text-stone-600"
                           />
                         </div>
                       </div>

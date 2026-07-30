@@ -475,9 +475,9 @@ export default function Home() {
                     <h3 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight font-sans">
                       {step.title}
                     </h3>
-                    <div className="text-sm text-stone-600 space-y-1 font-normal leading-relaxed whitespace-pre-line">
-                      {step.desc1 && <p>{step.desc1}</p>}
-                      {step.desc2 && <p className="text-stone-500">{step.desc2}</p>}
+                    <div className="text-sm text-stone-600 space-y-1 font-normal leading-relaxed">
+                      {step.desc1 && <p className="whitespace-pre-line">{step.desc1}</p>}
+                      {step.desc2 && <p className="text-stone-500 whitespace-pre-line">{step.desc2}</p>}
                     </div>
                   </div>
                 </div>
