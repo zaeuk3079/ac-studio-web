@@ -234,8 +234,11 @@ export default function Home() {
 
         {/* Category Header & Filter */}
         <div className="mb-16 mt-4">
-          <h1 className="font-sans text-3xl md:text-5xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-8">
-            Work
+          <h1 
+            className="text-3xl md:text-5xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-8"
+            style={{ fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif' }}
+          >
+            {settings.homePortfolioTitle || 'Work'}
           </h1>
           
           <div className="flex space-x-12 text-sm font-semibold tracking-[0.2em] border-b border-stone-100 pb-4">
