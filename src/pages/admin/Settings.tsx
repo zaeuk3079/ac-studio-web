@@ -538,11 +538,17 @@ export default function Settings() {
                         onChange={handleChange as any}
                         className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium"
                       >
-                        <option value="Pretendard">Pretendard (산세리프)</option>
+                        <option value="Pretendard">Pretendard (Regular 400)</option>
+                        <option value="Pretendard-Medium">Pretendard (Medium 500)</option>
+                        <option value="Pretendard-SemiBold">Pretendard (SemiBold 600)</option>
+                        <option value="Pretendard-Bold">Pretendard (Bold 700)</option>
+                        <option value="Pretendard-Black">Pretendard (Black 900)</option>
+                        <option value="Pretendard-Light">Pretendard (Light 300)</option>
+                        <option value="Moneygraphy-Rounded">Moneygraphy Rounded (머니그라피 둥근체)</option>
+                        <option value="Moneygraphy-Pixel">Moneygraphy Pixel (머니그라피 픽셀체)</option>
                         <option value="Playfair Display">Playfair Display (고급 Serif)</option>
                         <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
                         <option value="Cinzel">Cinzel (명품 비주얼)</option>
-                        <option value="Inter">Inter (모던 Sans)</option>
                       </select>
                     </div>
                     <div>
@@ -607,9 +613,15 @@ export default function Settings() {
                         onChange={handleChange as any}
                         className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium"
                       >
-                        <option value="Pretendard">Pretendard (산세리프)</option>
-                        <option value="Inter">Inter</option>
-                        <option value="Playfair Display">Playfair Display</option>
+                        <option value="Pretendard">Pretendard (Regular 400)</option>
+                        <option value="Pretendard-Medium">Pretendard (Medium 500)</option>
+                        <option value="Pretendard-SemiBold">Pretendard (SemiBold 600)</option>
+                        <option value="Pretendard-Bold">Pretendard (Bold 700)</option>
+                        <option value="Pretendard-Black">Pretendard (Black 900)</option>
+                        <option value="Pretendard-Light">Pretendard (Light 300)</option>
+                        <option value="Moneygraphy-Rounded">Moneygraphy Rounded (머니그라피 둥근체)</option>
+                        <option value="Moneygraphy-Pixel">Moneygraphy Pixel (머니그라피 픽셀체)</option>
+                        <option value="Playfair Display">Playfair Display (고급 Serif)</option>
                       </select>
                     </div>
                     <div>
@@ -787,7 +799,14 @@ export default function Settings() {
                 <div>
                   <label className="block text-xs font-medium text-stone-300 mb-1">폰트 종류</label>
                   <select name="aboutTextFontFamily" value={formData.aboutTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-700 rounded-lg px-3 py-2 text-xs bg-stone-800 text-stone-200 font-medium">
-                    <option value="Pretendard">Pretendard (산세리프)</option>
+                    <option value="Pretendard">Pretendard (Regular 400)</option>
+                    <option value="Pretendard-Medium">Pretendard (Medium 500)</option>
+                    <option value="Pretendard-SemiBold">Pretendard (SemiBold 600)</option>
+                    <option value="Pretendard-Bold">Pretendard (Bold 700)</option>
+                    <option value="Pretendard-Black">Pretendard (Black 900)</option>
+                    <option value="Pretendard-Light">Pretendard (Light 300)</option>
+                    <option value="Moneygraphy-Rounded">Moneygraphy Rounded (머니그라피 둥근체)</option>
+                    <option value="Moneygraphy-Pixel">Moneygraphy Pixel (머니그라피 픽셀체)</option>
                     <option value="Playfair Display">Playfair Display (고급 Serif)</option>
                     <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
                     <option value="Cinzel">Cinzel (명품 비주얼)</option>
@@ -1000,7 +1019,14 @@ export default function Settings() {
                 <div>
                   <label className="block text-xs font-medium text-stone-300 mb-1">폰트 종류</label>
                   <select name="serviceTextFontFamily" value={formData.serviceTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-700 rounded-lg px-3 py-2 text-xs bg-stone-800 text-stone-200 font-medium">
-                    <option value="Pretendard">Pretendard (산세리프)</option>
+                    <option value="Pretendard">Pretendard (Regular 400)</option>
+                    <option value="Pretendard-Medium">Pretendard (Medium 500)</option>
+                    <option value="Pretendard-SemiBold">Pretendard (SemiBold 600)</option>
+                    <option value="Pretendard-Bold">Pretendard (Bold 700)</option>
+                    <option value="Pretendard-Black">Pretendard (Black 900)</option>
+                    <option value="Pretendard-Light">Pretendard (Light 300)</option>
+                    <option value="Moneygraphy-Rounded">Moneygraphy Rounded (머니그라피 둥근체)</option>
+                    <option value="Moneygraphy-Pixel">Moneygraphy Pixel (머니그라피 픽셀체)</option>
                     <option value="Playfair Display">Playfair Display (고급 Serif)</option>
                     <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
                     <option value="Cinzel">Cinzel (명품 비주얼)</option>
@@ -1178,7 +1204,14 @@ export default function Settings() {
                 <div>
                   <label className="block text-xs font-medium text-stone-300 mb-1">폰트 종류</label>
                   <select name="contactTextFontFamily" value={formData.contactTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-700 rounded-lg px-3 py-2 text-xs bg-stone-800 text-stone-200 font-medium">
-                    <option value="Pretendard">Pretendard (산세리프)</option>
+                    <option value="Pretendard">Pretendard (Regular 400)</option>
+                    <option value="Pretendard-Medium">Pretendard (Medium 500)</option>
+                    <option value="Pretendard-SemiBold">Pretendard (SemiBold 600)</option>
+                    <option value="Pretendard-Bold">Pretendard (Bold 700)</option>
+                    <option value="Pretendard-Black">Pretendard (Black 900)</option>
+                    <option value="Pretendard-Light">Pretendard (Light 300)</option>
+                    <option value="Moneygraphy-Rounded">Moneygraphy Rounded (머니그라피 둥근체)</option>
+                    <option value="Moneygraphy-Pixel">Moneygraphy Pixel (머니그라피 픽셀체)</option>
                     <option value="Playfair Display">Playfair Display (고급 Serif)</option>
                     <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
                     <option value="Cinzel">Cinzel (명품 비주얼)</option>

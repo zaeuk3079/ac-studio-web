@@ -99,6 +99,24 @@ export const compressBase64String = (base64Str: string, maxDim = 600, quality = 
   return Promise.race([compressionPromise, timeoutPromise]);
 };
 
+export const parseFontFamilyStyle = (fontName?: string): { fontFamily: string; fontWeight?: number } => {
+  if (!fontName) return { fontFamily: 'Pretendard, sans-serif' };
+  if (fontName.startsWith('Pretendard-')) {
+    const weightMap: Record<string, number> = {
+      'Pretendard-Light': 300,
+      'Pretendard-Medium': 500,
+      'Pretendard-SemiBold': 600,
+      'Pretendard-Bold': 700,
+      'Pretendard-Black': 900,
+    };
+    return {
+      fontFamily: 'Pretendard, sans-serif',
+      fontWeight: weightMap[fontName] || 400
+    };
+  }
+  return { fontFamily: fontName };
+};
+
 export const compressImageToBlob = (file: File, maxWidth = 1200, maxHeight = 1200, quality = 0.7): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
