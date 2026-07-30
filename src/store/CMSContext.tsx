@@ -41,6 +41,7 @@ export interface SiteSettings {
   heroSubTextLetterSpacing?: number;
   heroSubTextFontFamily?: string;
   heroSubTextColor?: string;
+  heroTextAlign?: 'left' | 'center' | 'right' | string;
   heroNukiImages?: string[];
   heroNukiConfigs?: NukiImageConfig[];
   showHomeAbout: boolean;
@@ -151,6 +152,7 @@ const defaultSettings: SiteSettings = {
   heroSubTextLetterSpacing: 1,
   heroSubTextFontFamily: 'Pretendard',
   heroSubTextColor: '#E7E5E4',
+  heroTextAlign: 'left',
   heroNukiImages: [],
   heroNukiConfigs: [],
   showHomeAbout: true,

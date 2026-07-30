@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
-import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move } from 'lucide-react';
+import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { compressImage } from '../../utils/imageUtils';
 
 export default function Settings() {
@@ -299,10 +299,17 @@ export default function Settings() {
                       
                       {/* Draggable Text Block */}
                       <div
-                        className="absolute transform -translate-y-full pointer-events-none transition-transform duration-75"
+                        className={`absolute transform -translate-y-full pointer-events-none transition-transform duration-75 flex flex-col ${
+                          formData.heroTextAlign === 'center'
+                            ? 'items-center text-center'
+                            : formData.heroTextAlign === 'right'
+                            ? 'items-end text-right'
+                            : 'items-start text-left'
+                        }`}
                         style={{
                           left: `${formData.heroTextX ?? 6}%`,
                           top: `${formData.heroTextY ?? 82}%`,
+                          textAlign: (formData.heroTextAlign || 'left') as any,
                         }}
                       >
                         {formData.heroSubText && (
@@ -403,7 +410,50 @@ export default function Settings() {
                 <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
                   <span>🎨 메인 카피 디테일 편집기 (글자 크기 / 자간 / 폰트 / 위치)</span>
                   <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
-                </h4>
+                {/* Text Alignment Controls */}
+                <div className="pt-3 border-t border-stone-200/80">
+                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
+                    글자 정렬 (Text Alignment)
+                  </label>
+                  <div className="flex space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, heroTextAlign: 'left' })}
+                      className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                        (!formData.heroTextAlign || formData.heroTextAlign === 'left')
+                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                          : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-100'
+                      }`}
+                    >
+                      <AlignLeft size={14} />
+                      <span>왼쪽 정렬</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, heroTextAlign: 'center' })}
+                      className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                        formData.heroTextAlign === 'center'
+                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                          : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-100'
+                      }`}
+                    >
+                      <AlignCenter size={14} />
+                      <span>가운데 정렬</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, heroTextAlign: 'right' })}
+                      className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${
+                        formData.heroTextAlign === 'right'
+                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
+                          : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-100'
+                      }`}
+                    >
+                      <AlignRight size={14} />
+                      <span>오른쪽 정렬</span>
+                    </button>
+                  </div>
+                </div>
 
                 {/* Main Copy Controls */}
                 <div className="space-y-4 pt-3 border-t border-stone-200/80">

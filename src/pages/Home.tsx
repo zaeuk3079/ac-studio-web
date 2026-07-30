@@ -136,10 +136,17 @@ export default function Home() {
             
             {/* Positioned Brand Copy Container */}
             <div
-              className="absolute transform -translate-y-full flex flex-col pointer-events-none pr-6"
+              className={`absolute transform -translate-y-full flex flex-col pointer-events-none pr-6 ${
+                settings.heroTextAlign === 'center'
+                  ? 'items-center text-center'
+                  : settings.heroTextAlign === 'right'
+                  ? 'items-end text-right'
+                  : 'items-start text-left'
+              }`}
               style={{
                 left: `${settings.heroTextX ?? 6}%`,
                 top: `${settings.heroTextY ?? 82}%`,
+                textAlign: (settings.heroTextAlign || 'left') as any,
               }}
             >
               {settings.heroSubText && (
