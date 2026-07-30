@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <nav className="flex space-x-8 justify-end items-center">
               <Link
                 to="/contact"
-                className="text-xs font-bold tracking-wider text-white bg-[#5C4033] hover:bg-[#4A3227] px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center border border-[#6E4E3D] cursor-pointer"
+                className="text-sm font-medium tracking-wider text-white bg-[#5C4033] hover:bg-[#4A3227] px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center border border-[#6E4E3D] cursor-pointer"
               >
                 견적문의
               </Link>
@@ -89,7 +89,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               <Link to="/service" className="text-[11px] tracking-widest uppercase text-stone-500 hover:text-stone-900 transition-colors">Service</Link>
               <Link
                 to="/contact"
-                className="text-[12px] font-bold tracking-wider text-white bg-[#5C4033] hover:bg-[#4A3227] px-4 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center -my-1 border border-[#6E4E3D]"
+                className="text-sm font-medium tracking-wider text-white bg-[#5C4033] hover:bg-[#4A3227] px-4.5 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center -my-1 border border-[#6E4E3D]"
               >
                 견적문의
               </Link>

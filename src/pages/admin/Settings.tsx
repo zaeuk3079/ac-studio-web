@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
 import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
@@ -9,6 +9,12 @@ export default function Settings() {
   const [formData, setFormData] = useState<SiteSettings>(settings);
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+
+  useEffect(() => {
+    if (settings) {
+      setFormData(settings);
+    }
+  }, [settings]);
 
   const bannerContainerRef = useRef<HTMLDivElement>(null);
   const [isDraggingText, setIsDraggingText] = useState(false);
