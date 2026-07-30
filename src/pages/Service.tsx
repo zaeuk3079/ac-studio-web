@@ -6,42 +6,44 @@ import { Calendar, ArrowRight } from 'lucide-react';
 export default function Service() {
   const { settings } = useCMS();
 
-  const steps = settings.serviceProcessSteps && settings.serviceProcessSteps.length > 0
+  const defaultSteps: ProcessStep[] = [
+    {
+      id: 'step_1',
+      stepNumber: '01',
+      title: '상담·기획',
+      desc1: '24시간 안에 답장합니다.',
+      desc2: '목적과 무드를 듣고 레퍼런스·세팅·견적을 제안합니다.',
+      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop'
+    },
+    {
+      id: 'step_2',
+      stepNumber: '02',
+      title: '촬영',
+      desc1: '역삼 스튜디오 또는 로케이션.',
+      desc2: '현장에서 컷을 함께 확인하며 진행합니다.',
+      image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop'
+    },
+    {
+      id: 'step_3',
+      stepNumber: '03',
+      title: '셀렉·리터칭',
+      desc1: '정리된 컷에서 고르시면,',
+      desc2: '피드백을 반영해 정성껏 보정합니다.',
+      image: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=600&auto=format&fit=crop'
+    },
+    {
+      id: 'step_4',
+      stepNumber: '04',
+      title: '전달',
+      desc1: '고해상도 완성본을 일정에 맞춰드립니다.',
+      desc2: '',
+      image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop'
+    }
+  ];
+
+  const steps = (settings.serviceProcessSteps && settings.serviceProcessSteps.length > 0)
     ? settings.serviceProcessSteps
-    : [
-        {
-          id: 'step_1',
-          stepNumber: '01',
-          title: '상담·기획',
-          desc1: '24시간 안에 답장합니다.',
-          desc2: '목적과 무드를 듣고 레퍼런스·세팅·견적을 제안합니다.',
-          image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop'
-        },
-        {
-          id: 'step_2',
-          stepNumber: '02',
-          title: '촬영',
-          desc1: '역삼 스튜디오 또는 로케이션.',
-          desc2: '현장에서 컷을 함께 확인하며 진행합니다.',
-          image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop'
-        },
-        {
-          id: 'step_3',
-          stepNumber: '03',
-          title: '셀렉·리터칭',
-          desc1: '정리된 컷에서 고르시면,',
-          desc2: '피드백을 반영해 정성껏 보정합니다.',
-          image: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=600&auto=format&fit=crop'
-        },
-        {
-          id: 'step_4',
-          stepNumber: '04',
-          title: '전달',
-          desc1: '고해상도 완성본을 일정에 맞춰드립니다.',
-          desc2: '',
-          image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop'
-        }
-      ];
+    : defaultSteps;
 
   return (
     <div className="bg-white min-h-screen py-16 md:py-24">

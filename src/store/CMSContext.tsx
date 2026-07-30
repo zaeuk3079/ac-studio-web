@@ -334,17 +334,30 @@ export function CMSProvider({ children }: { children: ReactNode }) {
 
         if (docSnap.exists()) {
           const fetched = docSnap.data() as SiteSettings;
-          // Merge defaultSettings -> fetched -> cachedObj to NEVER lose user customizations
+          const mergedSteps = (fetched.serviceProcessSteps && fetched.serviceProcessSteps.length > 0)
+            ? fetched.serviceProcessSteps
+            : (cachedObj.serviceProcessSteps && cachedObj.serviceProcessSteps.length > 0)
+            ? cachedObj.serviceProcessSteps
+            : defaultSettings.serviceProcessSteps;
+
           const merged: SiteSettings = {
             ...defaultSettings,
             ...fetched,
-            ...cachedObj
+            ...cachedObj,
+            serviceProcessSteps: mergedSteps
           };
           setSettings(merged);
           localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
         } else {
-          // If Firebase doc is not ready, keep user local customizations intact
-          const merged = { ...defaultSettings, ...cachedObj };
+          const mergedSteps = (cachedObj.serviceProcessSteps && cachedObj.serviceProcessSteps.length > 0)
+            ? cachedObj.serviceProcessSteps
+            : defaultSettings.serviceProcessSteps;
+
+          const merged = {
+            ...defaultSettings,
+            ...cachedObj,
+            serviceProcessSteps: mergedSteps
+          };
           setSettings(merged);
           localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
           setDoc(doc(db, 'settings', 'main'), merged).catch(() => {});
