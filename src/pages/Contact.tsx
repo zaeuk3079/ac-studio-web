@@ -268,8 +268,8 @@ export default function Contact() {
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="촬영하고 싶으신 컨셉과 필요한 예상 컷 수 또는 영상 분량을 적어주세요."
-                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
+                  placeholder={settings.contactMessagePlaceholder || "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요"}
+                  className="w-full border border-stone-200 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none leading-relaxed"
                 />
               </div>
 

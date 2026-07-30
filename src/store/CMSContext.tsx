@@ -119,6 +119,7 @@ export interface SiteSettings {
   contactTextColor?: string;
   contactTextX?: number;
   contactTextY?: number;
+  contactMessagePlaceholder?: string;
   // Appearance
   themeColor: string; // 'ivory' or other
   accentColor: string; // 'burgundy' or other
@@ -295,6 +296,7 @@ const defaultSettings: SiteSettings = {
   contactTextColor: '#FFFFFF',
   contactTextX: 50,
   contactTextY: 20,
+  contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',

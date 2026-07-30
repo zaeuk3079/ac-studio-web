@@ -1482,6 +1482,17 @@ export default function Settings() {
                   />
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">촬영 내용 (컨셉 및 분량) 힌트 안내 문구 (Placeholder)</label>
+                <textarea
+                  name="contactMessagePlaceholder"
+                  value={formData.contactMessagePlaceholder ?? "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요"}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                />
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-stone-700 mb-2">Contact Message Title (안내 카드 제목)</label>
