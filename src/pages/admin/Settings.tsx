@@ -158,16 +158,6 @@ export default function Settings() {
     }
   };
 
-  // Real-time Auto-Save Engine: Auto saves user edits continuously so user NEVER loses work!
-  useEffect(() => {
-    if (!formData) return;
-    const timer = setTimeout(() => {
-      const sanitized = JSON.parse(JSON.stringify(formData));
-      updateSettings(sanitized);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [formData]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
