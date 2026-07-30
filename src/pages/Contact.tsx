@@ -94,12 +94,12 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-block bg-[#0a4416] px-10 py-3.5 rounded-full mb-6 shadow-lg border border-[#0e5c1d]/50 font-bold text-white"
+            className="inline-block bg-[#bcd0c9] px-10 py-3.5 rounded-full mb-6 shadow-md border border-[#a2bbb3] font-bold text-[#1C1917]"
             style={{
               fontSize: settings.contactTextFontSize ? `${settings.contactTextFontSize}px` : undefined,
               letterSpacing: settings.contactTextLetterSpacing !== undefined ? `${settings.contactTextLetterSpacing}px` : undefined,
               fontFamily: settings.contactTextFontFamily || 'Pretendard',
-              color: settings.contactTextColor || '#FFFFFF',
+              color: settings.contactTextColor || '#1C1917',
             }}
           >
             {settings.contactTitle === 'Contact' ? '견적문의' : (settings.contactTitle || '견적문의')}
@@ -288,7 +288,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#0a4416] hover:bg-[#073310] disabled:bg-stone-300 text-white font-medium tracking-widest uppercase py-4 rounded-full transition-all duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer border border-[#0e5c1d]/50"
+                className="w-full bg-[#bcd0c9] hover:bg-[#a9c1b9] disabled:bg-stone-300 text-[#1C1917] font-bold tracking-widest uppercase py-4 rounded-full transition-all duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer border border-[#a2bbb3]"
               >
                 {isSubmitting ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
