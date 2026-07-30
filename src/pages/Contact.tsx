@@ -135,7 +135,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Phone</h3>
-                    <p className="text-stone-600 font-light">{settings.contactPhone}</p>
+                    <p className="text-stone-600 font-light">{settings.contactPhone || '010-1234-5678'}</p>
                   </div>
                 </div>
                 
@@ -145,7 +145,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Email</h3>
-                    <p className="text-stone-600 font-light">{settings.contactEmail}</p>
+                    <p className="text-stone-600 font-light">{settings.contactEmail || 'contact@agingstudio.com'}</p>
                   </div>
                 </div>
 
@@ -154,9 +154,9 @@ export default function Contact() {
                     <MapPin size={24} />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Studio</h3>
+                    <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Studio Address</h3>
                     <p className="text-stone-600 font-light whitespace-pre-line">
-                      {settings.contactAddress}
+                      {settings.address || settings.contactAddress || '서울특별시 강남구 역삼동 스튜디오'}
                     </p>
                   </div>
                 </div>
@@ -167,8 +167,8 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Instagram</h3>
-                    <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-600 font-light hover:text-burgundy-600 transition-colors">
-                      {getInstagramHandle(settings.instagramUrl)}
+                    <a href={settings.instagramUrl || 'https://instagram.com/agingstudio'} target="_blank" rel="noopener noreferrer" className="text-stone-600 font-light hover:text-burgundy-600 transition-colors">
+                      {getInstagramHandle(settings.instagramUrl || 'https://instagram.com/agingstudio')}
                     </a>
                   </div>
                 </div>

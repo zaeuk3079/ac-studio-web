@@ -1493,26 +1493,67 @@ export default function Settings() {
                   className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Message Title (안내 카드 제목)</label>
-                  <input
-                    type="text"
-                    name="contactMessageTitle"
-                    value={formData.contactMessageTitle || ''}
-                    onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
-                  />
+              {/* Studio Contact Information Left Card Editor */}
+              <div className="pt-6 border-t border-stone-200 space-y-4">
+                <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
+                  <span>📍 좌측 스튜디오 주소 & 연락처 정보 편집</span>
+                  <span className="text-xs font-normal text-stone-500">견적문의 페이지 좌측 안내 카드에 100% 반영됩니다.</span>
+                </h4>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">스튜디오 주소 (Studio Address)</label>
+                    <textarea
+                      name="address"
+                      value={formData.address ?? formData.contactAddress ?? ''}
+                      onChange={(e) => {
+                        setFormData({
+                          ...formData,
+                          address: e.target.value,
+                          contactAddress: e.target.value
+                        });
+                      }}
+                      rows={2}
+                      placeholder="예: 서울특별시 강남구 역삼동 123-45 2층"
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">이메일 주소 (Email)</label>
+                    <input
+                      type="text"
+                      name="contactEmail"
+                      value={formData.contactEmail || ''}
+                      onChange={handleChange}
+                      placeholder="contact@agingstudio.com"
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Phone (전화번호)</label>
-                  <input
-                    type="text"
-                    name="contactPhone"
-                    value={formData.contactPhone || ''}
-                    onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
-                  />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">전화번호 / 대표 연락처 (Phone)</label>
+                    <input
+                      type="text"
+                      name="contactPhone"
+                      value={formData.contactPhone || ''}
+                      onChange={handleChange}
+                      placeholder="010-1234-5678"
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">인스타그램 URL (Instagram Link)</label>
+                    <input
+                      type="text"
+                      name="instagramUrl"
+                      value={formData.instagramUrl || ''}
+                      onChange={handleChange}
+                      placeholder="https://instagram.com/agingstudio"
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    />
+                  </div>
                 </div>
               </div>
               <div>

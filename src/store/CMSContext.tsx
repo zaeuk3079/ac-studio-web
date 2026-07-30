@@ -120,6 +120,10 @@ export interface SiteSettings {
   contactTextX?: number;
   contactTextY?: number;
   contactMessagePlaceholder?: string;
+  address?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  instagramUrl?: string;
   // Appearance
   themeColor: string; // 'ivory' or other
   accentColor: string; // 'burgundy' or other
@@ -297,6 +301,10 @@ const defaultSettings: SiteSettings = {
   contactTextX: 50,
   contactTextY: 20,
   contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
+  address: '서울특별시 강남구 역삼동 스튜디오',
+  contactEmail: 'contact@agingstudio.com',
+  contactPhone: '010-1234-5678',
+  instagramUrl: 'https://instagram.com/agingstudio',
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',
