@@ -377,9 +377,15 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     // Save to Firebase
     try {
       await setDoc(doc(db, 'settings', 'main'), updated);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating settings:", error);
-      alert("설정 저장에 실패했습니다.");
+      const msg = error?.message || '';
+      if (msg.includes('exceed') || msg.includes('size') || msg.includes('limit')) {
+        alert("이미지 데이터 용량이 한도를 초과했습니다. 메인 배너 이미지를 [PC에서 찾기]로 다시 선택하여 업로드 후 저장해 주세요.");
+      } else {
+        alert("설정 저장에 실패했습니다: " + (error?.message || ''));
+      }
+      throw error;
     }
   };
 

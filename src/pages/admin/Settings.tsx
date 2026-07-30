@@ -25,7 +25,6 @@ export default function Settings() {
       alert('설정이 성공적으로 저장되었습니다!');
     } catch (error) {
       console.error('Settings save error:', error);
-      alert('설정 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
     } finally {
       setIsSaving(false);
     }
@@ -40,8 +39,8 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        // 2K resolution (2560px), quality 0.6 to stay under Firestore 1MB limit for the settings doc
-        const compressedBase64 = await compressImage(file, 2560, 1800, 0.6);
+        // Optimized for Settings doc (1400px, quality 0.5) to keep Base64 under 100KB, preventing Firestore 1MB document limit failure
+        const compressedBase64 = await compressImage(file, 1400, 900, 0.5);
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);
