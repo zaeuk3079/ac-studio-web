@@ -877,74 +877,49 @@ export default function Settings() {
               <div className="flex items-center justify-between border-b border-stone-800 pb-3">
                 <div className="flex items-center space-x-2">
                   <Move size={18} className="text-burgundy-400" />
-                  <span className="font-semibold text-stone-200 text-sm">About 텍스트 위치 드래그 캔버스 (Visual Canvas)</span>
+                  <span className="font-semibold text-stone-200 text-sm">About 실시간 라이브 미리보기 (실제 화면과 100% 동일한 세로형 3:4 비율)</span>
                 </div>
-                <span className="text-xs text-stone-400">💡 마우스로 텍스트를 잡고 끌어서 위치를 정해보세요</span>
+                <span className="text-xs text-stone-400">💡 세로형 3:4 대표 사진 & 텍스트 실시간 라이브 연동</span>
               </div>
 
-              <div
-                ref={aboutCanvasRef}
-                onMouseDown={(e) => {
-                  const updater = updateTabDragPosition(aboutCanvasRef, 'aboutTextX', 'aboutTextY');
-                  updater(e.clientX, e.clientY);
-                  const onMove = (mv: MouseEvent) => updater(mv.clientX, mv.clientY);
-                  const onUp = () => {
-                    window.removeEventListener('mousemove', onMove);
-                    window.removeEventListener('mouseup', onUp);
-                  };
-                  window.addEventListener('mousemove', onMove);
-                  window.addEventListener('mouseup', onUp);
-                }}
-                className="relative w-full aspect-[16/9] bg-stone-950 rounded-xl overflow-hidden cursor-crosshair border border-stone-800 select-none shadow-inner"
-              >
-                {formData.aboutImage ? (
-                  <img src={formData.aboutImage} alt="About Canvas" className="w-full h-full object-cover opacity-60" referrerPolicy="no-referrer" />
-                ) : (
-                  <div className="w-full h-full bg-stone-900 flex items-center justify-center text-stone-600 text-xs">이미지 없음</div>
-                )}
-                <div className="absolute inset-0 bg-stone-950/20" />
-                
-                {/* Smart Center Grid Lines & Magnetic Snap Feedback */}
-                <div className="absolute inset-0 pointer-events-none z-10">
-                  <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
-                    activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/20'
-                  }`} />
-                  <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
-                    activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/20'
-                  }`} />
-                  {(activeSnapX || activeSnapY) && (
-                    <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
-                      🎯 중앙 50% 자석 스냅!
-                    </div>
+              {/* 2-Column Real Layout matching About.tsx */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center bg-stone-950 p-6 rounded-xl border border-stone-800 shadow-inner">
+                {/* Left: Vertical Image Card (3:4 Ratio) */}
+                <div className="relative aspect-[3/4] w-full rounded-lg overflow-hidden border border-stone-800 bg-stone-900 flex items-center justify-center">
+                  {formData.aboutImage ? (
+                    <img src={formData.aboutImage} alt="About Canvas" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    <span className="text-xs text-stone-500 font-medium">세로형 이미지 없음 (3:4 비율)</span>
                   )}
+                  <div className="absolute inset-0 bg-stone-950/10 pointer-events-none" />
                 </div>
-                
-                {/* Positioned Text Box */}
-                <div
-                  className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
-                  style={{
-                    left: `${formData.aboutTextX ?? 50}%`,
-                    top: `${formData.aboutTextY ?? 30}%`,
-                    transform: (formData.aboutTextAlign === 'center')
-                      ? 'translate(-50%, -50%)'
-                      : (formData.aboutTextAlign === 'right')
-                      ? 'translate(-100%, -50%)'
-                      : 'translate(0%, -50%)',
-                  }}
-                >
+
+                {/* Right: Live Text Preview matching About.tsx */}
+                <div className="flex flex-col justify-center space-y-4 p-2">
                   <h1
-                    className="font-bold whitespace-nowrap"
+                    className="font-bold leading-snug transition-all"
                     style={{
-                      fontSize: `${Math.max(14, Math.round((formData.aboutTextFontSize || 42) * 0.5))}px`,
+                      fontSize: `${formData.aboutTextFontSize || 36}px`,
                       letterSpacing: `${formData.aboutTextLetterSpacing ?? 0}px`,
                       fontFamily: formData.aboutTextFontFamily || 'Pretendard',
-                      textAlign: (formData.aboutTextAlign || 'center') as any,
+                      textAlign: (formData.aboutTextAlign || 'left') as any,
                       color: formData.aboutTextColor || '#FFFFFF',
                     }}
                   >
                     {formData.aboutTitle || 'About Us'}
                   </h1>
-                  <p className="text-[10px] text-stone-300 opacity-90 mt-1 whitespace-nowrap">{formData.aboutSubText || '소개 서브 타이틀'}</p>
+
+                  {formData.aboutSubText && (
+                    <h2 className="text-sm md:text-base text-stone-300 font-light leading-relaxed">
+                      {formData.aboutSubText}
+                    </h2>
+                  )}
+
+                  <div className="space-y-3 text-xs text-stone-400 font-light leading-relaxed">
+                    {formData.aboutText && <p>{formData.aboutText}</p>}
+                    {formData.aboutText2 && <p>{formData.aboutText2}</p>}
+                    {formData.aboutText3 && <p>{formData.aboutText3}</p>}
+                  </div>
                 </div>
               </div>
             </div>
