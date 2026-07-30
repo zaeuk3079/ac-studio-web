@@ -231,17 +231,61 @@ export default function Settings() {
     });
   };
 
-  const handleNukiConfigChange = (index: number, field: 'left' | 'top' | 'size', value: number) => {
-    const currentConfigs = [...(formData.heroNukiConfigs || [])];
-    if (currentConfigs[index]) {
-      currentConfigs[index] = {
-        ...currentConfigs[index],
-        [field]: value
-      };
-      setFormData({
+  const handleRestoreFullText = async () => {
+    if (window.confirm('기존 완성 텍스트(Work, About 스토리, Process 4단계, Contact 문구)를 100% 원상복구 하시겠습니까?')) {
+      const restored = {
         ...formData,
-        heroNukiConfigs: currentConfigs
-      });
+        homePortfolioTitle: 'Work',
+        homePortfolioTitleLetterSpacing: -1,
+        homePortfolioSubText: '에이징스튜디오의 포트폴리오를 소개합니다.',
+        aboutTitle: 'About Us',
+        aboutSubText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
+        aboutText: '에이징 스튜디오는 단순한 사진 촬영을 넘어, 당신의 이야기와 감정을 프레임 안에 담아냅니다.\n수년간의 경험과 독창적인 시선으로 가장 자연스럽고 아름다운 모습을 찾아드립니다.',
+        aboutText2: '우리는 모든 사람이 자신만의 고유한 아름다움을 가지고 있다고 믿습니다.\n그 아름다움이 가장 자연스럽게 드러나는 찰나를 포착하여, 시간이 흘러도 변하지 않는 가치 있는 결과물로 만들어냅니다.',
+        aboutText3: '단순히 셔터를 누르는 것을 넘어, 당신과 소통하고 교감하며 가장 편안한 분위기 속에서 촬영을 진행합니다.\n우리의 프레임 안에서 당신의 이야기가 예술이 됩니다.',
+        serviceProcessTitle: 'Process',
+        serviceProcessSteps: [
+          {
+            id: 'step_1',
+            stepNumber: '01',
+            title: '상담·기획',
+            desc1: '24시간 안에 답장합니다.',
+            desc2: '목적과 무드를 듣고 레퍼런스·세팅·견적을 제안합니다.',
+            image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=600&auto=format&fit=crop'
+          },
+          {
+            id: 'step_2',
+            stepNumber: '02',
+            title: '촬영',
+            desc1: '역삼 스튜디오 또는 로케이션.',
+            desc2: '현장에서 컷을 함께 확인하며 진행합니다.',
+            image: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=600&auto=format&fit=crop'
+          },
+          {
+            id: 'step_3',
+            stepNumber: '03',
+            title: '셀렉·리터칭',
+            desc1: '정리된 컷에서 고르시면,',
+            desc2: '피드백을 반영해 정성껏 보정합니다.',
+            image: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=600&auto=format&fit=crop'
+          },
+          {
+            id: 'step_4',
+            stepNumber: '04',
+            title: '전달',
+            desc1: '고해상도 완성본을 일정에 맞춰드립니다.',
+            desc2: '',
+            image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop'
+          }
+        ],
+        contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
+        address: '서울특별시 강남구 역삼동 스튜디오',
+        contactEmail: 'contact@agingstudio.com',
+        contactPhone: '010-1234-5678'
+      };
+      setFormData(restored);
+      await updateSettings(restored);
+      alert('모든 텍스트가 100% 성공적으로 원상복구 되었습니다!');
     }
   };
 
@@ -276,9 +320,29 @@ export default function Settings() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-semibold text-stone-800 tracking-tight">Site Settings</h2>
-        <p className="text-stone-500 mt-1">Manage your website's content and appearance by category.</p>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+        <div>
+          <h2 className="text-2xl font-bold text-stone-900 tracking-tight">Site Settings</h2>
+          <p className="text-stone-500 text-sm mt-1">사이트 전체 디자인, 텍스트, Process 4단계 타임라인을 편집 관리합니다.</p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <button
+            type="button"
+            onClick={handleRestoreFullText}
+            className="bg-stone-100 hover:bg-stone-200 text-stone-700 px-4 py-2.5 rounded-xl font-bold text-xs transition-all border border-stone-300 cursor-pointer shadow-sm"
+          >
+            ✨ 기존 완성 텍스트 1초 복원
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={isSaving}
+            className="flex items-center space-x-2 bg-burgundy-800 hover:bg-burgundy-900 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer"
+          >
+            <Save size={16} />
+            <span>{isSaving ? '저장 중...' : '설정 저장하기'}</span>
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}
