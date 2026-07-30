@@ -458,7 +458,7 @@ export default function Settings() {
                 {/* Main Copy Controls */}
                 <div className="space-y-4 pt-3 border-t border-stone-200/80">
                   <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">메인 카피 디테일 (Main Copy)</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
                       <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.heroTextFontSize || 42}px)</label>
                       <input
@@ -498,13 +498,36 @@ export default function Settings() {
                         <option value="Inter">Inter (모던 Sans)</option>
                       </select>
                     </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상 (Color Palette)</label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="color"
+                          value={formData.heroTextColor || '#FFFFFF'}
+                          onChange={(e) => setFormData({ ...formData, heroTextColor: e.target.value })}
+                          className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
+                        />
+                        <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                          {['#FFFFFF', '#F5F5F0', '#D4AF37', '#E2E8F0', '#18181B', '#800020', '#3B82F6'].map(color => (
+                            <button
+                              key={color}
+                              type="button"
+                              onClick={() => setFormData({ ...formData, heroTextColor: color })}
+                              className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.heroTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                              style={{ backgroundColor: color }}
+                              title={color}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Sub Copy Controls */}
                 <div className="space-y-4 pt-4 border-t border-stone-200/80">
                   <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">서브 카피 디테일 (Sub Copy)</span>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div>
                       <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.heroSubTextFontSize || 14}px)</label>
                       <input
@@ -541,6 +564,29 @@ export default function Settings() {
                         <option value="Inter">Inter</option>
                         <option value="Playfair Display">Playfair Display</option>
                       </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상 (Color Palette)</label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="color"
+                          value={formData.heroSubTextColor || '#E7E5E4'}
+                          onChange={(e) => setFormData({ ...formData, heroSubTextColor: e.target.value })}
+                          className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
+                        />
+                        <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                          {['#E7E5E4', '#FFFFFF', '#D4AF37', '#9CA3AF', '#18181B', '#800020'].map(color => (
+                            <button
+                              key={color}
+                              type="button"
+                              onClick={() => setFormData({ ...formData, heroSubTextColor: color })}
+                              className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.heroSubTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                              style={{ backgroundColor: color }}
+                              title={color}
+                            />
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
