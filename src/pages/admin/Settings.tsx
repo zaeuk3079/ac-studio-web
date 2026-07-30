@@ -415,6 +415,7 @@ export default function Settings() {
                 <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
                   <span>🎨 메인 카피 디테일 편집기 (글자 크기 / 자간 / 폰트 / 위치)</span>
                   <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
+                </h4>
                 {/* Text Alignment Controls */}
                 <div className="pt-3 border-t border-stone-200/80">
                   <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
