@@ -774,7 +774,6 @@ export default function Settings() {
                   </div>
                 </div>
               </div>
-            </div>
             
             {/* Font Settings */}
             <div className="pt-6 border-t border-stone-200 grid grid-cols-1 md:grid-cols-2 gap-6">
