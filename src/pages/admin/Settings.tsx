@@ -63,7 +63,6 @@ export default function Settings() {
   };
 
   const handleSave = async () => {
-    if (isSaving) return;
     setIsSaving(true);
     try {
       // Auto compress any large base64 images before sending to Firestore to guarantee < 1MB limit
@@ -1318,14 +1317,12 @@ export default function Settings() {
 
       <div className="flex justify-end pt-6 border-t border-stone-200">
         <button
+          type="button"
           onClick={handleSave}
-          disabled={isSaving}
-          className={`flex items-center space-x-2 bg-burgundy-700 hover:bg-burgundy-600 text-white px-8 py-3 rounded-xl font-medium shadow-md transition-all ${
-            isSaving ? 'opacity-70 cursor-not-allowed' : ''
-          }`}
+          className="flex items-center space-x-2 bg-burgundy-700 hover:bg-burgundy-600 active:bg-burgundy-800 text-white px-8 py-3 rounded-xl font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"
         >
           <Save size={20} />
-          <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+          <span>{isSaving ? '저장 중...' : 'Save Changes'}</span>
         </button>
       </div>
     </div>

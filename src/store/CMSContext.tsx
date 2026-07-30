@@ -462,14 +462,8 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     try {
       await setDoc(doc(db, 'settings', 'main'), updated);
     } catch (error: any) {
-      console.error("Error updating settings:", error);
-      const msg = error?.message || '';
-      if (msg.includes('exceed') || msg.includes('size') || msg.includes('limit')) {
-        alert("이미지 데이터 용량이 한도를 초과했습니다. 메인 배너 이미지를 [PC에서 찾기]로 다시 선택하여 업로드 후 저장해 주세요.");
-      } else {
-        alert("설정 저장에 실패했습니다: " + (error?.message || ''));
-      }
-      throw error;
+      console.error("Error updating settings in Firebase:", error);
+      throw new Error("파이어베이스 데이터 용량이 초과되었습니다. 이미지를 다시 업로드 후 시도해 주세요.");
     }
   };
 
