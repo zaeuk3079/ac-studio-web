@@ -638,318 +638,322 @@ export default function Settings() {
 
         {/* ABOUT TAB */}
         {activeTab === 'about' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">About Image</label>
-              <div className="flex space-x-3">
-                <input
-                  type="text"
-                  name="aboutImage"
-                  value={formData.aboutImage || ''}
-                  onChange={handleChange}
-                  className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
-                <div className="relative overflow-hidden">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(e, 'aboutImage')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
-                    PC에서 찾기
-                  </button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
+            {/* Live Preview Box */}
+            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
+              <div className="flex items-center justify-between text-xs text-stone-400 border-b border-stone-800 pb-3">
+                <span className="font-semibold text-stone-200">✨ About 페이지 실시간 라이브 미리보기 (Live Preview)</span>
+                <span>실제 웹사이트 노출 모습</span>
+              </div>
+              <div className="bg-ivory-100 text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner max-h-[420px] overflow-y-auto space-y-6">
+                <div className="text-center">
+                  <h1 className="font-serif text-3xl font-bold text-stone-900 mb-2">{formData.aboutTitle || 'About Us'}</h1>
+                  <p className="text-stone-500 text-xs uppercase tracking-widest">{formData.aboutSubText}</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                  {formData.aboutImage && (
+                    <div className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-md">
+                      <img src={formData.aboutImage} alt="About Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                    </div>
+                  )}
+                  <div className="space-y-3 text-xs leading-relaxed text-stone-600 font-light">
+                    {formData.aboutText && <p>{formData.aboutText}</p>}
+                    {formData.aboutText2 && <p>{formData.aboutText2}</p>}
+                    {formData.aboutText3 && <p>{formData.aboutText3}</p>}
+                  </div>
                 </div>
               </div>
-              {formData.aboutImage && (
-                <div className="mt-4 w-48 h-64 rounded-lg overflow-hidden border border-stone-200">
-                  <img src={formData.aboutImage} alt="About Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-              )}
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">About Title</label>
-              <input
-                type="text"
-                name="aboutTitle"
-                value={formData.aboutTitle || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">About Sub Title</label>
-              <input
-                type="text"
-                name="aboutSubText"
-                value={formData.aboutSubText || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Paragraph 1</label>
-              <textarea
-                name="aboutText"
-                value={formData.aboutText || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Paragraph 2</label>
-              <textarea
-                name="aboutText2"
-                value={formData.aboutText2 || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Paragraph 3</label>
-              <textarea
-                name="aboutText3"
-                value={formData.aboutText3 || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
             </div>
 
-            <div className="pt-6 border-t border-stone-100">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-sm font-semibold text-stone-800 uppercase tracking-wider">Philosophy Section</h3>
-                <label className="flex items-center space-x-3 cursor-pointer">
+            {/* Edit Fields */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">About Image (소개 대표 이미지)</label>
+                <div className="flex space-x-3">
                   <input
-                    type="checkbox"
-                    checked={formData.showPhilosophy !== false}
-                    onChange={(e) => setFormData({ ...formData, showPhilosophy: e.target.checked })}
-                    className="w-5 h-5 text-burgundy-600 border-stone-300 rounded focus:ring-burgundy-500"
+                    type="text"
+                    name="aboutImage"
+                    value={formData.aboutImage || ''}
+                    onChange={handleChange}
+                    className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
                   />
-                  <span className="text-sm font-medium text-stone-700">Show Philosophy Section</span>
-                </label>
-              </div>
-
-              {formData.showPhilosophy !== false && (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Title</label>
+                  <div className="relative overflow-hidden">
                     <input
-                      type="text"
-                      name="philosophyTitle"
-                      value={formData.philosophyTitle || ''}
-                      onChange={handleChange}
-                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'aboutImage')}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Item 1</label>
-                    <input
-                      type="text"
-                      name="philosophyItem1"
-                      value={formData.philosophyItem1 || ''}
-                      onChange={handleChange}
-                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Item 2</label>
-                    <input
-                      type="text"
-                      name="philosophyItem2"
-                      value={formData.philosophyItem2 || ''}
-                      onChange={handleChange}
-                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-stone-700 mb-2">Philosophy Item 3</label>
-                    <input
-                      type="text"
-                      name="philosophyItem3"
-                      value={formData.philosophyItem3 || ''}
-                      onChange={handleChange}
-                      className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                    />
+                    <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
+                      PC에서 찾기
+                    </button>
                   </div>
                 </div>
-              )}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">About Title (대제목)</label>
+                  <input
+                    type="text"
+                    name="aboutTitle"
+                    value={formData.aboutTitle || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">About Sub Title (서브 타이틀)</label>
+                  <input
+                    type="text"
+                    name="aboutSubText"
+                    value={formData.aboutSubText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Story Paragraph 1 (소개 문단 1)</label>
+                  <textarea
+                    name="aboutText"
+                    value={formData.aboutText || ''}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-stone-800 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Story Paragraph 2 (소개 문단 2)</label>
+                  <textarea
+                    name="aboutText2"
+                    value={formData.aboutText2 || ''}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-stone-800 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Story Paragraph 3 (소개 문단 3)</label>
+                  <textarea
+                    name="aboutText3"
+                    value={formData.aboutText3 || ''}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-stone-800 font-medium"
+                  />
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
 
         {/* SERVICE TAB */}
         {activeTab === 'service' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Service Page Title (서비스 대제목)</label>
-              <input
-                type="text"
-                name="serviceTitle"
-                value={formData.serviceTitle || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Service Sub Title (서비스 소제목)</label>
-              <input
-                type="text"
-                name="serviceSubText"
-                value={formData.serviceSubText || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Service Image (서비스/촬영진행 관련 이미지)</label>
-              <div className="flex space-x-3">
-                <input
-                  type="text"
-                  name="serviceImage"
-                  value={formData.serviceImage || ''}
-                  onChange={handleChange}
-                  className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                  placeholder="https://example.com/image.jpg"
-                />
-                <div className="relative overflow-hidden">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleImageUpload(e, 'serviceImage')}
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  />
-                  <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
-                    PC에서 찾기
-                  </button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
+            {/* Live Preview Box */}
+            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
+              <div className="flex items-center justify-between text-xs text-stone-400 border-b border-stone-800 pb-3">
+                <span className="font-semibold text-stone-200">✨ Service 페이지 실시간 라이브 미리보기 (Live Preview)</span>
+                <span>실제 웹사이트 노출 모습</span>
+              </div>
+              <div className="bg-white text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner space-y-6">
+                {formData.serviceImage && (
+                  <div className="w-full aspect-[16/10] rounded-none overflow-hidden shadow-sm">
+                    <img src={formData.serviceImage} alt="Service Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  </div>
+                )}
+                <div className="space-y-4">
+                  <h3 className="font-serif text-xl font-bold text-stone-900 border-b border-stone-100 pb-2">Service Process</h3>
+                  <div className="bg-stone-50 p-4 rounded-xl text-xs text-stone-700 leading-relaxed whitespace-pre-line border border-stone-200/60 font-light">
+                    {formData.serviceText2 || '촬영 진행 과정 안내 문구...'}
+                  </div>
+                  <div className="pt-2">
+                    <span className="inline-flex items-center space-x-2 bg-[#5C4033] text-white px-5 py-2 rounded-full text-xs font-bold shadow">
+                      <span>견적 문의하기 →</span>
+                    </span>
+                  </div>
                 </div>
               </div>
-              {formData.serviceImage && (
-                <div className="mt-4 w-48 h-64 rounded-lg overflow-hidden border border-stone-200">
-                  <img src={formData.serviceImage} alt="Service Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                </div>
-              )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Service Process (촬영 진행 과정 상세)</label>
-              <textarea
-                name="serviceText2"
-                value={formData.serviceText2 || ''}
-                onChange={handleChange}
-                rows={8}
-                placeholder="예:&#13;&#10;1. 상담 및 콘셉트 조율&#13;&#10;2. 일정 확정 및 예약금 확인&#13;&#10;3. 촬영 진행 (2~3시간)&#13;&#10;4. 1차 셀렉본 공유&#13;&#10;5. 최종 보정본 제공 (2주 소요)"
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none font-mono text-sm leading-relaxed"
-              />
+
+            {/* Edit Fields */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Service Image (서비스 대표 16:9 이미지)</label>
+                <div className="flex space-x-3">
+                  <input
+                    type="text"
+                    name="serviceImage"
+                    value={formData.serviceImage || ''}
+                    onChange={handleChange}
+                    className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                  <div className="relative overflow-hidden">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'serviceImage')}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    />
+                    <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
+                      PC에서 찾기
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Service Title (서비스 대제목)</label>
+                  <input
+                    type="text"
+                    name="serviceTitle"
+                    value={formData.serviceTitle || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Service Sub Title (서비스 서브 타이틀)</label>
+                  <input
+                    type="text"
+                    name="serviceSubText"
+                    value={formData.serviceSubText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Service Process (촬영 진행 과정 상세 설명)</label>
+                <textarea
+                  name="serviceText2"
+                  value={formData.serviceText2 || ''}
+                  onChange={handleChange}
+                  rows={6}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-stone-800 font-medium"
+                  placeholder="예: 1. 사전 기획 및 미팅 ➡️ 2. 촬영 세팅 ➡️ 3. 본 촬영 ➡️ 4. 리터칭 ➡️ 5. 완성본 전달"
+                />
+              </div>
             </div>
           </motion.div>
         )}
 
         {/* CONTACT TAB */}
         {activeTab === 'contact' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Contact Page Title</label>
-                <input
-                  type="text"
-                  name="contactTitle"
-                  value={formData.contactTitle || ''}
-                  onChange={handleChange}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
+            {/* Live Preview Box */}
+            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
+              <div className="flex items-center justify-between text-xs text-stone-400 border-b border-stone-800 pb-3">
+                <span className="font-semibold text-stone-200">✨ 견적문의 페이지 실시간 라이브 미리보기 (Live Preview)</span>
+                <span>실제 웹사이트 노출 모습</span>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Contact Sub Text</label>
-                <input
-                  type="text"
-                  name="contactSubText"
-                  value={formData.contactSubText || ''}
-                  onChange={handleChange}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Message Title</label>
-              <input
-                type="text"
-                name="contactMessageTitle"
-                value={formData.contactMessageTitle || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Message Text</label>
-              <textarea
-                name="contactMessageText"
-                value={formData.contactMessageText || ''}
-                onChange={handleChange}
-                rows={3}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Contact Email</label>
-                <input
-                  type="email"
-                  name="contactEmail"
-                  value={formData.contactEmail || ''}
-                  onChange={handleChange}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Contact Phone</label>
-                <input
-                  type="tel"
-                  name="contactPhone"
-                  value={formData.contactPhone || ''}
-                  onChange={handleChange}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                />
+              <div className="bg-ivory-100 text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner space-y-6">
+                <div className="text-center">
+                  <span className="inline-block bg-[#5C4033] text-white font-sans text-lg px-6 py-2 rounded-full font-bold shadow-md">
+                    {formData.contactTitle || '견적문의'}
+                  </span>
+                  <p className="text-stone-500 text-xs mt-2 uppercase tracking-wider">{formData.contactSubText || '견적 및 촬영 문의'}</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div className="bg-white p-4 rounded-xl border border-stone-200 space-y-2">
+                    <h4 className="font-serif font-bold text-stone-900">{formData.contactMessageTitle || "Let's Create Together"}</h4>
+                    <p className="text-stone-600 font-light leading-relaxed text-[11px]">{formData.contactMessageText}</p>
+                    <div className="pt-2 space-y-1 text-stone-500 font-medium">
+                      <p>📞 {formData.contactPhone}</p>
+                      <p>✉️ {formData.contactEmail}</p>
+                    </div>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl border border-stone-200 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <div className="w-full h-7 bg-stone-100 rounded border border-stone-200 text-[10px] px-2 flex items-center text-stone-400">성함 / 상호명</div>
+                      <div className="w-full h-7 bg-stone-100 rounded border border-stone-200 text-[10px] px-2 flex items-center text-stone-400">연락처</div>
+                    </div>
+                    <button type="button" className="w-full bg-[#5C4033] text-white py-2 rounded-lg text-xs font-semibold mt-3">
+                      견적 문의 제출하기
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Studio Address</label>
-              <textarea
-                name="contactAddress"
-                value={formData.contactAddress || ''}
-                onChange={handleChange}
-                rows={2}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-none"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Instagram URL</label>
-              <input
-                type="url"
-                name="instagramUrl"
-                value={formData.instagramUrl || ''}
-                onChange={handleChange}
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-              />
-            </div>
-            <div className="pt-4 border-t border-stone-100">
-              <label className="block text-sm font-medium text-stone-700 mb-2">Web3Forms Access Key (이메일 자동 발송용 키)</label>
-              <input
-                type="text"
-                name="web3FormsKey"
-                value={formData.web3FormsKey || ''}
-                onChange={handleChange}
-                placeholder="예: 1234abcd-1234-abcd-1234-abcd1234abcd"
-                className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-mono text-sm"
-              />
-              <div className="mt-3 bg-stone-50 border border-stone-200 rounded-lg p-4 text-xs text-stone-600 leading-relaxed">
-                <p className="font-semibold text-stone-700 mb-1">💡 웹사이트에서 견적 문의 메일을 받는 방법:</p>
-                <ol className="list-decimal list-inside space-y-1">
-                  <li><a href="https://web3forms.com/" target="_blank" rel="noopener noreferrer" className="text-burgundy-700 underline font-medium hover:text-burgundy-600">Web3Forms 홈페이지</a>에 접속합니다.</li>
-                  <li>견적 문의를 받을 <strong>본인의 이메일 주소</strong>를 입력하고 Access Key를 신청합니다.</li>
-                  <li>입력한 이메일로 즉시 발송되는 <strong>Access Key</strong>를 복사하여 위 입력란에 붙여넣고 저장하세요.</li>
-                </ol>
+
+            {/* Edit Fields */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Title (대제목)</label>
+                  <input
+                    type="text"
+                    name="contactTitle"
+                    value={formData.contactTitle || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Sub Title (서브 타이틀)</label>
+                  <input
+                    type="text"
+                    name="contactSubText"
+                    value={formData.contactSubText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Message Title (안내 카드 제목)</label>
+                  <input
+                    type="text"
+                    name="contactMessageTitle"
+                    value={formData.contactMessageTitle || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Phone (전화번호)</label>
+                  <input
+                    type="text"
+                    name="contactPhone"
+                    value={formData.contactPhone || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Contact Message Text (안내 카드 상세 설명)</label>
+                <textarea
+                  name="contactMessageText"
+                  value={formData.contactMessageText || ''}
+                  onChange={handleChange}
+                  rows={3}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-stone-800 font-medium"
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Email (이메일 주소)</label>
+                  <input
+                    type="text"
+                    name="contactEmail"
+                    value={formData.contactEmail || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Instagram URL (인스타그램 주소)</label>
+                  <input
+                    type="text"
+                    name="instagramUrl"
+                    value={formData.instagramUrl || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
