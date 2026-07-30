@@ -61,6 +61,8 @@ export interface SiteSettings {
   aboutTextFontFamily?: string;
   aboutTextAlign?: 'left' | 'center' | 'right' | string;
   aboutTextColor?: string;
+  aboutTextX?: number;
+  aboutTextY?: number;
   // Service
   serviceTitle: string;
   serviceSubText: string;
@@ -72,6 +74,8 @@ export interface SiteSettings {
   serviceTextFontFamily?: string;
   serviceTextAlign?: 'left' | 'center' | 'right' | string;
   serviceTextColor?: string;
+  serviceTextX?: number;
+  serviceTextY?: number;
   // Philosophy
   showPhilosophy: boolean;
   philosophyTitle: string;
@@ -95,6 +99,8 @@ export interface SiteSettings {
   contactTextFontFamily?: string;
   contactTextAlign?: 'left' | 'center' | 'right' | string;
   contactTextColor?: string;
+  contactTextX?: number;
+  contactTextY?: number;
   // Appearance
   themeColor: string; // 'ivory' or other
   accentColor: string; // 'burgundy' or other
@@ -187,6 +193,8 @@ const defaultSettings: SiteSettings = {
   aboutTextFontFamily: 'Pretendard',
   aboutTextAlign: 'center',
   aboutTextColor: '#1C1917',
+  aboutTextX: 50,
+  aboutTextY: 30,
   // Service
   serviceTitle: 'Our Services',
   serviceSubText: '촬영 진행 과정 및 서비스 안내',
@@ -198,6 +206,8 @@ const defaultSettings: SiteSettings = {
   serviceTextFontFamily: 'Pretendard',
   serviceTextAlign: 'center',
   serviceTextColor: '#1C1917',
+  serviceTextX: 50,
+  serviceTextY: 30,
   // Philosophy
   showPhilosophy: true,
   philosophyTitle: 'Our Philosophy',
@@ -221,6 +231,8 @@ const defaultSettings: SiteSettings = {
   contactTextFontFamily: 'Pretendard',
   contactTextAlign: 'center',
   contactTextColor: '#FFFFFF',
+  contactTextX: 50,
+  contactTextY: 20,
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',

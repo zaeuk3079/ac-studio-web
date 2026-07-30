@@ -17,6 +17,9 @@ export default function Settings() {
   }, [settings]);
 
   const bannerContainerRef = useRef<HTMLDivElement>(null);
+  const aboutCanvasRef = useRef<HTMLDivElement>(null);
+  const serviceCanvasRef = useRef<HTMLDivElement>(null);
+  const contactCanvasRef = useRef<HTMLDivElement>(null);
   const [isDraggingText, setIsDraggingText] = useState(false);
 
   const handleBannerMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -43,6 +46,20 @@ export default function Settings() {
       heroTextX: Math.round(x),
       heroTextY: Math.round(y)
     }));
+  };
+
+  const updateTabDragPosition = (ref: React.RefObject<HTMLDivElement>, fieldX: string, fieldY: string) => {
+    return (clientX: number, clientY: number) => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      const x = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+      const y = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+      setFormData(prev => ({
+        ...prev,
+        [fieldX]: Math.round(x),
+        [fieldY]: Math.round(y)
+      }));
+    };
   };
 
   const handleSave = async () => {
@@ -645,18 +662,92 @@ export default function Settings() {
         {/* ABOUT TAB */}
         {activeTab === 'about' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
-            {/* Photoshop-style Detail Typography Controller for About - Placed AT TOP */}
+            {/* Interactive Visual Drag Canvas Editor for About (Home Tab Style) */}
+            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-800 pb-3">
+                <div className="flex items-center space-x-2">
+                  <Move size={18} className="text-burgundy-400" />
+                  <span className="font-semibold text-stone-200 text-sm">About 텍스트 위치 드래그 캔버스 (Visual Canvas)</span>
+                </div>
+                <span className="text-xs text-stone-400">💡 마우스로 텍스트를 잡고 끌어서 위치를 정해보세요</span>
+              </div>
+
+              <div
+                ref={aboutCanvasRef}
+                onMouseDown={(e) => {
+                  const updater = updateTabDragPosition(aboutCanvasRef, 'aboutTextX', 'aboutTextY');
+                  updater(e.clientX, e.clientY);
+                  const onMove = (mv: MouseEvent) => updater(mv.clientX, mv.clientY);
+                  const onUp = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('mouseup', onUp);
+                  };
+                  window.addEventListener('mousemove', onMove);
+                  window.addEventListener('mouseup', onUp);
+                }}
+                className="relative w-full aspect-[16/9] bg-stone-950 rounded-xl overflow-hidden cursor-crosshair border border-stone-800 select-none shadow-inner"
+              >
+                {formData.aboutImage ? (
+                  <img src={formData.aboutImage} alt="About Canvas" className="w-full h-full object-cover opacity-60" referrerPolicy="no-referrer" />
+                ) : (
+                  <div className="w-full h-full bg-stone-900 flex items-center justify-center text-stone-600 text-xs">이미지 없음</div>
+                )}
+                <div className="absolute inset-0 bg-stone-950/20" />
+                
+                {/* Positioned Text Box */}
+                <div
+                  className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
+                  style={{
+                    left: `${formData.aboutTextX ?? 50}%`,
+                    top: `${formData.aboutTextY ?? 30}%`,
+                    transform: (formData.aboutTextAlign === 'center')
+                      ? 'translate(-50%, -50%)'
+                      : (formData.aboutTextAlign === 'right')
+                      ? 'translate(-100%, -50%)'
+                      : 'translate(0%, -50%)',
+                  }}
+                >
+                  <h1
+                    className="font-bold whitespace-nowrap"
+                    style={{
+                      fontSize: `${Math.max(14, Math.round((formData.aboutTextFontSize || 42) * 0.5))}px`,
+                      letterSpacing: `${formData.aboutTextLetterSpacing ?? 0}px`,
+                      fontFamily: formData.aboutTextFontFamily || 'Pretendard',
+                      textAlign: (formData.aboutTextAlign || 'center') as any,
+                      color: formData.aboutTextColor || '#FFFFFF',
+                    }}
+                  >
+                    {formData.aboutTitle || 'About Us'}
+                  </h1>
+                  <p className="text-[10px] text-stone-300 opacity-90 mt-1 whitespace-nowrap">{formData.aboutSubText || '소개 서브 타이틀'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Photoshop-style Detail Typography Controller for About */}
             <div className="bg-stone-900 text-white p-6 rounded-2xl border border-stone-800 space-y-6 shadow-xl">
               <h4 className="font-semibold text-stone-100 text-base flex items-center justify-between border-b border-stone-800 pb-3">
                 <span className="flex items-center space-x-2">
-                  <span>🎨 About 타이틀 포토샵 디테일 편집기</span>
-                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Live Editor</span>
+                  <span>🎨 About 포토샵 디테일 타이포그래피 편집기</span>
+                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Home Style Editor</span>
                 </span>
-                <span className="text-xs text-stone-400 font-normal">글자 크기 / 자간 / 폰트 / 정렬 / 색상</span>
+                <span className="text-xs text-stone-400 font-normal">위치 / 정렬 / 글자 크기 / 자간 / 폰트 / 색상</span>
               </h4>
-              
+
+              {/* Position Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">가로 위치 (X: {formData.aboutTextX ?? 50}%)</label>
+                  <input type="range" min="0" max="100" name="aboutTextX" value={formData.aboutTextX ?? 50} onChange={(e) => setFormData({ ...formData, aboutTextX: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">세로 위치 (Y: {formData.aboutTextY ?? 30}%)</label>
+                  <input type="range" min="0" max="100" name="aboutTextY" value={formData.aboutTextY ?? 30} onChange={(e) => setFormData({ ...formData, aboutTextY: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+              </div>
+
               {/* Text Alignment */}
-              <div>
+              <div className="pt-2 border-t border-stone-800">
                 <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-2">글자 정렬 (Text Alignment)</label>
                 <div className="flex space-x-2">
                   <button type="button" onClick={() => setFormData({ ...formData, aboutTextAlign: 'left' })} className={`flex-1 py-2.5 px-3 rounded-xl border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${(!formData.aboutTextAlign || formData.aboutTextAlign === 'left') ? 'bg-white text-stone-900 border-white shadow-md font-bold' : 'bg-stone-800 text-stone-400 border-stone-700 hover:bg-stone-700'}`}><AlignLeft size={16} /><span>왼쪽 정렬</span></button>
@@ -693,43 +784,6 @@ export default function Settings() {
                         <button key={color} type="button" onClick={() => setFormData({ ...formData, aboutTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-600 transition-transform cursor-pointer ${formData.aboutTextColor === color ? 'scale-125 ring-2 ring-white z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
                       ))}
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Preview Box */}
-            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
-              <div className="flex items-center justify-between text-xs text-stone-400 border-b border-stone-800 pb-3">
-                <span className="font-semibold text-stone-200">✨ About 페이지 실시간 라이브 미리보기 (Live Preview)</span>
-                <span>실제 웹사이트 노출 모습</span>
-              </div>
-              <div className="bg-ivory-100 text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner max-h-[420px] overflow-y-auto space-y-6">
-                <div className="text-center">
-                  <h1
-                    className="font-bold mb-2"
-                    style={{
-                      fontSize: `${Math.max(16, Math.round((formData.aboutTextFontSize || 42) * 0.65))}px`,
-                      letterSpacing: `${formData.aboutTextLetterSpacing ?? 0}px`,
-                      fontFamily: formData.aboutTextFontFamily || 'Pretendard',
-                      textAlign: (formData.aboutTextAlign || 'center') as any,
-                      color: formData.aboutTextColor || '#1C1917',
-                    }}
-                  >
-                    {formData.aboutTitle || 'About Us'}
-                  </h1>
-                  <p className="text-stone-500 text-xs uppercase tracking-widest">{formData.aboutSubText}</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                  {formData.aboutImage && (
-                    <div className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-md">
-                      <img src={formData.aboutImage} alt="About Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                    </div>
-                  )}
-                  <div className="space-y-3 text-xs leading-relaxed text-stone-600 font-light">
-                    {formData.aboutText && <p>{formData.aboutText}</p>}
-                    {formData.aboutText2 && <p>{formData.aboutText2}</p>}
-                    {formData.aboutText3 && <p>{formData.aboutText3}</p>}
                   </div>
                 </div>
               </div>
@@ -821,18 +875,92 @@ export default function Settings() {
         {/* SERVICE TAB */}
         {activeTab === 'service' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
-            {/* Photoshop-style Detail Typography Controller for Service - Placed AT TOP */}
+            {/* Interactive Visual Drag Canvas Editor for Service (Home Tab Style) */}
+            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-800 pb-3">
+                <div className="flex items-center space-x-2">
+                  <Move size={18} className="text-burgundy-400" />
+                  <span className="font-semibold text-stone-200 text-sm">Service 텍스트 위치 드래그 캔버스 (Visual Canvas)</span>
+                </div>
+                <span className="text-xs text-stone-400">💡 마우스로 텍스트를 잡고 끌어서 위치를 정해보세요</span>
+              </div>
+
+              <div
+                ref={serviceCanvasRef}
+                onMouseDown={(e) => {
+                  const updater = updateTabDragPosition(serviceCanvasRef, 'serviceTextX', 'serviceTextY');
+                  updater(e.clientX, e.clientY);
+                  const onMove = (mv: MouseEvent) => updater(mv.clientX, mv.clientY);
+                  const onUp = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('mouseup', onUp);
+                  };
+                  window.addEventListener('mousemove', onMove);
+                  window.addEventListener('mouseup', onUp);
+                }}
+                className="relative w-full aspect-[16/9] bg-stone-950 rounded-xl overflow-hidden cursor-crosshair border border-stone-800 select-none shadow-inner"
+              >
+                {formData.serviceImage ? (
+                  <img src={formData.serviceImage} alt="Service Canvas" className="w-full h-full object-cover opacity-60" referrerPolicy="no-referrer" />
+                ) : (
+                  <div className="w-full h-full bg-stone-900 flex items-center justify-center text-stone-600 text-xs">이미지 없음</div>
+                )}
+                <div className="absolute inset-0 bg-stone-950/20" />
+                
+                {/* Positioned Text Box */}
+                <div
+                  className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
+                  style={{
+                    left: `${formData.serviceTextX ?? 50}%`,
+                    top: `${formData.serviceTextY ?? 30}%`,
+                    transform: (formData.serviceTextAlign === 'center')
+                      ? 'translate(-50%, -50%)'
+                      : (formData.serviceTextAlign === 'right')
+                      ? 'translate(-100%, -50%)'
+                      : 'translate(0%, -50%)',
+                  }}
+                >
+                  <h1
+                    className="font-bold whitespace-nowrap"
+                    style={{
+                      fontSize: `${Math.max(14, Math.round((formData.serviceTextFontSize || 42) * 0.5))}px`,
+                      letterSpacing: `${formData.serviceTextLetterSpacing ?? 0}px`,
+                      fontFamily: formData.serviceTextFontFamily || 'Pretendard',
+                      textAlign: (formData.serviceTextAlign || 'center') as any,
+                      color: formData.serviceTextColor || '#FFFFFF',
+                    }}
+                  >
+                    {formData.serviceTitle || 'Our Services'}
+                  </h1>
+                  <p className="text-[10px] text-stone-300 opacity-90 mt-1 whitespace-nowrap">{formData.serviceSubText || '서비스 서브 타이틀'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Photoshop-style Detail Typography Controller for Service */}
             <div className="bg-stone-900 text-white p-6 rounded-2xl border border-stone-800 space-y-6 shadow-xl">
               <h4 className="font-semibold text-stone-100 text-base flex items-center justify-between border-b border-stone-800 pb-3">
                 <span className="flex items-center space-x-2">
-                  <span>🎨 Service 타이틀 포토샵 디테일 편집기</span>
-                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Live Editor</span>
+                  <span>🎨 Service 포토샵 디테일 타이포그래피 편집기</span>
+                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Home Style Editor</span>
                 </span>
-                <span className="text-xs text-stone-400 font-normal">글자 크기 / 자간 / 폰트 / 정렬 / 색상</span>
+                <span className="text-xs text-stone-400 font-normal">위치 / 정렬 / 글자 크기 / 자간 / 폰트 / 색상</span>
               </h4>
-              
+
+              {/* Position Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">가로 위치 (X: {formData.serviceTextX ?? 50}%)</label>
+                  <input type="range" min="0" max="100" name="serviceTextX" value={formData.serviceTextX ?? 50} onChange={(e) => setFormData({ ...formData, serviceTextX: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">세로 위치 (Y: {formData.serviceTextY ?? 30}%)</label>
+                  <input type="range" min="0" max="100" name="serviceTextY" value={formData.serviceTextY ?? 30} onChange={(e) => setFormData({ ...formData, serviceTextY: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+              </div>
+
               {/* Text Alignment */}
-              <div>
+              <div className="pt-2 border-t border-stone-800">
                 <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-2">글자 정렬 (Text Alignment)</label>
                 <div className="flex space-x-2">
                   <button type="button" onClick={() => setFormData({ ...formData, serviceTextAlign: 'left' })} className={`flex-1 py-2.5 px-3 rounded-xl border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${(!formData.serviceTextAlign || formData.serviceTextAlign === 'left') ? 'bg-white text-stone-900 border-white shadow-md font-bold' : 'bg-stone-800 text-stone-400 border-stone-700 hover:bg-stone-700'}`}><AlignLeft size={16} /><span>왼쪽 정렬</span></button>
@@ -869,47 +997,6 @@ export default function Settings() {
                         <button key={color} type="button" onClick={() => setFormData({ ...formData, serviceTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-600 transition-transform cursor-pointer ${formData.serviceTextColor === color ? 'scale-125 ring-2 ring-white z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
                       ))}
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Preview Box */}
-            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
-              <div className="flex items-center justify-between text-xs text-stone-400 border-b border-stone-800 pb-3">
-                <span className="font-semibold text-stone-200">✨ Service 페이지 실시간 라이브 미리보기 (Live Preview)</span>
-                <span>실제 웹사이트 노출 모습</span>
-              </div>
-              <div className="bg-white text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner space-y-6">
-                <div className="text-center">
-                  <h1
-                    className="font-bold mb-1"
-                    style={{
-                      fontSize: `${Math.max(16, Math.round((formData.serviceTextFontSize || 42) * 0.65))}px`,
-                      letterSpacing: `${formData.serviceTextLetterSpacing ?? 0}px`,
-                      fontFamily: formData.serviceTextFontFamily || 'Pretendard',
-                      textAlign: (formData.serviceTextAlign || 'center') as any,
-                      color: formData.serviceTextColor || '#1C1917',
-                    }}
-                  >
-                    {formData.serviceTitle || 'Our Services'}
-                  </h1>
-                  <p className="text-stone-500 text-xs uppercase tracking-widest">{formData.serviceSubText}</p>
-                </div>
-                {formData.serviceImage && (
-                  <div className="w-full aspect-[16/10] rounded-none overflow-hidden shadow-sm">
-                    <img src={formData.serviceImage} alt="Service Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                  </div>
-                )}
-                <div className="space-y-4">
-                  <h3 className="font-serif text-xl font-bold text-stone-900 border-b border-stone-100 pb-2">Service Process</h3>
-                  <div className="bg-stone-50 p-4 rounded-xl text-xs text-stone-700 leading-relaxed whitespace-pre-line border border-stone-200/60 font-light">
-                    {formData.serviceText2 || '촬영 진행 과정 안내 문구...'}
-                  </div>
-                  <div className="pt-2">
-                    <span className="inline-flex items-center space-x-2 bg-[#5C4033] text-white px-5 py-2 rounded-full text-xs font-bold shadow">
-                      <span>견적 문의하기 →</span>
-                    </span>
                   </div>
                 </div>
               </div>
@@ -980,18 +1067,88 @@ export default function Settings() {
         {/* CONTACT TAB */}
         {activeTab === 'contact' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
-            {/* Photoshop-style Detail Typography Controller for Contact - Placed AT TOP */}
+            {/* Interactive Visual Drag Canvas Editor for Contact (Home Tab Style) */}
+            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
+              <div className="flex items-center justify-between border-b border-stone-800 pb-3">
+                <div className="flex items-center space-x-2">
+                  <Move size={18} className="text-burgundy-400" />
+                  <span className="font-semibold text-stone-200 text-sm">견적문의 텍스트 위치 드래그 캔버스 (Visual Canvas)</span>
+                </div>
+                <span className="text-xs text-stone-400">💡 마우스로 텍스트를 잡고 끌어서 위치를 정해보세요</span>
+              </div>
+
+              <div
+                ref={contactCanvasRef}
+                onMouseDown={(e) => {
+                  const updater = updateTabDragPosition(contactCanvasRef, 'contactTextX', 'contactTextY');
+                  updater(e.clientX, e.clientY);
+                  const onMove = (mv: MouseEvent) => updater(mv.clientX, mv.clientY);
+                  const onUp = () => {
+                    window.removeEventListener('mousemove', onMove);
+                    window.removeEventListener('mouseup', onUp);
+                  };
+                  window.addEventListener('mousemove', onMove);
+                  window.addEventListener('mouseup', onUp);
+                }}
+                className="relative w-full aspect-[16/9] bg-stone-950 rounded-xl overflow-hidden cursor-crosshair border border-stone-800 select-none shadow-inner"
+              >
+                <div className="w-full h-full bg-stone-900 flex flex-col items-center justify-center text-stone-600 text-xs">
+                  <span className="text-stone-500 font-serif text-lg">견적문의 캔버스</span>
+                </div>
+                
+                {/* Positioned Text Box */}
+                <div
+                  className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
+                  style={{
+                    left: `${formData.contactTextX ?? 50}%`,
+                    top: `${formData.contactTextY ?? 20}%`,
+                    transform: (formData.contactTextAlign === 'center')
+                      ? 'translate(-50%, -50%)'
+                      : (formData.contactTextAlign === 'right')
+                      ? 'translate(-100%, -50%)'
+                      : 'translate(0%, -50%)',
+                  }}
+                >
+                  <span
+                    className="inline-block bg-[#5C4033] px-6 py-2 rounded-full font-bold shadow-md whitespace-nowrap"
+                    style={{
+                      fontSize: `${Math.max(14, Math.round((formData.contactTextFontSize || 42) * 0.5))}px`,
+                      letterSpacing: `${formData.contactTextLetterSpacing ?? 0}px`,
+                      fontFamily: formData.contactTextFontFamily || 'Pretendard',
+                      color: formData.contactTextColor || '#FFFFFF',
+                    }}
+                  >
+                    {formData.contactTitle || '견적문의'}
+                  </span>
+                  <p className="text-[10px] text-stone-300 opacity-90 mt-1.5 whitespace-nowrap text-center">{formData.contactSubText || '견적 및 촬영 문의'}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Photoshop-style Detail Typography Controller for Contact */}
             <div className="bg-stone-900 text-white p-6 rounded-2xl border border-stone-800 space-y-6 shadow-xl">
               <h4 className="font-semibold text-stone-100 text-base flex items-center justify-between border-b border-stone-800 pb-3">
                 <span className="flex items-center space-x-2">
-                  <span>🎨 견적문의 타이틀 포토샵 디테일 편집기</span>
-                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Live Editor</span>
+                  <span>🎨 견적문의 포토샵 디테일 타이포그래피 편집기</span>
+                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Home Style Editor</span>
                 </span>
-                <span className="text-xs text-stone-400 font-normal">글자 크기 / 자간 / 폰트 / 색상</span>
+                <span className="text-xs text-stone-400 font-normal">위치 / 정렬 / 글자 크기 / 자간 / 폰트 / 색상</span>
               </h4>
-              
+
+              {/* Position Controls */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">가로 위치 (X: {formData.contactTextX ?? 50}%)</label>
+                  <input type="range" min="0" max="100" name="contactTextX" value={formData.contactTextX ?? 50} onChange={(e) => setFormData({ ...formData, contactTextX: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">세로 위치 (Y: {formData.contactTextY ?? 20}%)</label>
+                  <input type="range" min="0" max="100" name="contactTextY" value={formData.contactTextY ?? 20} onChange={(e) => setFormData({ ...formData, contactTextY: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
+                </div>
+              </div>
+
               {/* Sliders & Color */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-3 border-t border-stone-800">
                 <div>
                   <label className="block text-xs font-medium text-stone-300 mb-1">글자 크기 ({formData.contactTextFontSize || 42}px)</label>
                   <input type="range" min="18" max="80" name="contactTextFontSize" value={formData.contactTextFontSize || 42} onChange={(e) => setFormData({ ...formData, contactTextFontSize: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
@@ -1018,49 +1175,6 @@ export default function Settings() {
                         <button key={color} type="button" onClick={() => setFormData({ ...formData, contactTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-600 transition-transform cursor-pointer ${formData.contactTextColor === color ? 'scale-125 ring-2 ring-white z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
                       ))}
                     </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Live Preview Box */}
-            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
-              <div className="flex items-center justify-between text-xs text-stone-400 border-b border-stone-800 pb-3">
-                <span className="font-semibold text-stone-200">✨ 견적문의 페이지 실시간 라이브 미리보기 (Live Preview)</span>
-                <span>실제 웹사이트 노출 모습</span>
-              </div>
-              <div className="bg-ivory-100 text-stone-900 p-6 rounded-xl border border-stone-200 shadow-inner space-y-6">
-                <div className="text-center">
-                  <span
-                    className="inline-block bg-[#5C4033] px-6 py-2 rounded-full font-bold shadow-md"
-                    style={{
-                      fontSize: `${Math.max(14, Math.round((formData.contactTextFontSize || 42) * 0.55))}px`,
-                      letterSpacing: `${formData.contactTextLetterSpacing ?? 0}px`,
-                      fontFamily: formData.contactTextFontFamily || 'Pretendard',
-                      color: formData.contactTextColor || '#FFFFFF',
-                    }}
-                  >
-                    {formData.contactTitle || '견적문의'}
-                  </span>
-                  <p className="text-stone-500 text-xs mt-2 uppercase tracking-wider">{formData.contactSubText || '견적 및 촬영 문의'}</p>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                  <div className="bg-white p-4 rounded-xl border border-stone-200 space-y-2">
-                    <h4 className="font-serif font-bold text-stone-900">{formData.contactMessageTitle || "Let's Create Together"}</h4>
-                    <p className="text-stone-600 font-light leading-relaxed text-[11px]">{formData.contactMessageText}</p>
-                    <div className="pt-2 space-y-1 text-stone-500 font-medium">
-                      <p>📞 {formData.contactPhone}</p>
-                      <p>✉️ {formData.contactEmail}</p>
-                    </div>
-                  </div>
-                  <div className="bg-white p-4 rounded-xl border border-stone-200 flex flex-col justify-between">
-                    <div className="space-y-2">
-                      <div className="w-full h-7 bg-stone-100 rounded border border-stone-200 text-[10px] px-2 flex items-center text-stone-400">성함 / 상호명</div>
-                      <div className="w-full h-7 bg-stone-100 rounded border border-stone-200 text-[10px] px-2 flex items-center text-stone-400">연락처</div>
-                    </div>
-                    <button type="button" className="w-full bg-[#5C4033] text-white py-2 rounded-lg text-xs font-semibold mt-3">
-                      견적 문의 제출하기
-                    </button>
                   </div>
                 </div>
               </div>
