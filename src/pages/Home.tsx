@@ -115,8 +115,49 @@ export default function Home() {
     <div className="bg-white min-h-screen py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
+        {/* Main Hero Banner (16:9 Aspect Ratio with Brand Copy) */}
+        {settings.heroImage && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="w-full mb-16 rounded-2xl md:rounded-3xl overflow-hidden relative shadow-xl shadow-stone-200/50 border border-stone-100/60"
+            style={{ aspectRatio: '16/9' }}
+          >
+            <img
+              src={settings.heroImage}
+              alt={settings.heroText || settings.siteName}
+              className="absolute inset-0 w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+            {/* Dark gradient overlay & Brand Copy */}
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/30 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-14 text-white">
+              {settings.heroSubText && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="text-xs sm:text-sm md:text-base tracking-[0.2em] uppercase font-semibold text-stone-200 mb-2 drop-shadow-sm"
+                >
+                  {settings.heroSubText}
+                </motion.p>
+              )}
+              {settings.heroText && (
+                <motion.h2
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-white drop-shadow-md"
+                >
+                  {settings.heroText}
+                </motion.h2>
+              )}
+            </div>
+          </motion.div>
+        )}
+
         {/* Category Header & Filter */}
-        <div className="mb-16 mt-8">
+        <div className="mb-16 mt-4">
           <h1 className="font-sans text-3xl md:text-5xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-8">
             Work
           </h1>
@@ -169,84 +210,72 @@ export default function Home() {
 
         {/* Content Display: Photography vs Video */}
         {activeCategory === 'Video' ? (
-          <div className="space-y-20">
-            {/* 16:9 Landscape Video Section */}
+          <div className="space-y-16">
+            {/* 16:9 Landscape Video Section (Direct Grid without text header) */}
             {videoItems16x9.length > 0 && (
-              <div>
-                <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-stone-100">
-                  <h2 className="text-base md:text-lg font-bold text-stone-900 tracking-wider">16:9 가로 영상</h2>
-                  <span className="text-xs text-stone-400 font-medium">({videoItems16x9.length})</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-                  {videoItems16x9.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                      className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <div className="relative overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
-                        <img
-                          src={item.imageUrl}
-                          alt={item.title}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className="absolute inset-0 bg-stone-900/30 group-hover:bg-stone-900/15 transition-colors duration-500 flex items-center justify-center">
-                          <div className="bg-stone-900/70 backdrop-blur-md text-white p-3.5 rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
-                            <Play size={20} fill="currentColor" className="ml-0.5" />
-                          </div>
-                        </div>
-                        <div className="absolute bottom-3 left-4 right-4 text-white text-xs font-semibold drop-shadow-md truncate">
-                          {item.title}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+                {videoItems16x9.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
+                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    <div className="relative overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-stone-900/30 group-hover:bg-stone-900/15 transition-colors duration-500 flex items-center justify-center">
+                        <div className="bg-stone-900/70 backdrop-blur-md text-white p-3.5 rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
+                          <Play size={20} fill="currentColor" className="ml-0.5" />
                         </div>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
+                      <div className="absolute bottom-3 left-4 right-4 text-white text-xs font-semibold drop-shadow-md truncate">
+                        {item.title}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             )}
 
-            {/* 9:16 Vertical Shorts Section */}
+            {/* 9:16 Vertical Shorts Section (Direct Grid without text header) */}
             {videoItems9x16.length > 0 && (
-              <div>
-                <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-stone-100">
-                  <h2 className="text-base md:text-lg font-bold text-stone-900 tracking-wider">9:16 세로 숏폼 / 릴스 / 쇼츠</h2>
-                  <span className="text-xs text-stone-400 font-medium">({videoItems9x16.length})</span>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
-                  {videoItems9x16.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                      className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
-                      onClick={() => handleItemClick(item)}
-                    >
-                      <div className="relative overflow-hidden w-full" style={{ aspectRatio: '9/16' }}>
-                        <img
-                          src={item.imageUrl}
-                          alt={item.title}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                          referrerPolicy="no-referrer"
-                        />
-                        <div className="absolute inset-0 bg-stone-900/30 group-hover:bg-stone-900/15 transition-colors duration-500 flex items-center justify-center">
-                          <div className="bg-stone-900/70 backdrop-blur-md text-white p-3 rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
-                            <Play size={18} fill="currentColor" className="ml-0.5" />
-                          </div>
-                        </div>
-                        <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-semibold drop-shadow-md truncate text-center">
-                          {item.title}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
+                {videoItems9x16.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
+                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                    onClick={() => handleItemClick(item)}
+                  >
+                    <div className="relative overflow-hidden w-full" style={{ aspectRatio: '9/16' }}>
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute inset-0 bg-stone-900/30 group-hover:bg-stone-900/15 transition-colors duration-500 flex items-center justify-center">
+                        <div className="bg-stone-900/70 backdrop-blur-md text-white p-3 rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
+                          <Play size={18} fill="currentColor" className="ml-0.5" />
                         </div>
                       </div>
-                    </motion.div>
-                  ))}
-                </div>
+                      <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-semibold drop-shadow-md truncate text-center">
+                        {item.title}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             )}
 

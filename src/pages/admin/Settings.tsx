@@ -211,6 +211,64 @@ export default function Settings() {
                 </div>
               )}
             </div>
+
+            {/* Main Banner (Hero Visual) Settings */}
+            <div className="pt-6 border-t border-stone-200 space-y-6">
+              <h3 className="text-base font-semibold text-stone-800">Main Banner (메인 비주얼 배너 16:9)</h3>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Main Banner Image (16:9 가로 비주얼 이미지)</label>
+                <div className="flex space-x-3">
+                  <input
+                    type="text"
+                    name="heroImage"
+                    value={formData.heroImage || ''}
+                    onChange={handleChange}
+                    className="flex-1 border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    placeholder="https://example.com/banner.jpg"
+                  />
+                  <div className="relative overflow-hidden">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'heroImage')}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    />
+                    <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
+                      PC에서 찾기
+                    </button>
+                  </div>
+                </div>
+                {formData.heroImage && (
+                  <div className="mt-4 w-full aspect-video rounded-lg overflow-hidden border border-stone-200">
+                    <img src={formData.heroImage} alt="Banner Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  </div>
+                )}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Main Copy (메인 카피 문구)</label>
+                  <input
+                    type="text"
+                    name="heroText"
+                    value={formData.heroText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    placeholder="예: CRAFTING VISUAL STORIES"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Sub Copy (서브 카피 문구)</label>
+                  <input
+                    type="text"
+                    name="heroSubText"
+                    value={formData.heroSubText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    placeholder="예: 감각적인 순간을 담는 브랜드 포토그라피 & 비디오 스튜디오"
+                  />
+                </div>
+              </div>
+            </div>
             
             {/* Font Settings */}
             <div className="pt-6 border-t border-stone-200 grid grid-cols-1 md:grid-cols-2 gap-6">
