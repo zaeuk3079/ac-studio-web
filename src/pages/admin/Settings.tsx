@@ -10,23 +10,25 @@ export default function Settings() {
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setIsSaving(true);
-    
-    // Clean up large unused fields to avoid Firestore 1MB document size limit
-    const cleanedData = {
-      ...formData,
-      heroImage: '',
-      heroNukiImages: [],
-      heroNukiConfigs: []
-    };
-    
-    setTimeout(() => {
-      updateSettings(cleanedData);
+    try {
+      // Clean up truly unused large fields (nuki) to stay under Firestore limits, preserving heroImage
+      const cleanedData = {
+        ...formData,
+        heroNukiImages: [],
+        heroNukiConfigs: []
+      };
+      
+      await updateSettings(cleanedData);
       setFormData(cleanedData);
+      alert('설정이 성공적으로 저장되었습니다!');
+    } catch (error) {
+      console.error('Settings save error:', error);
+      alert('설정 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+    } finally {
       setIsSaving(false);
-      alert('Settings saved successfully!');
-    }, 500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
