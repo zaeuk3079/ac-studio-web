@@ -100,12 +100,20 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        // High Quality Ultra HD (2560px, quality 0.88) for crisp, clear visual sharpness
-        const compressedBase64 = await compressImage(file, 2560, 1800, 0.88);
-        setFormData({ ...formData, [fieldName]: compressedBase64 });
+        const maxDim = fieldName === 'logoUrl' ? 800 : 2000;
+        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.85);
+        setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
       } catch (error) {
-        console.error('Error compressing image:', error);
-        alert('이미지 처리 중 오류가 발생했습니다.');
+        console.error('Error compressing image, using direct reader fallback:', error);
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          if (ev.target?.result) {
+            setFormData(prev => ({ ...prev, [fieldName]: ev.target!.result as string }));
+          }
+        };
+        reader.readAsDataURL(file);
+      } finally {
+        e.target.value = '';
       }
     }
   };
