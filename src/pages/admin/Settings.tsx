@@ -8,6 +8,16 @@ export default function Settings() {
   const { settings, updateSettings } = useCMS();
   const [formData, setFormData] = useState<SiteSettings>(settings);
   const [isSaving, setIsSaving] = useState(false);
+
+  const getByteSizeKB = (str?: string) => {
+    if (!str) return '0 KB';
+    const bytes = new Blob([str]).size;
+    const kb = Math.round(bytes / 1024);
+    if (kb > 500) {
+      return `${kb} KB (⚠️ 용량 큼)`;
+    }
+    return `${kb} KB (안전)`;
+  };
   const [activeTab, setActiveTab] = useState('home');
 
   useEffect(() => {
@@ -253,7 +263,12 @@ export default function Settings() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-stone-700 mb-2">Site Logo (로고 이미지)</label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-medium text-stone-700">Site Logo (로고 이미지)</label>
+                <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-stone-100 text-stone-600">
+                  {getByteSizeKB(formData.logoUrl)}
+                </span>
+              </div>
               <div className="flex space-x-3">
                 <input
                   type="text"
@@ -829,7 +844,12 @@ export default function Settings() {
             {/* Edit Fields */}
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">About Image (소개 대표 이미지)</label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="block text-sm font-medium text-stone-700">Hero Image (메인 배너 이미지)</label>
+                <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-stone-100 text-stone-600">
+                  {getByteSizeKB(formData.heroImage)}
+                </span>
+              </div>
                 <div className="flex space-x-3">
                   <input
                     type="text"
