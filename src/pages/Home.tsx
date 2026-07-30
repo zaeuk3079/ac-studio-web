@@ -115,13 +115,13 @@ export default function Home() {
     <div className="bg-white min-h-screen py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main Hero Banner (16:9 Aspect Ratio with Brand Copy) */}
+        {/* Main Hero Banner (16:9 Aspect Ratio with Sharp Edges) */}
         {settings.heroImage && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="w-full mb-16 rounded-2xl md:rounded-3xl overflow-hidden relative shadow-xl shadow-stone-200/50 border border-stone-100/60"
+            className="w-full mb-16 rounded-none overflow-hidden relative shadow-xl shadow-stone-200/50 border border-stone-100/60"
             style={{ aspectRatio: '16/9' }}
           >
             <img
@@ -212,7 +212,7 @@ export default function Home() {
         {/* Content Display: Photography vs Video */}
         {activeCategory === 'Video' ? (
           <div className="space-y-16">
-            {/* 16:9 Landscape Video Section (Direct Grid without text header) */}
+            {/* 16:9 Landscape Video Section (Direct Grid without text header, Sharp Edges) */}
             {videoItems16x9.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 {videoItems16x9.map((item, index) => (
@@ -222,7 +222,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-none overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
                     onClick={() => handleItemClick(item)}
                   >
                     <div className="relative overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
@@ -246,7 +246,7 @@ export default function Home() {
               </div>
             )}
 
-            {/* 9:16 Vertical Shorts Section (Direct Grid without text header) */}
+            {/* 9:16 Vertical Shorts Section (Direct Grid without text header, Sharp Edges) */}
             {videoItems9x16.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
                 {videoItems9x16.map((item, index) => (
@@ -256,7 +256,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-none overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
                     onClick={() => handleItemClick(item)}
                   >
                     <div className="relative overflow-hidden w-full" style={{ aspectRatio: '9/16' }}>
@@ -281,13 +281,13 @@ export default function Home() {
             )}
 
             {filteredPortfolio.length === 0 && (
-              <div className="text-center py-24 border border-dashed border-stone-200 rounded-3xl bg-stone-50 text-stone-400 text-sm">
+              <div className="text-center py-24 border border-dashed border-stone-200 rounded-none bg-stone-50 text-stone-400 text-sm">
                 등록된 영상 포트폴리오가 없습니다.
               </div>
             )}
           </div>
         ) : (
-          /* Photography Grid */
+          /* Photography Grid with Sharp Edges */
           filteredPortfolio.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
               {filteredPortfolio.map((item, index) => (
@@ -297,7 +297,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                  className="w-full group cursor-pointer bg-white border border-stone-100/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
+                  className="w-full group cursor-pointer bg-white border border-stone-100/30 rounded-none overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
                   onClick={() => handleItemClick(item)}
                 >
                   <div className="relative overflow-hidden w-full" style={{ aspectRatio: '3/4' }}>
@@ -319,7 +319,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-24 border border-dashed border-stone-200 rounded-3xl bg-stone-50 text-stone-400 text-sm">
+            <div className="text-center py-24 border border-dashed border-stone-200 rounded-none bg-stone-50 text-stone-400 text-sm">
               등록된 포트폴리오가 없습니다.
             </div>
           )
@@ -357,7 +357,7 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className={`bg-stone-900 w-full overflow-hidden shadow-2xl relative my-auto rounded-3xl border border-stone-800 ${
+              className={`bg-stone-900 w-full overflow-hidden shadow-2xl relative my-auto rounded-none border border-stone-800 ${
                 isSelectedVideo && selectedVideoRatio === '9:16'
                   ? 'max-w-sm md:max-w-md'
                   : 'max-w-4xl'
@@ -409,7 +409,7 @@ export default function Home() {
                 </div>
               ) : (
                 /* Photo Lightbox */
-                <div className="bg-white rounded-3xl overflow-hidden">
+                <div className="bg-white rounded-none overflow-hidden">
                   <div className="p-8 md:p-10 border-b border-stone-100">
                     <h2 className="font-serif text-2xl md:text-3xl text-stone-900 mb-2">{selectedItem.title}</h2>
                     <p className="text-xs text-stone-400 tracking-widest uppercase mb-4 font-semibold">{selectedItem.category}</p>
@@ -424,7 +424,7 @@ export default function Home() {
                         </div>
                       ) : (
                         galleryImages.map((imgUrl, idx) => (
-                          <div key={idx} className="relative w-full flex justify-center bg-white rounded-xl overflow-hidden shadow-sm">
+                          <div key={idx} className="relative w-full flex justify-center bg-white rounded-none overflow-hidden shadow-sm">
                             <img
                               src={imgUrl}
                               alt={`${selectedItem.title} - ${idx + 1}`}
