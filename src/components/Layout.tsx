@@ -91,7 +91,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               <Link to="/service" className="text-[11px] tracking-widest uppercase text-stone-500 hover:text-stone-900 transition-colors">Service</Link>
               <Link
                 to="/contact"
-                className="text-[11px] font-semibold tracking-wider text-stone-50 bg-[#4B3621] hover:bg-[#382717] px-3.5 py-1 rounded-full shadow-sm hover:shadow transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center -my-1"
+                className="text-[12px] font-bold tracking-wider text-white bg-[#5C4033] hover:bg-[#4A3227] px-4 py-1.5 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center justify-center -my-1 border border-[#6E4E3D]"
               >
                 견적문의
               </Link>

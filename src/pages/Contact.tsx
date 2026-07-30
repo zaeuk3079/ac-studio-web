@@ -94,7 +94,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-serif text-5xl md:text-6xl text-burgundy-900 mb-6 tracking-tight"
+            className="inline-block bg-[#5C4033] text-white font-sans text-3xl md:text-5xl px-10 py-3.5 rounded-full mb-6 tracking-wider shadow-lg border border-[#6E4E3D]/50"
           >
             {settings.contactTitle === 'Contact' ? '견적문의' : (settings.contactTitle || '견적문의')}
           </motion.h1>
@@ -282,7 +282,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-burgundy-800 hover:bg-burgundy-700 disabled:bg-stone-300 text-ivory-100 font-medium tracking-widest uppercase py-4 rounded-lg transition-colors duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer"
+                className="w-full bg-[#5C4033] hover:bg-[#4A3227] disabled:bg-stone-300 text-white font-medium tracking-widest uppercase py-4 rounded-xl transition-all duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer border border-[#6E4E3D]/50"
               >
                 {isSubmitting ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
