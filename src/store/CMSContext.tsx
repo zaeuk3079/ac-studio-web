@@ -238,30 +238,47 @@ export function CMSProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<SiteSettings>(defaultSettings);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load data from Firebase
+  // Load data from Firebase & listen to real-time changes
   useEffect(() => {
-    const loadData = async () => {
+    // 1. Initial local storage check for instant render
+    const cachedSettings = localStorage.getItem('ac_studio_settings');
+    if (cachedSettings) {
       try {
-        // Load Settings
-        const settingsDoc = await getDocs(collection(db, 'settings'));
-        if (!settingsDoc.empty) {
-          setSettings(settingsDoc.docs[0].data() as SiteSettings);
-        } else {
-          // Initialize default settings if empty
-          await setDoc(doc(db, 'settings', 'main'), defaultSettings);
-        }
+        setSettings(JSON.parse(cachedSettings));
+      } catch (e) {}
+    }
 
-        // Load Portfolio
+    // 2. Real-time Firebase Settings Listener
+    const unsubscribeSettings = onSnapshot(
+      doc(db, 'settings', 'main'),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const fetched = docSnap.data() as SiteSettings;
+          setSettings(fetched);
+          localStorage.setItem('ac_studio_settings', JSON.stringify(fetched));
+        } else {
+          setDoc(doc(db, 'settings', 'main'), defaultSettings);
+        }
+        setIsLoading(false);
+      },
+      (error) => {
+        console.error("Firebase settings onSnapshot error:", error);
+        setIsLoading(false);
+      }
+    );
+
+    // 3. Load Portfolio
+    const loadPortfolio = async () => {
+      try {
         const portfolioCollection = collection(db, 'portfolio');
         const portfolioSnapshot = await getDocs(portfolioCollection);
         
         if (!portfolioSnapshot.empty) {
-          const loadedPortfolio = portfolioSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
+          const loadedPortfolio = portfolioSnapshot.docs.map(d => ({
+            id: d.id,
+            ...d.data()
           })) as PortfolioItem[];
           
-          // Sort by isPinned (desc) then orderIndex (asc)
           loadedPortfolio.sort((a, b) => {
             if (a.isPinned && !b.isPinned) return -1;
             if (!a.isPinned && b.isPinned) return 1;
@@ -272,20 +289,20 @@ export function CMSProvider({ children }: { children: ReactNode }) {
           
           setPortfolio(loadedPortfolio);
         } else {
-          // Initialize default portfolio if empty
           for (const item of defaultPortfolio) {
             await setDoc(doc(db, 'portfolio', item.id), item);
           }
         }
       } catch (error) {
-        console.error("Error loading data from Firebase:", error);
-        // Fallback to defaults if Firebase fails
-      } finally {
-        setIsLoading(false);
+        console.error("Error loading portfolio:", error);
       }
     };
 
-    loadData();
+    loadPortfolio();
+
+    return () => {
+      unsubscribeSettings();
+    };
   }, []);
 
   const addPortfolioItem = async (item: Omit<PortfolioItem, 'id'>) => {
@@ -425,8 +442,9 @@ export function CMSProvider({ children }: { children: ReactNode }) {
 
   const updateSettings = async (newSettings: Partial<SiteSettings>) => {
     const updated = { ...settings, ...newSettings };
-    // Update local state
+    // Update local state & localStorage immediately for instant UI feedback
     setSettings(updated);
+    localStorage.setItem('ac_studio_settings', JSON.stringify(updated));
     
     // Save to Firebase
     try {
