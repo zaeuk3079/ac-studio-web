@@ -115,13 +115,13 @@ export default function Home() {
     <div className="bg-white min-h-screen py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Main Hero Banner (16:9 Aspect Ratio with Sharp Edges) */}
+        {/* Main Hero Banner (16:9 Sharp Edges with Draggable Copy Position & Detailed Typography) */}
         {settings.heroImage && (
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="w-full mb-16 rounded-none overflow-hidden relative shadow-xl shadow-stone-200/50 border border-stone-100/60"
+            className="w-full mb-16 rounded-none overflow-hidden relative shadow-xl shadow-stone-200/40 border border-stone-100/60"
             style={{ aspectRatio: '16/9' }}
           >
             <img
@@ -131,14 +131,29 @@ export default function Home() {
               style={{ objectPosition: settings.heroObjectPosition || 'center' }}
               referrerPolicy="no-referrer"
             />
-            {/* Dark gradient overlay & Brand Copy */}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/30 to-transparent flex flex-col justify-end p-6 sm:p-10 md:p-14 text-white">
+            {/* Dark gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent" />
+            
+            {/* Positioned Brand Copy Container */}
+            <div
+              className="absolute transform -translate-y-full flex flex-col pointer-events-none pr-6"
+              style={{
+                left: `${settings.heroTextX ?? 6}%`,
+                top: `${settings.heroTextY ?? 82}%`,
+              }}
+            >
               {settings.heroSubText && (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="text-xs sm:text-sm md:text-base tracking-[0.2em] uppercase font-semibold text-stone-200 mb-2 drop-shadow-sm"
+                  style={{
+                    fontSize: `${settings.heroSubTextFontSize || 14}px`,
+                    letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
+                    fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
+                    color: settings.heroSubTextColor || '#E7E5E4',
+                  }}
+                  className="uppercase font-semibold mb-1 drop-shadow text-stone-200"
                 >
                   {settings.heroSubText}
                 </motion.p>
@@ -148,7 +163,13 @@ export default function Home() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
-                  className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-white drop-shadow-md"
+                  style={{
+                    fontSize: `${settings.heroTextFontSize || 42}px`,
+                    letterSpacing: `${settings.heroTextLetterSpacing ?? 0}px`,
+                    fontFamily: settings.heroTextFontFamily || 'Pretendard',
+                    color: settings.heroTextColor || '#FFFFFF',
+                  }}
+                  className="font-bold tracking-tight leading-tight text-white drop-shadow-md"
                 >
                   {settings.heroText}
                 </motion.h2>
@@ -209,10 +230,10 @@ export default function Home() {
           )}
         </div>
 
-        {/* Content Display: Photography vs Video */}
+        {/* Content Display: Photography vs Video (No Border, 3px Corner Radius) */}
         {activeCategory === 'Video' ? (
           <div className="space-y-16">
-            {/* 16:9 Landscape Video Section (Direct Grid without text header, Sharp Edges) */}
+            {/* 16:9 Landscape Video Section */}
             {videoItems16x9.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 {videoItems16x9.map((item, index) => (
@@ -222,7 +243,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-none overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                    className="w-full group cursor-pointer bg-stone-900 border-0 rounded-[3px] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
                     onClick={() => handleItemClick(item)}
                   >
                     <div className="relative overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
@@ -246,7 +267,7 @@ export default function Home() {
               </div>
             )}
 
-            {/* 9:16 Vertical Shorts Section (Direct Grid without text header, Sharp Edges) */}
+            {/* 9:16 Vertical Shorts Section */}
             {videoItems9x16.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
                 {videoItems9x16.map((item, index) => (
@@ -256,7 +277,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                    className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-none overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                    className="w-full group cursor-pointer bg-stone-900 border-0 rounded-[3px] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
                     onClick={() => handleItemClick(item)}
                   >
                     <div className="relative overflow-hidden w-full" style={{ aspectRatio: '9/16' }}>
@@ -281,13 +302,13 @@ export default function Home() {
             )}
 
             {filteredPortfolio.length === 0 && (
-              <div className="text-center py-24 border border-dashed border-stone-200 rounded-none bg-stone-50 text-stone-400 text-sm">
+              <div className="text-center py-24 border border-dashed border-stone-200 rounded-[3px] bg-stone-50 text-stone-400 text-sm">
                 등록된 영상 포트폴리오가 없습니다.
               </div>
             )}
           </div>
         ) : (
-          /* Photography Grid with Sharp Edges */
+          /* Photography Grid (No Border, 3px Corner Radius) */
           filteredPortfolio.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
               {filteredPortfolio.map((item, index) => (
@@ -297,7 +318,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                  className="w-full group cursor-pointer bg-white border border-stone-100/30 rounded-none overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
+                  className="w-full group cursor-pointer bg-white border-0 rounded-[3px] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
                   onClick={() => handleItemClick(item)}
                 >
                   <div className="relative overflow-hidden w-full" style={{ aspectRatio: '3/4' }}>
@@ -319,7 +340,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-24 border border-dashed border-stone-200 rounded-none bg-stone-50 text-stone-400 text-sm">
+            <div className="text-center py-24 border border-dashed border-stone-200 rounded-[3px] bg-stone-50 text-stone-400 text-sm">
               등록된 포트폴리오가 없습니다.
             </div>
           )
@@ -357,7 +378,7 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className={`bg-stone-900 w-full overflow-hidden shadow-2xl relative my-auto rounded-none border border-stone-800 ${
+              className={`bg-stone-900 w-full overflow-hidden shadow-2xl relative my-auto rounded-[3px] border border-stone-800 ${
                 isSelectedVideo && selectedVideoRatio === '9:16'
                   ? 'max-w-sm md:max-w-md'
                   : 'max-w-4xl'
@@ -409,7 +430,7 @@ export default function Home() {
                 </div>
               ) : (
                 /* Photo Lightbox */
-                <div className="bg-white rounded-none overflow-hidden">
+                <div className="bg-white rounded-[3px] overflow-hidden">
                   <div className="p-8 md:p-10 border-b border-stone-100">
                     <h2 className="font-serif text-2xl md:text-3xl text-stone-900 mb-2">{selectedItem.title}</h2>
                     <p className="text-xs text-stone-400 tracking-widest uppercase mb-4 font-semibold">{selectedItem.category}</p>
@@ -424,7 +445,7 @@ export default function Home() {
                         </div>
                       ) : (
                         galleryImages.map((imgUrl, idx) => (
-                          <div key={idx} className="relative w-full flex justify-center bg-white rounded-none overflow-hidden shadow-sm">
+                          <div key={idx} className="relative w-full flex justify-center bg-white rounded-[3px] overflow-hidden shadow-sm">
                             <img
                               src={imgUrl}
                               alt={`${selectedItem.title} - ${idx + 1}`}

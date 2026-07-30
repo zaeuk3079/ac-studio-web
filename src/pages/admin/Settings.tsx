@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
-import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers } from 'lucide-react';
+import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move } from 'lucide-react';
 import { compressImage } from '../../utils/imageUtils';
 
 export default function Settings() {
@@ -9,6 +9,35 @@ export default function Settings() {
   const [formData, setFormData] = useState<SiteSettings>(settings);
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+
+  const bannerContainerRef = useRef<HTMLDivElement>(null);
+  const [isDraggingText, setIsDraggingText] = useState(false);
+
+  const handleBannerMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsDraggingText(true);
+    updateDragPosition(e.clientX, e.clientY);
+  };
+
+  const handleBannerMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDraggingText) return;
+    updateDragPosition(e.clientX, e.clientY);
+  };
+
+  const handleBannerMouseUp = () => {
+    setIsDraggingText(false);
+  };
+
+  const updateDragPosition = (clientX: number, clientY: number) => {
+    if (!bannerContainerRef.current) return;
+    const rect = bannerContainerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+    const y = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+    setFormData(prev => ({
+      ...prev,
+      heroTextX: Math.round(x),
+      heroTextY: Math.round(y)
+    }));
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -240,22 +269,76 @@ export default function Settings() {
                   </div>
                 </div>
                 {formData.heroImage && (
-                  <div className="mt-4 space-y-2">
-                    <div className="w-full aspect-video rounded-lg overflow-hidden border border-stone-200 relative">
+                  <div className="mt-4 space-y-3">
+                    <label className="block text-xs font-semibold text-stone-600 uppercase tracking-wider flex items-center justify-between">
+                      <span className="flex items-center space-x-1.5 text-stone-800">
+                        <Move size={14} className="text-burgundy-600" />
+                        <span>포토샵 스타일 드래그 미리보기 (화면 위 텍스트를 마우스로 잡고 이동하세요)</span>
+                      </span>
+                      <span className="text-[11px] text-stone-400 font-normal">좌표: X {formData.heroTextX ?? 6}%, Y {formData.heroTextY ?? 82}%</span>
+                    </label>
+                    
+                    <div
+                      ref={bannerContainerRef}
+                      onMouseDown={handleBannerMouseDown}
+                      onMouseMove={handleBannerMouseMove}
+                      onMouseUp={handleBannerMouseUp}
+                      onMouseLeave={handleBannerMouseUp}
+                      className="w-full aspect-video rounded-lg overflow-hidden border border-stone-300 relative select-none cursor-move group shadow-lg transition-all"
+                    >
                       <img
                         src={formData.heroImage}
                         alt="Banner Preview"
-                        className="w-full h-full object-cover transition-all duration-300"
+                        className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                         style={{ objectPosition: formData.heroObjectPosition || 'center' }}
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-1 rounded">
-                        현재 초점: {formData.heroObjectPosition || 'center'}
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent pointer-events-none" />
+                      
+                      {/* Draggable Text Block */}
+                      <div
+                        className="absolute transform -translate-y-full pointer-events-none transition-transform duration-75"
+                        style={{
+                          left: `${formData.heroTextX ?? 6}%`,
+                          top: `${formData.heroTextY ?? 82}%`,
+                        }}
+                      >
+                        {formData.heroSubText && (
+                          <div
+                            style={{
+                              fontSize: `${Math.max(10, Math.round((formData.heroSubTextFontSize || 14) * 0.45))}px`,
+                              letterSpacing: `${formData.heroSubTextLetterSpacing ?? 1}px`,
+                              fontFamily: formData.heroSubTextFontFamily || 'Pretendard',
+                              color: formData.heroSubTextColor || '#E7E5E4',
+                            }}
+                            className="font-semibold uppercase drop-shadow mb-1"
+                          >
+                            {formData.heroSubText}
+                          </div>
+                        )}
+                        {formData.heroText && (
+                          <div
+                            style={{
+                              fontSize: `${Math.max(14, Math.round((formData.heroTextFontSize || 42) * 0.45))}px`,
+                              letterSpacing: `${formData.heroTextLetterSpacing ?? 0}px`,
+                              fontFamily: formData.heroTextFontFamily || 'Pretendard',
+                              color: formData.heroTextColor || '#FFFFFF',
+                            }}
+                            className="font-bold drop-shadow-md leading-tight"
+                          >
+                            {formData.heroText}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2.5 py-1 rounded pointer-events-none">
+                        초점: {formData.heroObjectPosition || 'center'}
                       </div>
                     </div>
                   </div>
                 )}
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">Main Banner Position (배너 사진 초점/위치 이동 조정)</label>
                 <select
@@ -270,8 +353,8 @@ export default function Settings() {
                   <option value="50% 25%">상단 25% (약간 위쪽)</option>
                   <option value="50% 75%">하단 75% (약간 아래쪽)</option>
                 </select>
-                <p className="text-xs text-stone-500 mt-1">16:9 배너 크기에 맞춰 이미지가 잘릴 때 원하시는 주요 시선/위치로 이동시킵니다.</p>
               </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-stone-700 mb-2">Main Copy (메인 카피 문구)</label>
@@ -280,7 +363,7 @@ export default function Settings() {
                     name="heroText"
                     value={formData.heroText || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
                     placeholder="예: CRAFTING VISUAL STORIES"
                   />
                 </div>
@@ -291,9 +374,107 @@ export default function Settings() {
                     name="heroSubText"
                     value={formData.heroSubText || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
                     placeholder="예: 감각적인 순간을 담는 브랜드 포토그라피 & 비디오 스튜디오"
                   />
+                </div>
+              </div>
+
+              {/* Photoshop-style Detail Typography Controllers */}
+              <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-6">
+                <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
+                  <span>🎨 메인 카피 디테일 편집기 (글자 크기 / 자간 / 폰트 / 위치)</span>
+                  <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
+                </h4>
+
+                {/* Main Copy Controls */}
+                <div className="space-y-4 pt-3 border-t border-stone-200/80">
+                  <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">메인 카피 디테일 (Main Copy)</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.heroTextFontSize || 42}px)</label>
+                      <input
+                        type="range"
+                        min="18"
+                        max="80"
+                        name="heroTextFontSize"
+                        value={formData.heroTextFontSize || 42}
+                        onChange={(e) => setFormData({ ...formData, heroTextFontSize: Number(e.target.value) })}
+                        className="w-full accent-stone-800 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.heroTextLetterSpacing ?? 0}px)</label>
+                      <input
+                        type="range"
+                        min="-4"
+                        max="16"
+                        name="heroTextLetterSpacing"
+                        value={formData.heroTextLetterSpacing ?? 0}
+                        onChange={(e) => setFormData({ ...formData, heroTextLetterSpacing: Number(e.target.value) })}
+                        className="w-full accent-stone-800 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류 (Font Family)</label>
+                      <select
+                        name="heroTextFontFamily"
+                        value={formData.heroTextFontFamily || 'Pretendard'}
+                        onChange={handleChange as any}
+                        className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium"
+                      >
+                        <option value="Pretendard">Pretendard (산세리프)</option>
+                        <option value="Playfair Display">Playfair Display (고급 Serif)</option>
+                        <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
+                        <option value="Cinzel">Cinzel (명품 비주얼)</option>
+                        <option value="Inter">Inter (모던 Sans)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sub Copy Controls */}
+                <div className="space-y-4 pt-4 border-t border-stone-200/80">
+                  <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">서브 카피 디테일 (Sub Copy)</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.heroSubTextFontSize || 14}px)</label>
+                      <input
+                        type="range"
+                        min="10"
+                        max="30"
+                        name="heroSubTextFontSize"
+                        value={formData.heroSubTextFontSize || 14}
+                        onChange={(e) => setFormData({ ...formData, heroSubTextFontSize: Number(e.target.value) })}
+                        className="w-full accent-stone-800 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.heroSubTextLetterSpacing ?? 1}px)</label>
+                      <input
+                        type="range"
+                        min="-2"
+                        max="10"
+                        name="heroSubTextLetterSpacing"
+                        value={formData.heroSubTextLetterSpacing ?? 1}
+                        onChange={(e) => setFormData({ ...formData, heroSubTextLetterSpacing: Number(e.target.value) })}
+                        className="w-full accent-stone-800 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류 (Font Family)</label>
+                      <select
+                        name="heroSubTextFontFamily"
+                        value={formData.heroSubTextFontFamily || 'Pretendard'}
+                        onChange={handleChange as any}
+                        className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium"
+                      >
+                        <option value="Pretendard">Pretendard (산세리프)</option>
+                        <option value="Inter">Inter</option>
+                        <option value="Playfair Display">Playfair Display</option>
+                      </select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

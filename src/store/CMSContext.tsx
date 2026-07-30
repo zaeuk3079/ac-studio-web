@@ -30,6 +30,16 @@ export interface SiteSettings {
   heroSubText: string;
   heroImage: string;
   heroObjectPosition?: 'top' | 'center' | 'bottom' | string;
+  heroTextFontSize?: number;
+  heroTextLetterSpacing?: number;
+  heroTextFontFamily?: string;
+  heroTextColor?: string;
+  heroTextX?: number;
+  heroTextY?: number;
+  heroSubTextFontSize?: number;
+  heroSubTextLetterSpacing?: number;
+  heroSubTextFontFamily?: string;
+  heroSubTextColor?: string;
   heroNukiImages?: string[];
   heroNukiConfigs?: NukiImageConfig[];
   showHomeAbout: boolean;
@@ -129,6 +139,16 @@ const defaultSettings: SiteSettings = {
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
   heroObjectPosition: 'center',
+  heroTextFontSize: 42,
+  heroTextLetterSpacing: 0,
+  heroTextFontFamily: 'Pretendard',
+  heroTextColor: '#FFFFFF',
+  heroTextX: 6,
+  heroTextY: 82,
+  heroSubTextFontSize: 14,
+  heroSubTextLetterSpacing: 1,
+  heroSubTextFontFamily: 'Pretendard',
+  heroSubTextColor: '#E7E5E4',
   heroNukiImages: [],
   heroNukiConfigs: [],
   showHomeAbout: true,
