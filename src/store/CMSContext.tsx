@@ -164,7 +164,7 @@ const defaultSettings: SiteSettings = {
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
   heroImages: [],
-  heroSlideInterval: 4500,
+  heroSlideInterval: 2500,
   heroAspectRatio: '3:2',
   heroObjectPosition: 'center',
   heroTextFontSize: 42,

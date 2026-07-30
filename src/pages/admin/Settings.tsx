@@ -31,7 +31,18 @@ export default function Settings() {
   const aboutCanvasRef = useRef<HTMLDivElement>(null);
   const serviceCanvasRef = useRef<HTMLDivElement>(null);
   const contactCanvasRef = useRef<HTMLDivElement>(null);
+  
   const [isDraggingText, setIsDraggingText] = useState(false);
+  const [activeSnapX, setActiveSnapX] = useState(false);
+  const [activeSnapY, setActiveSnapY] = useState(false);
+
+  const applySnap = (valPct: number) => {
+    // Magnetic Snap Tolerance (snaps to 50% if within 47.5% ~ 52.5%)
+    if (Math.abs(valPct - 50) < 3.2) {
+      return { val: 50, snapped: true };
+    }
+    return { val: valPct, snapped: false };
+  };
 
   const handleBannerMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDraggingText(true);
@@ -45,30 +56,48 @@ export default function Settings() {
 
   const handleBannerMouseUp = () => {
     setIsDraggingText(false);
+    setActiveSnapX(false);
+    setActiveSnapY(false);
   };
 
   const updateDragPosition = (clientX: number, clientY: number) => {
     if (!bannerContainerRef.current) return;
     const rect = bannerContainerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
-    const y = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+    const rawX = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+    const rawY = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+
+    const snapX = applySnap(rawX);
+    const snapY = applySnap(rawY);
+
+    setActiveSnapX(snapX.snapped);
+    setActiveSnapY(snapY.snapped);
+
     setFormData(prev => ({
       ...prev,
-      heroTextX: Math.round(x),
-      heroTextY: Math.round(y)
+      heroTextX: Math.round(snapX.val),
+      heroTextY: Math.round(snapY.val)
     }));
   };
 
-  const updateTabDragPosition = (ref: React.RefObject<HTMLDivElement>, fieldX: string, fieldY: string) => {
-    return (clientX: number, clientY: number) => {
+  // Helper for About, Service, Contact drag canvas with magnetic snap to 50%
+  const createDragHandlers = (ref: React.RefObject<HTMLDivElement>, fieldX: string, fieldY: string) => {
+    return (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.buttons !== 1) return;
       if (!ref.current) return;
       const rect = ref.current.getBoundingClientRect();
-      const x = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
-      const y = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+      const rawX = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      const rawY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+
+      const snapX = applySnap(rawX);
+      const snapY = applySnap(rawY);
+
+      setActiveSnapX(snapX.snapped);
+      setActiveSnapY(snapY.snapped);
+
       setFormData(prev => ({
         ...prev,
-        [fieldX]: Math.round(x),
-        [fieldY]: Math.round(y)
+        [fieldX]: Math.round(snapX.val),
+        [fieldY]: Math.round(snapY.val)
       }));
     };
   };
@@ -396,6 +425,25 @@ export default function Settings() {
                         style={{ objectPosition: formData.heroObjectPosition || 'center' }}
                         referrerPolicy="no-referrer"
                       />
+
+                      {/* Smart Center Alignment Grid Lines & Magnetic Snap Feedback */}
+                      <div className="absolute inset-0 pointer-events-none z-10">
+                        {/* Vertical Center Line (50%) */}
+                        <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
+                          activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/40'
+                        }`} />
+                        {/* Horizontal Center Line (50%) */}
+                        <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
+                          activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/40'
+                        }`} />
+                        
+                        {/* Magnetic Snap Badge Feedback */}
+                        {(activeSnapX || activeSnapY) && (
+                          <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
+                            🎯 중앙 50% 자석 스냅!
+                          </div>
+                        )}
+                      </div>
                       
                       {/* Draggable Text Block */}
                       <div
@@ -783,6 +831,21 @@ export default function Settings() {
                 )}
                 <div className="absolute inset-0 bg-stone-950/20" />
                 
+                {/* Smart Center Grid Lines & Magnetic Snap Feedback */}
+                <div className="absolute inset-0 pointer-events-none z-10">
+                  <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
+                    activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/20'
+                  }`} />
+                  <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
+                    activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/20'
+                  }`} />
+                  {(activeSnapX || activeSnapY) && (
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
+                      🎯 중앙 50% 자석 스냅!
+                    </div>
+                  )}
+                </div>
+                
                 {/* Positioned Text Box */}
                 <div
                   className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
@@ -1008,6 +1071,21 @@ export default function Settings() {
                 )}
                 <div className="absolute inset-0 bg-stone-950/20" />
                 
+                {/* Smart Center Grid Lines & Magnetic Snap Feedback */}
+                <div className="absolute inset-0 pointer-events-none z-10">
+                  <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
+                    activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/20'
+                  }`} />
+                  <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
+                    activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/20'
+                  }`} />
+                  {(activeSnapX || activeSnapY) && (
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
+                      🎯 중앙 50% 자석 스냅!
+                    </div>
+                  )}
+                </div>
+                
                 {/* Positioned Text Box */}
                 <div
                   className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
@@ -1202,6 +1280,21 @@ export default function Settings() {
               >
                 <div className="w-full h-full bg-stone-900 flex flex-col items-center justify-center text-stone-600 text-xs">
                   <span className="text-stone-500 font-serif text-lg">견적문의 캔버스</span>
+                </div>
+
+                {/* Smart Center Grid Lines & Magnetic Snap Feedback */}
+                <div className="absolute inset-0 pointer-events-none z-10">
+                  <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
+                    activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/20'
+                  }`} />
+                  <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
+                    activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/20'
+                  }`} />
+                  {(activeSnapX || activeSnapY) && (
+                    <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
+                      🎯 중앙 50% 자석 스냅!
+                    </div>
+                  )}
                 </div>
                 
                 {/* Positioned Text Box */}

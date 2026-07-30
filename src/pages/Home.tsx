@@ -119,7 +119,7 @@ export default function Home() {
     if (heroImageList.length <= 1) return;
     const interval = setInterval(() => {
       setCurrentSlideIndex((prev) => (prev + 1) % heroImageList.length);
-    }, settings.heroSlideInterval || 4500);
+    }, settings.heroSlideInterval || 2500);
     return () => clearInterval(interval);
   }, [heroImageList.length, settings.heroSlideInterval]);
 
