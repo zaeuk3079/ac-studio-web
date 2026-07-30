@@ -94,7 +94,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-block bg-[#5C4033] px-10 py-3.5 rounded-full mb-6 shadow-lg border border-[#6E4E3D]/50 font-bold"
+            className="inline-block bg-[#0a4416] px-10 py-3.5 rounded-full mb-6 shadow-lg border border-[#0e5c1d]/50 font-bold text-white"
             style={{
               fontSize: settings.contactTextFontSize ? `${settings.contactTextFontSize}px` : undefined,
               letterSpacing: settings.contactTextLetterSpacing !== undefined ? `${settings.contactTextLetterSpacing}px` : undefined,
@@ -288,7 +288,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[#5C4033] hover:bg-[#4A3227] disabled:bg-stone-300 text-white font-medium tracking-widest uppercase py-4 rounded-xl transition-all duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer border border-[#6E4E3D]/50"
+                className="w-full bg-[#0a4416] hover:bg-[#073310] disabled:bg-stone-300 text-white font-medium tracking-widest uppercase py-4 rounded-full transition-all duration-300 shadow-md flex items-center justify-center space-x-2 cursor-pointer border border-[#0e5c1d]/50"
               >
                 {isSubmitting ? (
                   <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
