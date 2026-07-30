@@ -65,9 +65,18 @@ export default function Settings() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Clean up truly unused large fields (nuki) to stay under Firestore limits, preserving heroImage
+      // Auto compress any large base64 images before sending to Firestore to guarantee < 1MB limit
+      const logoUrlCompressed = formData.logoUrl ? await compressBase64String(formData.logoUrl, 600, 0.7) : formData.logoUrl;
+      const heroImageCompressed = formData.heroImage ? await compressBase64String(formData.heroImage, 1000, 0.7) : formData.heroImage;
+      const aboutImageCompressed = formData.aboutImage ? await compressBase64String(formData.aboutImage, 1000, 0.7) : formData.aboutImage;
+      const serviceImageCompressed = formData.serviceImage ? await compressBase64String(formData.serviceImage, 1000, 0.7) : formData.serviceImage;
+
       const cleanedData = {
         ...formData,
+        logoUrl: logoUrlCompressed,
+        heroImage: heroImageCompressed,
+        aboutImage: aboutImageCompressed,
+        serviceImage: serviceImageCompressed,
         heroNukiImages: [],
         heroNukiConfigs: []
       };
