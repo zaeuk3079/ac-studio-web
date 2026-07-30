@@ -386,6 +386,42 @@ export default function PortfolioManage() {
                 />
                 <p className="text-xs text-stone-500 mt-2">유튜브(YouTube) 또는 비메오(Vimeo) 영상 링크를 넣으시면 포트폴리오에 영상이 표시됩니다.</p>
               </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">영상 비율 선택 (Video Aspect Ratio)</label>
+                <div className="flex space-x-4">
+                  <label className={`flex-1 flex items-center justify-center space-x-2 p-3 rounded-lg border cursor-pointer transition-all ${
+                    (formData.videoAspectRatio || '16:9') === '16:9'
+                      ? 'border-stone-900 bg-stone-900 text-white font-semibold'
+                      : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="videoAspectRatio"
+                      value="16:9"
+                      checked={(formData.videoAspectRatio || '16:9') === '16:9'}
+                      onChange={() => setFormData(prev => ({ ...prev, videoAspectRatio: '16:9' }))}
+                      className="sr-only"
+                    />
+                    <span>16:9 (가로 / 롱폼)</span>
+                  </label>
+                  <label className={`flex-1 flex items-center justify-center space-x-2 p-3 rounded-lg border cursor-pointer transition-all ${
+                    formData.videoAspectRatio === '9:16'
+                      ? 'border-stone-900 bg-stone-900 text-white font-semibold'
+                      : 'border-stone-200 bg-white text-stone-600 hover:bg-stone-50'
+                  }`}>
+                    <input
+                      type="radio"
+                      name="videoAspectRatio"
+                      value="9:16"
+                      checked={formData.videoAspectRatio === '9:16'}
+                      onChange={() => setFormData(prev => ({ ...prev, videoAspectRatio: '9:16' }))}
+                      className="sr-only"
+                    />
+                    <span>9:16 (세로 / 숏폼 / 릴스 / 쇼츠)</span>
+                  </label>
+                </div>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">Images (Gallery) *</label>
                 <div className="flex flex-wrap gap-3 mb-4">

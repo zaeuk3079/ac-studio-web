@@ -1,23 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useCMS, PortfolioItem } from '../store/CMSContext';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, X, Play, Send } from 'lucide-react';
+import { X, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Helper function to get embed URL from YouTube or Vimeo link
-const getEmbedUrl = (url: string) => {
+// Helper function to get embed URL from YouTube or Vimeo link with autoplay
+const getEmbedUrl = (url: string, autoPlay: boolean = true) => {
   if (!url) return null;
   
   // YouTube
-  const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+  const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
   if (ytMatch && ytMatch[1]) {
-    return { type: 'youtube', url: `https://www.youtube.com/embed/${ytMatch[1]}` };
+    const autoPlayParam = autoPlay ? '?autoplay=1&rel=0' : '';
+    return { type: 'youtube', url: `https://www.youtube.com/embed/${ytMatch[1]}${autoPlayParam}` };
   }
   
   // Vimeo
   const vimeoMatch = url.match(/(?:vimeo\.com\/)(\d+)/);
   if (vimeoMatch && vimeoMatch[1]) {
-    return { type: 'vimeo', url: `https://player.vimeo.com/video/${vimeoMatch[1]}` };
+    const autoPlayParam = autoPlay ? '?autoplay=1' : '';
+    return { type: 'vimeo', url: `https://player.vimeo.com/video/${vimeoMatch[1]}${autoPlayParam}` };
   }
   
   // Direct video file
@@ -26,6 +28,15 @@ const getEmbedUrl = (url: string) => {
   }
   
   return null;
+};
+
+// Helper function to determine aspect ratio for video items
+const getItemVideoAspectRatio = (item: PortfolioItem): '16:9' | '9:16' => {
+  if (item.videoAspectRatio) return item.videoAspectRatio;
+  if (item.videoUrl && (item.videoUrl.includes('/shorts/') || item.videoUrl.includes('reels'))) {
+    return '9:16';
+  }
+  return '16:9';
 };
 
 export default function Home() {
@@ -58,12 +69,24 @@ export default function Home() {
       }
       return false;
     } else {
-      return item.category === 'Video';
+      return item.category === 'Video' || !!item.videoUrl;
     }
   });
 
+  // Split video items by aspect ratio
+  const videoItems16x9 = filteredPortfolio.filter(item => getItemVideoAspectRatio(item) === '16:9');
+  const videoItems9x16 = filteredPortfolio.filter(item => getItemVideoAspectRatio(item) === '9:16');
+
   const handleItemClick = async (item: PortfolioItem) => {
     setSelectedItem(item);
+    
+    // If it's a video item, do not fetch extra gallery images so it directly plays the video in lightbox
+    if (item.videoUrl || item.category === 'Video') {
+      setGalleryImages([]);
+      setIsLoadingGallery(false);
+      return;
+    }
+
     setIsLoadingGallery(true);
     try {
       const images = await getGalleryImages(item.id);
@@ -84,6 +107,9 @@ export default function Home() {
     }
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedItem]);
+
+  const isSelectedVideo = selectedItem && (!!selectedItem.videoUrl || selectedItem.category === 'Video');
+  const selectedVideoRatio = selectedItem ? getItemVideoAspectRatio(selectedItem) : '16:9';
 
   return (
     <div className="bg-white min-h-screen py-16">
@@ -141,41 +167,132 @@ export default function Home() {
           )}
         </div>
 
-        {/* Pinterest-style Grid (Row flow: Left to Right) */}
-        {filteredPortfolio.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
-            {filteredPortfolio.map((item, index) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                className="w-full group cursor-pointer bg-white border border-stone-100/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
-                onClick={() => handleItemClick(item)}
-              >
-                <div className="relative overflow-hidden w-full" style={{ aspectRatio: '3/4' }}>
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                    referrerPolicy="no-referrer"
-                  />
-                  
-                  {item.videoUrl && (
-                    <div className="absolute bottom-4 right-4 bg-stone-900/60 backdrop-blur-sm text-white p-2.5 rounded-full z-10 shadow-md">
-                      <Play size={14} fill="currentColor" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-stone-900/[0.01] group-hover:bg-transparent transition-colors duration-500" />
+        {/* Content Display: Photography vs Video */}
+        {activeCategory === 'Video' ? (
+          <div className="space-y-20">
+            {/* 16:9 Landscape Video Section */}
+            {videoItems16x9.length > 0 && (
+              <div>
+                <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-stone-100">
+                  <h2 className="text-base md:text-lg font-bold text-stone-900 tracking-wider">16:9 가로 영상</h2>
+                  <span className="text-xs text-stone-400 font-medium">({videoItems16x9.length})</span>
                 </div>
-              </motion.div>
-            ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+                  {videoItems16x9.map((item, index) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
+                      className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                      onClick={() => handleItemClick(item)}
+                    >
+                      <div className="relative overflow-hidden w-full" style={{ aspectRatio: '16/9' }}>
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute inset-0 bg-stone-900/30 group-hover:bg-stone-900/15 transition-colors duration-500 flex items-center justify-center">
+                          <div className="bg-stone-900/70 backdrop-blur-md text-white p-3.5 rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
+                            <Play size={20} fill="currentColor" className="ml-0.5" />
+                          </div>
+                        </div>
+                        <div className="absolute bottom-3 left-4 right-4 text-white text-xs font-semibold drop-shadow-md truncate">
+                          {item.title}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 9:16 Vertical Shorts Section */}
+            {videoItems9x16.length > 0 && (
+              <div>
+                <div className="flex items-center space-x-3 mb-6 pb-2 border-b border-stone-100">
+                  <h2 className="text-base md:text-lg font-bold text-stone-900 tracking-wider">9:16 세로 숏폼 / 릴스 / 쇼츠</h2>
+                  <span className="text-xs text-stone-400 font-medium">({videoItems9x16.length})</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 items-start">
+                  {videoItems9x16.map((item, index) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
+                      className="w-full group cursor-pointer bg-white border border-stone-100/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/30 transition-all duration-500 hover:-translate-y-1 relative"
+                      onClick={() => handleItemClick(item)}
+                    >
+                      <div className="relative overflow-hidden w-full" style={{ aspectRatio: '9/16' }}>
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute inset-0 bg-stone-900/30 group-hover:bg-stone-900/15 transition-colors duration-500 flex items-center justify-center">
+                          <div className="bg-stone-900/70 backdrop-blur-md text-white p-3 rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110">
+                            <Play size={18} fill="currentColor" className="ml-0.5" />
+                          </div>
+                        </div>
+                        <div className="absolute bottom-3 left-3 right-3 text-white text-xs font-semibold drop-shadow-md truncate text-center">
+                          {item.title}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {filteredPortfolio.length === 0 && (
+              <div className="text-center py-24 border border-dashed border-stone-200 rounded-3xl bg-stone-50 text-stone-400 text-sm">
+                등록된 영상 포트폴리오가 없습니다.
+              </div>
+            )}
           </div>
         ) : (
-          <div className="text-center py-24 border border-dashed border-stone-200 rounded-3xl bg-stone-50 text-stone-400 text-sm">
-            등록된 포트폴리오가 없습니다.
-          </div>
+          /* Photography Grid */
+          filteredPortfolio.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+              {filteredPortfolio.map((item, index) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
+                  className="w-full group cursor-pointer bg-white border border-stone-100/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
+                  onClick={() => handleItemClick(item)}
+                >
+                  <div className="relative overflow-hidden w-full" style={{ aspectRatio: '3/4' }}>
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                      referrerPolicy="no-referrer"
+                    />
+                    
+                    {item.videoUrl && (
+                      <div className="absolute bottom-4 right-4 bg-stone-900/60 backdrop-blur-sm text-white p-2.5 rounded-full z-10 shadow-md">
+                        <Play size={14} fill="currentColor" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-stone-900/[0.01] group-hover:bg-transparent transition-colors duration-500" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-24 border border-dashed border-stone-200 rounded-3xl bg-stone-50 text-stone-400 text-sm">
+              등록된 포트폴리오가 없습니다.
+            </div>
+          )
         )}
       </div>
 
@@ -196,78 +313,101 @@ export default function Home() {
         </section>
       )}
 
-      {/* Modal */}
+      {/* Lightbox Modal */}
       <AnimatePresence>
         {selectedItem && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/90 backdrop-blur-sm p-0 md:p-8 overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/90 backdrop-blur-md p-4 md:p-8 overflow-y-auto"
             onClick={() => setSelectedItem(null)}
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="bg-white w-full max-w-5xl md:rounded-3xl overflow-hidden shadow-2xl my-auto relative min-h-screen md:min-h-0"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className={`bg-stone-900 w-full overflow-hidden shadow-2xl relative my-auto rounded-3xl border border-stone-800 ${
+                isSelectedVideo && selectedVideoRatio === '9:16'
+                  ? 'max-w-sm md:max-w-md'
+                  : 'max-w-4xl'
+              }`}
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Close Button */}
               <button
                 onClick={() => setSelectedItem(null)}
-                className="absolute top-6 right-6 z-10 bg-stone-100 hover:bg-stone-200 text-stone-700 p-2.5 rounded-full transition-colors shadow-sm"
+                className="absolute top-4 right-4 z-20 bg-stone-800/80 hover:bg-stone-700 text-white p-2.5 rounded-full transition-colors shadow-lg backdrop-blur-sm"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
               
-              <div className="p-8 md:p-12 border-b border-stone-100">
-                <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mb-2">{selectedItem.title}</h2>
-                <p className="text-sm text-stone-400 tracking-widest uppercase mb-6 font-semibold">{selectedItem.category}</p>
-                <p className="text-stone-600 font-light leading-relaxed max-w-2xl">{selectedItem.description}</p>
-              </div>
-
-              <div className="p-4 md:p-12 bg-stone-50">
-                <div className="flex flex-col gap-4 md:gap-8">
-                  {selectedItem.videoUrl && getEmbedUrl(selectedItem.videoUrl) && (
-                    <div className="relative w-full aspect-video bg-stone-900 md:rounded-2xl overflow-hidden shadow-lg">
-                      {getEmbedUrl(selectedItem.videoUrl)?.type === 'direct' ? (
+              {/* Video Player or Photo Gallery */}
+              {isSelectedVideo ? (
+                <div className="flex flex-col bg-black">
+                  <div 
+                    className="relative w-full bg-black flex items-center justify-center"
+                    style={{ aspectRatio: selectedVideoRatio === '9:16' ? '9/16' : '16/9' }}
+                  >
+                    {selectedItem.videoUrl && getEmbedUrl(selectedItem.videoUrl, true) ? (
+                      getEmbedUrl(selectedItem.videoUrl, true)?.type === 'direct' ? (
                         <video 
-                          src={getEmbedUrl(selectedItem.videoUrl)!.url} 
+                          src={getEmbedUrl(selectedItem.videoUrl, true)!.url} 
                           controls 
-                          className="absolute top-0 left-0 w-full h-full"
                           autoPlay
-                          muted
+                          className="w-full h-full object-contain"
                         />
                       ) : (
                         <iframe
-                          src={getEmbedUrl(selectedItem.videoUrl)!.url}
-                          title="Video player"
-                          className="absolute top-0 left-0 w-full h-full"
+                          src={getEmbedUrl(selectedItem.videoUrl, true)!.url}
+                          title={selectedItem.title}
+                          className="w-full h-full"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           allowFullScreen
                         ></iframe>
+                      )
+                    ) : (
+                      <img src={selectedItem.imageUrl} alt={selectedItem.title} className="w-full h-full object-contain" />
+                    )}
+                  </div>
+                  <div className="p-6 bg-stone-900 text-white border-t border-stone-800">
+                    <h3 className="text-xl font-bold mb-1">{selectedItem.title}</h3>
+                    {selectedItem.description && (
+                      <p className="text-sm text-stone-400 font-light mt-2 leading-relaxed">{selectedItem.description}</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                /* Photo Lightbox */
+                <div className="bg-white rounded-3xl overflow-hidden">
+                  <div className="p-8 md:p-10 border-b border-stone-100">
+                    <h2 className="font-serif text-2xl md:text-3xl text-stone-900 mb-2">{selectedItem.title}</h2>
+                    <p className="text-xs text-stone-400 tracking-widest uppercase mb-4 font-semibold">{selectedItem.category}</p>
+                    <p className="text-stone-600 font-light text-sm leading-relaxed max-w-2xl">{selectedItem.description}</p>
+                  </div>
+
+                  <div className="p-4 md:p-8 bg-stone-50 max-h-[70vh] overflow-y-auto">
+                    <div className="flex flex-col gap-6">
+                      {isLoadingGallery ? (
+                        <div className="flex justify-center items-center py-16">
+                          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-stone-800"></div>
+                        </div>
+                      ) : (
+                        galleryImages.map((imgUrl, idx) => (
+                          <div key={idx} className="relative w-full flex justify-center bg-white rounded-xl overflow-hidden shadow-sm">
+                            <img
+                              src={imgUrl}
+                              alt={`${selectedItem.title} - ${idx + 1}`}
+                              className="w-full h-auto object-contain"
+                              referrerPolicy="no-referrer"
+                            />
+                          </div>
+                        ))
                       )}
                     </div>
-                  )}
-                  
-                  {isLoadingGallery ? (
-                    <div className="flex justify-center items-center py-20">
-                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-stone-800"></div>
-                    </div>
-                  ) : (
-                    galleryImages.map((imgUrl, idx) => (
-                      <div key={idx} className="relative w-full flex justify-center bg-white md:rounded-2xl overflow-hidden shadow-sm">
-                        <img
-                          src={imgUrl}
-                          alt={`${selectedItem.title} - ${idx + 1}`}
-                          className="w-full h-auto object-contain"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                    ))
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
             </motion.div>
           </motion.div>
         )}

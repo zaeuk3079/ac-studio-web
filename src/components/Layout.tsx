@@ -62,7 +62,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                   location.pathname === '/contact' ? 'text-stone-900 font-bold' : 'text-stone-500'
                 }`}
               >
-                Contact
+                견적문의
               </Link>
               <div className="pl-4 flex items-center space-x-4 border-l border-stone-200">
                 <a href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="text-stone-400 hover:text-stone-900 transition-colors">
@@ -89,7 +89,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               <Link to="/about" className="text-[10px] tracking-widest uppercase text-stone-500">About</Link>
               <Link to="/service" className="text-[10px] tracking-widest uppercase text-stone-500">Service</Link>
-              <Link to="/contact" className="text-[10px] tracking-widest uppercase text-stone-500">Contact</Link>
+              <Link to="/contact" className="text-[10px] tracking-widest uppercase text-stone-500">견적문의</Link>
             </nav>
           </div>
         </div>

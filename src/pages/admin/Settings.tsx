@@ -135,7 +135,7 @@ export default function Settings() {
     { id: 'home', label: 'Home', icon: Home },
     { id: 'about', label: 'About', icon: Info },
     { id: 'service', label: 'Service', icon: Layers },
-    { id: 'contact', label: 'Contact', icon: Phone },
+    { id: 'contact', label: '견적문의', icon: Phone },
     { id: 'deployment', label: 'Deployment', icon: Globe },
   ];
 

@@ -16,6 +16,7 @@ export interface PortfolioItem {
   imageUrl: string;
   gallery?: string[];
   videoUrl?: string;
+  videoAspectRatio?: '16:9' | '9:16';
   description: string;
   isPinned?: boolean;
   objectPosition?: 'top' | 'center' | 'bottom';
