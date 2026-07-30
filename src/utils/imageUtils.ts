@@ -56,37 +56,47 @@ export const compressBase64String = (base64Str: string, maxDim = 600, quality = 
   if (!base64Str || !base64Str.startsWith('data:image')) return Promise.resolve(base64Str);
   if (base64Str.length < 300000) return Promise.resolve(base64Str); // Already under 300KB
 
-  return new Promise((resolve) => {
+  const compressionPromise = new Promise<string>((resolve) => {
     const img = new Image();
     img.src = base64Str;
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      let width = img.width;
-      let height = img.height;
+      try {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
 
-      if (width > maxDim || height > maxDim) {
-        if (width > height) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
         }
-      }
 
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        ctx.drawImage(img, 0, 0, width, height);
-        let dataUrl = canvas.toDataURL('image/jpeg', quality);
-        resolve(dataUrl);
-      } else {
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          let dataUrl = canvas.toDataURL('image/jpeg', quality);
+          resolve(dataUrl);
+        } else {
+          resolve(base64Str);
+        }
+      } catch (e) {
         resolve(base64Str);
       }
     };
     img.onerror = () => resolve(base64Str);
   });
+
+  const timeoutPromise = new Promise<string>((resolve) => {
+    setTimeout(() => resolve(base64Str), 1000);
+  });
+
+  return Promise.race([compressionPromise, timeoutPromise]);
 };
 
 export const compressImageToBlob = (file: File, maxWidth = 1200, maxHeight = 1200, quality = 0.7): Promise<Blob> => {

@@ -63,6 +63,7 @@ export default function Settings() {
   };
 
   const handleSave = async () => {
+    if (isSaving) return;
     setIsSaving(true);
     try {
       // Auto compress any large base64 images before sending to Firestore to guarantee < 1MB limit
@@ -84,8 +85,9 @@ export default function Settings() {
       await updateSettings(cleanedData);
       setFormData(cleanedData);
       alert('설정이 성공적으로 저장되었습니다!');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Settings save error:', error);
+      alert('설정 저장 중 오류가 발생했습니다: ' + (error?.message || '잠시 후 다시 시도해 주세요.'));
     } finally {
       setIsSaving(false);
     }
