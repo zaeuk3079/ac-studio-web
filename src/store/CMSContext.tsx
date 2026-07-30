@@ -348,17 +348,24 @@ export function CMSProvider({ children }: { children: ReactNode }) {
 
         if (docSnap.exists()) {
           const fetched = docSnap.data() as SiteSettings;
-          const mergedSteps = (fetched.serviceProcessSteps && fetched.serviceProcessSteps.length > 0)
+          
+          const mergedSteps = (cachedObj.serviceProcessSteps && cachedObj.serviceProcessSteps.length > 0)
+            ? cachedObj.serviceProcessSteps
+            : (fetched.serviceProcessSteps && fetched.serviceProcessSteps.length > 0)
             ? fetched.serviceProcessSteps
             : defaultSettings.serviceProcessSteps;
 
-          const mergedHeroImages = (fetched.heroImages && fetched.heroImages.length > 0)
+          const mergedHeroImages = (cachedObj.heroImages && cachedObj.heroImages.length > 0)
+            ? cachedObj.heroImages
+            : (fetched.heroImages && fetched.heroImages.length > 0)
             ? fetched.heroImages
             : defaultSettings.heroImages;
 
+          // CRITICAL SAFEGUARD: cachedObj comes AFTER fetched so user local edits NEVER reset!
           const merged: SiteSettings = {
             ...defaultSettings,
             ...fetched,
+            ...cachedObj,
             serviceProcessSteps: mergedSteps,
             heroImages: mergedHeroImages
           };
