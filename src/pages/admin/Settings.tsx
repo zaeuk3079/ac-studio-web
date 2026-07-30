@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
 import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
-import { compressImage } from '../../utils/imageUtils';
+import { compressImage, compressBase64String } from '../../utils/imageUtils';
 
 export default function Settings() {
   const { settings, updateSettings } = useCMS();
