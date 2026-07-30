@@ -264,16 +264,32 @@ export function CMSProvider({ children }: { children: ReactNode }) {
       } catch (e) {}
     }
 
-    // 2. Real-time Firebase Settings Listener
+    // 2. Real-time Firebase Settings Listener with Smart Local Merge Safeguard
     const unsubscribeSettings = onSnapshot(
       doc(db, 'settings', 'main'),
       (docSnap) => {
+        let cachedObj: Partial<SiteSettings> = {};
+        const localRaw = localStorage.getItem('ac_studio_settings');
+        if (localRaw) {
+          try { cachedObj = JSON.parse(localRaw); } catch (e) {}
+        }
+
         if (docSnap.exists()) {
           const fetched = docSnap.data() as SiteSettings;
-          setSettings(fetched);
-          localStorage.setItem('ac_studio_settings', JSON.stringify(fetched));
+          // Merge defaultSettings -> fetched -> cachedObj to NEVER lose user customizations
+          const merged: SiteSettings = {
+            ...defaultSettings,
+            ...fetched,
+            ...cachedObj
+          };
+          setSettings(merged);
+          localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
         } else {
-          setDoc(doc(db, 'settings', 'main'), defaultSettings);
+          // If Firebase doc is not ready, keep user local customizations intact
+          const merged = { ...defaultSettings, ...cachedObj };
+          setSettings(merged);
+          localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
+          setDoc(doc(db, 'settings', 'main'), merged).catch(() => {});
         }
         setIsLoading(false);
       },
