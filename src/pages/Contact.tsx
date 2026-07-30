@@ -96,7 +96,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="font-serif text-5xl md:text-6xl text-burgundy-900 mb-6 tracking-tight"
           >
-            {settings.contactTitle}
+            {settings.contactTitle === 'Contact' ? '견적문의' : (settings.contactTitle || '견적문의')}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}

@@ -299,7 +299,7 @@ export default function Settings() {
                       
                       {/* Draggable Text Block */}
                       <div
-                        className={`absolute transform -translate-y-full pointer-events-none transition-transform duration-75 flex flex-col ${
+                        className={`absolute pointer-events-none transition-transform duration-75 flex flex-col ${
                           formData.heroTextAlign === 'center'
                             ? 'items-center text-center'
                             : formData.heroTextAlign === 'right'
@@ -309,6 +309,11 @@ export default function Settings() {
                         style={{
                           left: `${formData.heroTextX ?? 6}%`,
                           top: `${formData.heroTextY ?? 82}%`,
+                          transform: formData.heroTextAlign === 'center'
+                            ? 'translate(-50%, -100%)'
+                            : formData.heroTextAlign === 'right'
+                            ? 'translate(-100%, -100%)'
+                            : 'translate(0%, -100%)',
                           textAlign: (formData.heroTextAlign || 'left') as any,
                         }}
                       >

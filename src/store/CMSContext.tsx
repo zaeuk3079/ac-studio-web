@@ -180,8 +180,8 @@ const defaultSettings: SiteSettings = {
   philosophyItem2: '시간의 가치: 유행을 타지 않는 클래식한 아름다움을 추구합니다.',
   philosophyItem3: '소통: 고객과의 깊은 교감을 통해 최상의 결과물을 만듭니다.',
   // Contact
-  contactTitle: 'Contact',
-  contactSubText: 'Get in touch & Booking',
+  contactTitle: '견적문의',
+  contactSubText: '견적 및 촬영 문의',
   contactMessageTitle: "Let's Create Together",
   contactMessageText: '촬영 문의 및 예약은 아래 연락처나 우측의 구글 폼을 통해 남겨주시면, 최대한 빠르게 답변해 드리겠습니다. 당신의 특별한 순간을 함께할 수 있기를 기대합니다.',
   contactEmail: 'contact@agingstudio.com',
