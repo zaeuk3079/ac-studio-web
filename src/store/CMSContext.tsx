@@ -178,7 +178,7 @@ const defaultPortfolio: PortfolioItem[] = [
 ];
 
 const defaultSettings: SiteSettings = {
-  siteName: 'aging studio',
+  siteName: 'puff studio',
   logoUrl: '',
   // Home
   heroText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',

@@ -22,11 +22,17 @@ import AdminDashboard from './pages/admin/Dashboard';
 import PortfolioManage from './pages/admin/PortfolioManage';
 import Settings from './pages/admin/Settings';
 
+import { useEffect } from 'react';
+
 function ThemeApplier() {
   const { settings } = useCMS();
   
   const headingFont = settings.headingFont || 'Pretendard';
   const bodyFont = settings.bodyFont || 'Pretendard';
+
+  useEffect(() => {
+    document.title = settings.siteName || 'puff studio';
+  }, [settings.siteName]);
 
   return (
     <style>
