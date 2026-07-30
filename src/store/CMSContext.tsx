@@ -562,7 +562,7 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     
     // Save to Firebase with auto-retry emergency auto-shrink fallback
     try {
-      await setDoc(doc(db, 'settings', 'main'), updated);
+      await setDoc(doc(db, 'settings', 'main'), updated, { merge: true });
     } catch (error: any) {
       console.warn("First setDoc failed, attempting emergency auto-shrink fallback...", error);
       try {
