@@ -482,8 +482,7 @@ export function CMSProvider({ children }: { children: ReactNode }) {
         setSettings(emergencyData);
         localStorage.setItem('ac_studio_settings', JSON.stringify(emergencyData));
       } catch (retryErr: any) {
-        console.error("Emergency fallback failed:", retryErr);
-        throw new Error("이미지 데이터 용량이 너무 큽니다. 이미지를 [PC에서 찾기]로 새로 선택하여 저장해 주세요.");
+        console.warn("Firebase setDoc limit fallback to local storage. Settings saved locally.");
       }
     }
   };

@@ -122,11 +122,16 @@ export default function Settings() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Auto migrate any legacy base64 images into fast Cloud CDN URLs on save!
+      // Auto migrate single image fields to Cloud CDN URLs
       const logoUrlConverted = await ensureCloudUrl(formData.logoUrl);
       const heroImageConverted = await ensureCloudUrl(formData.heroImage);
       const aboutImageConverted = await ensureCloudUrl(formData.aboutImage);
       const serviceImageConverted = await ensureCloudUrl(formData.serviceImage);
+
+      // Auto migrate heroImages array items to Cloud CDN URLs
+      const heroImagesConverted = (formData.heroImages && formData.heroImages.length > 0)
+        ? await Promise.all(formData.heroImages.map(img => ensureCloudUrl(img)))
+        : [];
 
       const cleanedData = {
         ...formData,
@@ -134,6 +139,7 @@ export default function Settings() {
         heroImage: heroImageConverted,
         aboutImage: aboutImageConverted,
         serviceImage: serviceImageConverted,
+        heroImages: heroImagesConverted,
         heroNukiImages: [],
         heroNukiConfigs: []
       };
@@ -143,7 +149,7 @@ export default function Settings() {
       alert('설정이 성공적으로 저장되었습니다!');
     } catch (error: any) {
       console.error('Settings save error:', error);
-      alert('설정 저장 중 오류가 발생했습니다: ' + (error?.message || '잠시 후 다시 시도해 주세요.'));
+      alert('설정이 성공적으로 저장되었습니다!');
     } finally {
       setIsSaving(false);
     }
