@@ -29,6 +29,7 @@ export interface SiteSettings {
   heroText: string;
   heroSubText: string;
   heroImage: string;
+  heroObjectPosition?: 'top' | 'center' | 'bottom' | string;
   heroNukiImages?: string[];
   heroNukiConfigs?: NukiImageConfig[];
   showHomeAbout: boolean;
@@ -127,6 +128,7 @@ const defaultSettings: SiteSettings = {
   heroText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=2069&auto=format&fit=crop',
+  heroObjectPosition: 'center',
   heroNukiImages: [],
   heroNukiConfigs: [],
   showHomeAbout: true,

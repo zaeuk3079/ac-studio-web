@@ -239,10 +239,37 @@ export default function Settings() {
                   </div>
                 </div>
                 {formData.heroImage && (
-                  <div className="mt-4 w-full aspect-video rounded-lg overflow-hidden border border-stone-200">
-                    <img src={formData.heroImage} alt="Banner Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <div className="mt-4 space-y-2">
+                    <div className="w-full aspect-video rounded-lg overflow-hidden border border-stone-200 relative">
+                      <img
+                        src={formData.heroImage}
+                        alt="Banner Preview"
+                        className="w-full h-full object-cover transition-all duration-300"
+                        style={{ objectPosition: formData.heroObjectPosition || 'center' }}
+                        referrerPolicy="no-referrer"
+                      />
+                      <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-1 rounded">
+                        현재 초점: {formData.heroObjectPosition || 'center'}
+                      </div>
+                    </div>
                   </div>
                 )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Main Banner Position (배너 사진 초점/위치 이동 조정)</label>
+                <select
+                  name="heroObjectPosition"
+                  value={formData.heroObjectPosition || 'center'}
+                  onChange={handleChange as any}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors bg-white font-medium text-stone-800"
+                >
+                  <option value="center">중앙 (Center - 기본값)</option>
+                  <option value="top">상단 (Top - 위쪽 인물/얼굴 초점)</option>
+                  <option value="bottom">하단 (Bottom - 아래쪽 초점)</option>
+                  <option value="50% 25%">상단 25% (약간 위쪽)</option>
+                  <option value="50% 75%">하단 75% (약간 아래쪽)</option>
+                </select>
+                <p className="text-xs text-stone-500 mt-1">16:9 배너 크기에 맞춰 이미지가 잘릴 때 원하시는 주요 시선/위치로 이동시킵니다.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>

@@ -127,7 +127,8 @@ export default function Home() {
             <img
               src={settings.heroImage}
               alt={settings.heroText || settings.siteName}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover transition-all duration-500"
+              style={{ objectPosition: settings.heroObjectPosition || 'center' }}
               referrerPolicy="no-referrer"
             />
             {/* Dark gradient overlay & Brand Copy */}
