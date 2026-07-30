@@ -65,11 +65,11 @@ export default function Settings() {
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Auto compress any large base64 images before sending to Firestore to guarantee < 1MB limit
-      const logoUrlCompressed = formData.logoUrl ? await compressBase64String(formData.logoUrl, 600, 0.7) : formData.logoUrl;
-      const heroImageCompressed = formData.heroImage ? await compressBase64String(formData.heroImage, 1000, 0.7) : formData.heroImage;
-      const aboutImageCompressed = formData.aboutImage ? await compressBase64String(formData.aboutImage, 1000, 0.7) : formData.aboutImage;
-      const serviceImageCompressed = formData.serviceImage ? await compressBase64String(formData.serviceImage, 1000, 0.7) : formData.serviceImage;
+      // Auto compress base64 images before sending to Firestore to guarantee well under 1MB limit (~200KB max)
+      const logoUrlCompressed = formData.logoUrl ? await compressBase64String(formData.logoUrl, 500, 0.75) : formData.logoUrl;
+      const heroImageCompressed = formData.heroImage ? await compressBase64String(formData.heroImage, 900, 0.7) : formData.heroImage;
+      const aboutImageCompressed = formData.aboutImage ? await compressBase64String(formData.aboutImage, 900, 0.7) : formData.aboutImage;
+      const serviceImageCompressed = formData.serviceImage ? await compressBase64String(formData.serviceImage, 900, 0.7) : formData.serviceImage;
 
       const cleanedData = {
         ...formData,
@@ -101,8 +101,8 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const maxDim = fieldName === 'logoUrl' ? 800 : 2000;
-        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.85);
+        const maxDim = fieldName === 'logoUrl' ? 500 : 1200;
+        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.75);
         setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
       } catch (error) {
         console.error('Error compressing image, using direct reader fallback:', error);
