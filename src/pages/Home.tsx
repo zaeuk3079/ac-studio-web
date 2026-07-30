@@ -234,12 +234,30 @@ export default function Home() {
 
         {/* Category Header & Filter */}
         <div className="mb-16 mt-4">
-          <h1 
-            className="text-3xl md:text-5xl text-stone-900 tracking-[0.2em] uppercase font-bold mb-8"
-            style={{ fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif' }}
-          >
-            {settings.homePortfolioTitle || 'Work'}
-          </h1>
+          <div className="mb-8">
+            <h1 
+              className="text-3xl md:text-5xl text-stone-900 uppercase font-bold"
+              style={{
+                fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
+                letterSpacing: `${settings.homePortfolioTitleLetterSpacing ?? 1}px`,
+              }}
+            >
+              {settings.homePortfolioTitle || 'Work'}
+            </h1>
+            {settings.homePortfolioSubText && (
+              <p
+                style={{
+                  fontSize: `${settings.homePortfolioSubTextFontSize || 14}px`,
+                  letterSpacing: `${settings.homePortfolioSubTextLetterSpacing ?? 1}px`,
+                  color: settings.homePortfolioSubTextColor || '#78716C',
+                  fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
+                }}
+                className="font-medium mt-2"
+              >
+                {settings.homePortfolioSubText}
+              </p>
+            )}
+          </div>
           
           <div className="flex space-x-12 text-sm font-semibold tracking-[0.2em] border-b border-stone-100 pb-4">
             <button

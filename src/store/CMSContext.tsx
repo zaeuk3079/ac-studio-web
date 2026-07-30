@@ -48,9 +48,11 @@ export interface SiteSettings {
   heroNukiConfigs?: NukiImageConfig[];
   showHomeAbout: boolean;
   homePortfolioTitle: string;
-  // Portfolio
-  portfolioTitle: string;
-  portfolioSubText: string;
+  homePortfolioTitleLetterSpacing?: number;
+  homePortfolioSubText?: string;
+  homePortfolioSubTextFontSize?: number;
+  homePortfolioSubTextLetterSpacing?: number;
+  homePortfolioSubTextColor?: string;
   // About
   aboutTitle: string;
   aboutSubText: string;
@@ -181,7 +183,12 @@ const defaultSettings: SiteSettings = {
   heroNukiImages: [],
   heroNukiConfigs: [],
   showHomeAbout: true,
-  homePortfolioTitle: 'Selected Works',
+  homePortfolioTitle: 'Work',
+  homePortfolioTitleLetterSpacing: 1,
+  homePortfolioSubText: '',
+  homePortfolioSubTextFontSize: 14,
+  homePortfolioSubTextLetterSpacing: 1,
+  homePortfolioSubTextColor: '#78716C',
   // Portfolio
   portfolioTitle: 'Portfolio',
   portfolioSubText: 'Our Selected Works',

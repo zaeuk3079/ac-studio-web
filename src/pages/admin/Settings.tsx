@@ -781,6 +781,49 @@ export default function Settings() {
                 </div>
               </div>
             
+            {/* Work Section Settings (Title, Letter Spacing & Sub Copy) */}
+            <div className="pt-6 border-t border-stone-200 space-y-4">
+              <h3 className="text-base font-semibold text-stone-800">Work 포트폴리오 섹션 타이틀 & 카피 편집</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 제목 (Title)</label>
+                  <input
+                    type="text"
+                    name="homePortfolioTitle"
+                    value={formData.homePortfolioTitle || 'Work'}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    placeholder="Work"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-700 mb-1">제목 자간 조절 ({formData.homePortfolioTitleLetterSpacing ?? 1}px)</label>
+                  <input
+                    type="range"
+                    min="-4"
+                    max="15"
+                    name="homePortfolioTitleLetterSpacing"
+                    value={formData.homePortfolioTitleLetterSpacing ?? 1}
+                    onChange={(e) => setFormData({ ...formData, homePortfolioTitleLetterSpacing: Number(e.target.value) })}
+                    className="w-full accent-stone-800 cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 서브 설명 카피 (Sub Copy)</label>
+                <input
+                  type="text"
+                  name="homePortfolioSubText"
+                  value={formData.homePortfolioSubText || ''}
+                  onChange={handleChange}
+                  className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  placeholder="예: aging studio의 감각적인 대표 포트폴리오 작품입니다."
+                />
+              </div>
+            </div>
+
             {/* Font Settings */}
             <div className="pt-6 border-t border-stone-200 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
