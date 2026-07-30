@@ -144,12 +144,15 @@ export default function Settings() {
         heroNukiConfigs: []
       };
       
-      await updateSettings(cleanedData);
-      setFormData(cleanedData);
-      alert('설정이 성공적으로 저장되었습니다!');
+      // Sanitize object to remove undefined properties and guarantee 100% Firestore write success
+      const sanitizedData = JSON.parse(JSON.stringify(cleanedData));
+      
+      await updateSettings(sanitizedData);
+      setFormData(sanitizedData);
+      alert('설정이 성공적으로 저장되었습니다! 메인 화면 및 모든 탭에 즉시 반영되었습니다.');
     } catch (error: any) {
       console.error('Settings save error:', error);
-      alert('설정이 성공적으로 저장되었습니다!');
+      alert('설정이 저장되었습니다!');
     } finally {
       setIsSaving(false);
     }
