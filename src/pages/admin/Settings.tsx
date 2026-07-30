@@ -68,8 +68,8 @@ export default function Settings() {
     const file = e.target.files?.[0];
     if (file) {
       try {
-        // Optimized for Settings doc (1400px, quality 0.5) to keep Base64 under 100KB, preventing Firestore 1MB document limit failure
-        const compressedBase64 = await compressImage(file, 1400, 900, 0.5);
+        // High Quality Ultra HD (2560px, quality 0.88) for crisp, clear visual sharpness
+        const compressedBase64 = await compressImage(file, 2560, 1800, 0.88);
         setFormData({ ...formData, [fieldName]: compressedBase64 });
       } catch (error) {
         console.error('Error compressing image:', error);
@@ -296,7 +296,6 @@ export default function Settings() {
                         style={{ objectPosition: formData.heroObjectPosition || 'center' }}
                         referrerPolicy="no-referrer"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent pointer-events-none" />
                       
                       {/* Draggable Text Block */}
                       <div

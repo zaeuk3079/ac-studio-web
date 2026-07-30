@@ -133,8 +133,6 @@ export default function Home() {
               style={{ objectPosition: settings.heroObjectPosition || 'center' }}
               referrerPolicy="no-referrer"
             />
-            {/* Dark gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-stone-950/20 to-transparent" />
             
             {/* Positioned Brand Copy Container */}
             <div
