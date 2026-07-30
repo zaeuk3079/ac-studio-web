@@ -346,32 +346,20 @@ export function CMSProvider({ children }: { children: ReactNode }) {
           const fetched = docSnap.data() as SiteSettings;
           const mergedSteps = (fetched.serviceProcessSteps && fetched.serviceProcessSteps.length > 0)
             ? fetched.serviceProcessSteps
-            : (cachedObj.serviceProcessSteps && cachedObj.serviceProcessSteps.length > 0)
-            ? cachedObj.serviceProcessSteps
             : defaultSettings.serviceProcessSteps;
 
-          // Priority: defaultSettings -> cachedObj -> fetched (Firebase DB is authoritative across domains)
           const merged: SiteSettings = {
             ...defaultSettings,
-            ...cachedObj,
             ...fetched,
             serviceProcessSteps: mergedSteps
           };
           setSettings(merged);
           localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
         } else {
-          const mergedSteps = (cachedObj.serviceProcessSteps && cachedObj.serviceProcessSteps.length > 0)
-            ? cachedObj.serviceProcessSteps
-            : defaultSettings.serviceProcessSteps;
-
-          const merged = {
-            ...defaultSettings,
-            ...cachedObj,
-            serviceProcessSteps: mergedSteps
-          };
-          setSettings(merged);
-          localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
-          setDoc(doc(db, 'settings', 'main'), merged).catch(() => {});
+          // If Firebase doc is not ready, write defaultSettings directly to Firestore for all domain visitors
+          setSettings(defaultSettings);
+          localStorage.setItem('ac_studio_settings', JSON.stringify(defaultSettings));
+          setDoc(doc(db, 'settings', 'main'), defaultSettings, { merge: true }).catch(() => {});
         }
         setIsLoading(false);
       },
