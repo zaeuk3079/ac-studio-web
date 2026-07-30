@@ -1077,9 +1077,9 @@ export default function Settings() {
             <div className="space-y-6">
               <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-stone-700">Hero Image (메인 배너 이미지)</label>
+                <label className="block text-sm font-medium text-stone-700">About Image (소개 페이지 대표 세로형 이미지 3:4)</label>
                 <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-stone-100 text-stone-600">
-                  {getByteSizeKB(formData.heroImage)}
+                  {getByteSizeKB(formData.aboutImage)}
                 </span>
               </div>
                 <div className="flex space-x-3">

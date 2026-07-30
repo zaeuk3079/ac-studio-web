@@ -15,8 +15,8 @@ export default function About() {
             className="relative aspect-[3/4] overflow-hidden rounded-sm bg-stone-200"
           >
             <img
-              src={settings.aboutImage}
-              alt="Studio Interior"
+              src={settings.aboutImage || 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=2069&auto=format&fit=crop'}
+              alt="About Studio"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
