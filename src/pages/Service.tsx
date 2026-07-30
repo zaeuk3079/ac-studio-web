@@ -70,7 +70,7 @@ export default function Service() {
           >
             <Link
               to="/contact"
-              className="inline-flex items-center space-x-3 bg-[#bcd0c9] hover:bg-[#a9c1b9] text-[#1C1917] px-10 py-4.5 rounded-full text-sm font-bold tracking-wider transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 border border-[#a2bbb3]"
+              className="inline-flex items-center space-x-3 bg-[#bcd0c9] hover:bg-[#a9c1b9] text-white px-10 py-4.5 rounded-full text-sm font-bold tracking-wider transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 border-none"
             >
               <Calendar size={18} />
               <span>견적 문의하기</span>

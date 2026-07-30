@@ -1119,7 +1119,7 @@ export default function Settings() {
                   }}
                 >
                   <span
-                    className="inline-block bg-[#bcd0c9] text-[#1C1917] px-6 py-2 rounded-full font-bold shadow-md whitespace-nowrap"
+                    className="inline-block bg-[#bcd0c9] text-white px-6 py-2 rounded-full font-bold shadow-md whitespace-nowrap"
                     style={{
                       fontSize: `${Math.max(14, Math.round((formData.contactTextFontSize || 42) * 0.5))}px`,
                       letterSpacing: `${formData.contactTextLetterSpacing ?? 0}px`,
