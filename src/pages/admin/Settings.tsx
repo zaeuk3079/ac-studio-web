@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
 import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
-import { compressImage, compressBase64String } from '../../utils/imageUtils';
+import { compressImage, compressBase64String, uploadImageToCloudCDN } from '../../utils/imageUtils';
 
 export default function Settings() {
   const { settings, updateSettings } = useCMS();
   const [formData, setFormData] = useState<SiteSettings>(settings);
   const [isSaving, setIsSaving] = useState(false);
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
 
   const getByteSizeKB = (str?: string) => {
     if (!str) return '0 KB';
@@ -110,20 +111,18 @@ export default function Settings() {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
     const file = e.target.files?.[0];
     if (file) {
+      setUploadingField(fieldName);
       try {
-        const maxDim = fieldName === 'logoUrl' ? 500 : 1200;
+        // High-Speed Unlimited Cloud CDN Upload
+        const cdnUrl = await uploadImageToCloudCDN(file);
+        setFormData(prev => ({ ...prev, [fieldName]: cdnUrl }));
+      } catch (error) {
+        console.error('Error uploading image to cloud CDN:', error);
+        const maxDim = fieldName === 'logoUrl' ? 500 : 1000;
         const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.75);
         setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
-      } catch (error) {
-        console.error('Error compressing image, using direct reader fallback:', error);
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          if (ev.target?.result) {
-            setFormData(prev => ({ ...prev, [fieldName]: ev.target!.result as string }));
-          }
-        };
-        reader.readAsDataURL(file);
       } finally {
+        setUploadingField(null);
         e.target.value = '';
       }
     }
@@ -286,7 +285,7 @@ export default function Settings() {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
                   <button type="button" className="bg-stone-200 hover:bg-stone-300 text-stone-700 px-4 py-2.5 rounded-lg font-medium transition-colors h-full whitespace-nowrap">
-                    PC에서 찾기
+                    {uploadingField === 'logoUrl' ? '업로드 중...' : 'PC에서 찾기'}
                   </button>
                 </div>
               </div>

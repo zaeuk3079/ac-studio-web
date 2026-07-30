@@ -1,3 +1,29 @@
+export const uploadImageToCloudCDN = async (file: File): Promise<string> => {
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    // High-Speed Unlimited Free Image Cloud CDN (ImgBB API)
+    const apiKey = '3b8fae923e4210e7b8f9e2b17b629b35';
+    const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success && data.data?.url) {
+        return data.data.url; // Return fast, unlimited CDN URL
+      }
+    }
+  } catch (err) {
+    console.warn('Cloud CDN upload fallback to compressed base64:', err);
+  }
+
+  // Fallback if network drops: compress to light base64
+  return compressImage(file, 800, 800, 0.75);
+};
+
 export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.8): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
