@@ -48,26 +48,28 @@ export default function Home() {
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
 
-  // Filter portfolio based on category & subcategory
+  // Filter portfolio based on 3 main categories: Photography, Video, AI
   const filteredPortfolio = portfolio.filter(item => {
-    if (activeCategory === 'Photography') {
-      if (item.category === 'Video') return false;
-      if (subCategory === 'ALL') return true;
-      
-      const itemCat = item.category.toUpperCase().replace(/\s+/g, '');
-      if (subCategory === 'COMMERCIAL') {
-        return itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL' || itemCat.includes('FOOD') || itemCat.includes('BEVERAGE');
-      }
-      if (subCategory === 'MODEL') {
-        return itemCat === 'MODEL' || itemCat === 'PORTRAIT' || itemCat === 'SNAP' || itemCat === 'WEDDING';
-      }
-      if (subCategory === 'AI') {
-        return itemCat === 'AI';
-      }
-      return false;
-    } else {
+    const itemCat = (item.category || '').toUpperCase().replace(/\s+/g, '');
+    
+    if (activeCategory === 'AI') {
+      return itemCat === 'AI';
+    }
+    if (activeCategory === 'Video') {
       return item.category === 'Video' || !!item.videoUrl;
     }
+    
+    // activeCategory === 'Photography'
+    if (item.category === 'Video' || itemCat === 'AI') return false;
+    if (subCategory === 'ALL') return true;
+    
+    if (subCategory === 'COMMERCIAL') {
+      return itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL' || itemCat.includes('FOOD') || itemCat.includes('BEVERAGE');
+    }
+    if (subCategory === 'MODEL') {
+      return itemCat === 'MODEL' || itemCat === 'PORTRAIT' || itemCat === 'SNAP' || itemCat === 'WEDDING';
+    }
+    return false;
   });
 
   // Split video items by aspect ratio
@@ -257,12 +259,22 @@ export default function Home() {
             >
               영상
             </button>
+            <button
+              onClick={() => setActiveCategory('AI')}
+              className={`transition-all duration-300 cursor-pointer pb-4 -mb-5 border-b-2 ${
+                activeCategory === 'AI' 
+                  ? 'border-stone-900 text-stone-900 font-bold' 
+                  : 'border-transparent text-stone-400 hover:text-stone-700'
+              }`}
+            >
+              AI
+            </button>
           </div>
 
           {/* Subcategories (only under Photography) */}
           {activeCategory === 'Photography' && (
             <div className="flex flex-wrap gap-3 mt-8 text-[11px] tracking-wider uppercase font-semibold text-stone-500">
-              {['ALL', 'COMMERCIAL', 'MODEL', 'AI'].map((sub) => (
+              {['ALL', 'COMMERCIAL', 'MODEL'].map((sub) => (
                 <button
                   key={sub}
                   onClick={() => setSubCategory(sub)}
