@@ -154,8 +154,11 @@ export default function Home() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 1.8, ease: 'easeInOut' }}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectPosition: settings.heroObjectPosition || 'center' }}
+                  className="absolute inset-0 w-full h-full object-cover select-none"
+                  style={{ 
+                    objectPosition: settings.heroObjectPosition || 'center',
+                    imageRendering: 'crisp-edges'
+                  }}
                   referrerPolicy="no-referrer"
                 />
               </AnimatePresence>
@@ -163,7 +166,7 @@ export default function Home() {
 
             {/* Slide Navigation Dots (visible when 2 or more images) */}
             {heroImageList.length > 1 && (
-              <div className="absolute bottom-4 right-6 z-20 flex space-x-2 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
+              <div className="absolute bottom-4 right-4 md:right-6 z-20 flex space-x-2 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
                 {heroImageList.map((_, idx) => (
                   <button
                     key={idx}
@@ -178,24 +181,18 @@ export default function Home() {
               </div>
             )}
             
-            {/* Positioned Brand Copy Container */}
+            {/* Positioned Brand Copy Container - Mobile Responsive clamp */}
             <div
-              className={`absolute flex flex-col pointer-events-none pr-6 ${
+              className={`absolute flex flex-col pointer-events-none px-4 sm:px-0 max-w-[90%] md:max-w-2xl ${
                 settings.heroTextAlign === 'center'
-                  ? 'items-center text-center'
+                  ? 'items-center text-center left-1/2 -translate-x-1/2'
                   : settings.heroTextAlign === 'right'
-                  ? 'items-end text-right'
-                  : 'items-start text-left'
+                  ? 'items-end text-right right-4 md:right-8'
+                  : 'items-start text-left left-4 md:left-10'
               }`}
               style={{
-                left: `${settings.heroTextX ?? 6}%`,
-                top: `${settings.heroTextY ?? 82}%`,
-                transform: settings.heroTextAlign === 'center'
-                  ? 'translate(-50%, -100%)'
-                  : settings.heroTextAlign === 'right'
-                  ? 'translate(-100%, -100%)'
-                  : 'translate(0%, -100%)',
-                textAlign: (settings.heroTextAlign || 'left') as any,
+                top: `${settings.heroTextY ?? 80}%`,
+                transform: 'translateY(-100%)',
               }}
             >
               {settings.heroSubText && (
@@ -204,7 +201,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                   style={{
-                    fontSize: `${settings.heroSubTextFontSize || 14}px`,
+                    fontSize: `clamp(11px, 2.5vw, ${settings.heroSubTextFontSize || 14}px)`,
                     letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
                     fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
                     color: settings.heroSubTextColor || '#E7E5E4',
@@ -220,12 +217,12 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                   style={{
-                    fontSize: `${settings.heroTextFontSize || 42}px`,
+                    fontSize: `clamp(20px, 4.5vw, ${settings.heroTextFontSize || 42}px)`,
                     letterSpacing: `${settings.heroTextLetterSpacing ?? 0}px`,
                     fontFamily: settings.heroTextFontFamily || 'Pretendard',
                     color: settings.heroTextColor || '#FFFFFF',
                   }}
-                  className="font-bold tracking-tight leading-tight text-white drop-shadow-md"
+                  className="font-bold leading-tight drop-shadow-lg whitespace-pre-line"
                 >
                   {settings.heroText}
                 </motion.h2>
