@@ -19,10 +19,10 @@ export default function Contact() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const getInstagramHandle = (url: string) => {
-    if (!url) return '@agingstudio';
+    if (!url) return '@puffstudio';
     const parts = url.split('/').filter(Boolean);
     const handle = parts[parts.length - 1];
-    return handle ? `@${handle}` : '@agingstudio';
+    return handle ? `@${handle}` : '@puffstudio';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -263,8 +263,8 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold tracking-widest uppercase text-stone-900 mb-1">Instagram</h3>
-                    <a href={settings.instagramUrl || 'https://instagram.com/agingstudio'} target="_blank" rel="noopener noreferrer" className="text-stone-600 font-light hover:text-burgundy-600 transition-colors">
-                      {getInstagramHandle(settings.instagramUrl || 'https://instagram.com/agingstudio')}
+                    <a href={settings.instagramUrl || 'https://instagram.com/puffstudio'} target="_blank" rel="noopener noreferrer" className="text-stone-600 font-light hover:text-burgundy-600 transition-colors">
+                      {getInstagramHandle(settings.instagramUrl || 'https://instagram.com/puffstudio')}
                     </a>
                   </div>
                 </div>

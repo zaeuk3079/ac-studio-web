@@ -191,7 +191,7 @@ const defaultSettings: SiteSettings = {
   siteName: 'puff studio',
   logoUrl: '',
   // Home
-  heroText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
+  heroText: 'puff studio는 당신의 가장 빛나는 순간을 기록합니다.',
   heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
   heroImages: [
@@ -227,8 +227,8 @@ const defaultSettings: SiteSettings = {
   portfolioSubText: 'Our Selected Works',
   // About
   aboutTitle: 'About Us',
-  aboutSubText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
-  aboutText: '에이징 스튜디오는 단순한 사진 촬영을 넘어, 당신의 이야기와 감정을 프레임 안에 담아냅니다. 수년간의 경험과 독창적인 시선으로 가장 자연스럽고 아름다운 모습을 찾아드립니다.',
+  aboutSubText: 'puff studio는 당신의 가장 빛나는 순간을 기록합니다.',
+  aboutText: '퍼프 스튜디오는 단순한 사진 촬영을 넘어, 당신의 이야기와 감정을 프레임 안에 담아냅니다. 수년간의 경험과 독창적인 시선으로 가장 자연스럽고 아름다운 모습을 찾아드립니다.',
   aboutText2: '우리는 모든 사람이 자신만의 고유한 아름다움을 가지고 있다고 믿습니다. 그 아름다움이 가장 자연스럽게 드러나는 찰나를 포착하여, 시간이 흘러도 변하지 않는 가치 있는 결과물로 만들어냅니다.',
   aboutText3: '단순히 셔터를 누르는 것을 넘어, 당신과 소통하고 교감하며 가장 편안한 분위기 속에서 촬영을 진행합니다. 우리의 프레임 안에서 당신의 이야기가 예술이 됩니다.',
   aboutImage: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=2069&auto=format&fit=crop',
@@ -300,10 +300,10 @@ const defaultSettings: SiteSettings = {
   contactSubText: '견적 및 촬영 문의',
   contactMessageTitle: "Let's Create Together",
   contactMessageText: '촬영 문의 및 예약은 아래 연락처나 우측의 구글 폼을 통해 남겨주시면, 최대한 빠르게 답변해 드리겠습니다. 당신의 특별한 순간을 함께할 수 있기를 기대합니다.',
-  contactEmail: 'contact@agingstudio.com',
+  contactEmail: 'contact@puffstudio.com',
   contactPhone: '010-1234-5678',
-  contactAddress: '서울특별시 강남구 논현로 123길 45\naging studio 2F',
-  instagramUrl: 'https://instagram.com/agingstudio',
+  contactAddress: '서울특별시 강남구 역삼동 스튜디오',
+  instagramUrl: 'https://instagram.com/puffstudio',
   googleFormUrl: 'https://docs.google.com/forms',
   formDownloadUrl: '#',
   web3FormsKey: '2ad41e7e-6c9c-4c9b-b14a-d160b8fc15bf',
@@ -316,9 +316,6 @@ const defaultSettings: SiteSettings = {
   contactTextY: 20,
   contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
   address: '서울특별시 강남구 역삼동 스튜디오',
-  contactEmail: 'contact@agingstudio.com',
-  contactPhone: '010-1234-5678',
-  instagramUrl: 'https://instagram.com/agingstudio',
   contactBgColor: '#F5F5F0',
   servicePlans: [
     {
@@ -363,7 +360,7 @@ const defaultSettings: SiteSettings = {
   headingFont: 'Pretendard',
   bodyFont: 'Pretendard',
   // Footer
-  footerTitle: 'aging studio',
+  footerTitle: 'puff studio',
   footerText: '당신의 가장 빛나는 순간을 기록합니다. 시간이 흘러도 변하지 않는 가치를 선사합니다.',
 };
 

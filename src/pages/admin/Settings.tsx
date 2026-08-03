@@ -237,10 +237,10 @@ export default function Settings() {
         ...formData,
         homePortfolioTitle: 'Work',
         homePortfolioTitleLetterSpacing: -1,
-        homePortfolioSubText: '에이징스튜디오의 포트폴리오를 소개합니다.',
+        homePortfolioSubText: 'puff studio의 포트폴리오를 소개합니다.',
         aboutTitle: 'About Us',
-        aboutSubText: 'aging studio는 당신의 가장 빛나는 순간을 기록합니다.',
-        aboutText: '에이징 스튜디오는 단순한 사진 촬영을 넘어, 당신의 이야기와 감정을 프레임 안에 담아냅니다.\n수년간의 경험과 독창적인 시선으로 가장 자연스럽고 아름다운 모습을 찾아드립니다.',
+        aboutSubText: 'puff studio는 당신의 가장 빛나는 순간을 기록합니다.',
+        aboutText: '퍼프 스튜디오는 단순한 사진 촬영을 넘어, 당신의 이야기와 감정을 프레임 안에 담아냅니다.\n수년간의 경험과 독창적인 시선으로 가장 자연스럽고 아름다운 모습을 찾아드립니다.',
         aboutText2: '우리는 모든 사람이 자신만의 고유한 아름다움을 가지고 있다고 믿습니다.\n그 아름다움이 가장 자연스럽게 드러나는 찰나를 포착하여, 시간이 흘러도 변하지 않는 가치 있는 결과물로 만들어냅니다.',
         aboutText3: '단순히 셔터를 누르는 것을 넘어, 당신과 소통하고 교감하며 가장 편안한 분위기 속에서 촬영을 진행합니다.\n우리의 프레임 안에서 당신의 이야기가 예술이 됩니다.',
         serviceProcessTitle: 'Process',
@@ -280,7 +280,7 @@ export default function Settings() {
         ],
         contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
         address: '서울특별시 강남구 역삼동 스튜디오',
-        contactEmail: 'contact@agingstudio.com',
+        contactEmail: 'contact@puffstudio.com',
         contactPhone: '010-1234-5678'
       };
       setFormData(restored);
@@ -1668,7 +1668,7 @@ export default function Settings() {
                       name="contactEmail"
                       value={formData.contactEmail || ''}
                       onChange={handleChange}
-                      placeholder="contact@agingstudio.com"
+                      placeholder="contact@puffstudio.com"
                       className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
                     />
                   </div>
@@ -1693,7 +1693,7 @@ export default function Settings() {
                       name="instagramUrl"
                       value={formData.instagramUrl || ''}
                       onChange={handleChange}
-                      placeholder="https://instagram.com/agingstudio"
+                      placeholder="https://instagram.com/puffstudio"
                       className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
                     />
                   </div>
