@@ -322,21 +322,21 @@ const defaultSettings: SiteSettings = {
     {
       id: 'basic',
       name: 'Basic',
-      badge: '상세페이지 특화',
+      badge: '기본 플랜',
       description: '브랜드 스타트업을 위한 핵심 상세페이지 제작 플랜',
       features: ['상세페이지']
     },
     {
       id: 'standard',
       name: 'Standard',
-      badge: 'Popular 패키지',
+      badge: '인기 패키지',
       description: '상세페이지와 SNS 마케팅 브랜드 컨텐츠 종합 패키지',
       features: ['상세페이지', 'SNS컨텐츠']
     },
     {
       id: 'premium',
       name: 'Premium',
-      badge: 'All-In-One 프리미엄',
+      badge: '올인원 프리미엄',
       description: '상세페이지부터 SNS, 퍼포먼스 광고용 컨텐츠까지 완벽 포함',
       features: ['상세페이지', 'SNS컨텐츠', '광고용 컨텐츠']
     },
@@ -346,6 +346,13 @@ const defaultSettings: SiteSettings = {
       badge: 'Monthly 정기구독',
       description: '지속적인 브랜드 마케팅을 위한 월 정기 구독형 컨텐츠 제작',
       features: ['월별 SNS컨텐츠', '월 9개 컨텐츠 (사진/영상 비율 조정가능)']
+    },
+    {
+      id: 'extra',
+      name: '그 외 촬영',
+      badge: '별도 문의',
+      description: '카페, 식당 메뉴, 굿즈, 인테리어 촬영 등 건별 맞춤 촬영',
+      features: ['카페 · 식당 메뉴', '굿즈 · 인테리어 촬영 등']
     }
   ],
   // Appearance
