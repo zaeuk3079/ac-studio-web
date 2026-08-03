@@ -71,7 +71,7 @@ export const compressImage = (file: File, maxWidth = 3840, maxHeight = 3840, qua
   });
 };
 
-export const compressBase64String = (base64Str: string, maxDim = 450, quality = 0.7): Promise<string> => {
+export const compressBase64String = (base64Str: string, maxDim = 3840, quality = 0.98): Promise<string> => {
   if (!base64Str || !base64Str.startsWith('data:image')) return Promise.resolve(base64Str);
   if (base64Str.length < 150000) return Promise.resolve(base64Str);
 

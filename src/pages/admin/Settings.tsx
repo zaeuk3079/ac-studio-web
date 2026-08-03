@@ -417,82 +417,49 @@ export default function Settings() {
             </div>
 
             {/* Main Banner (Hero Visual) Settings */}
+            {/* Single Main Hero Image Settings */}
             <div className="pt-6 border-t border-stone-200 space-y-6">
-              <h3 className="text-base font-semibold text-stone-800">Main Banner (메인 비주얼 슬라이드 배너)</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="text-base font-bold text-stone-900">Main Banner (메인 비주얼 배너 이미지 1장)</h3>
+                <span className="text-xs text-stone-500 font-mono">
+                  {getByteSizeKB(formData.heroImage)}
+                </span>
+              </div>
               
-              {/* Multi-Image Cross-Dissolve Slider (Max 5 Images) */}
-              <div className="pt-2 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h4 className="text-sm font-semibold text-stone-800">✨ 메인 교차 디졸브 슬라이드 사진 (최대 5장)</h4>
-                  <span className="text-xs text-stone-500">사진을 2장 이상 올리시면 4.5초마다 부드러운 디졸브 모션으로 바뀝니다.</span>
-                </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                  {[0, 1, 2, 3, 4].map((idx) => {
-                    const heroArr = formData.heroImages || [];
-                    const currentImg = heroArr[idx] || (idx === 0 ? formData.heroImage : '');
-                    return (
-                      <div key={idx} className="bg-stone-50 p-3 rounded-xl border border-stone-200 flex flex-col items-center space-y-2">
-                        <span className="text-xs font-bold text-stone-700">사진 {idx + 1}</span>
-                        <div className="w-full h-24 bg-stone-200 rounded-lg overflow-hidden relative flex items-center justify-center border border-stone-300">
-                          {currentImg ? (
-                            <img src={currentImg} alt={`Slide ${idx + 1}`} className="w-full h-full object-cover" />
-                          ) : (
-                            <span className="text-[10px] text-stone-400 font-medium">비어있음</span>
-                          )}
-                        </div>
-                        <div className="relative w-full overflow-hidden">
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                setUploadingField(`heroSlide_${idx}`);
-                                try {
-                                  const url = await uploadImageToCloudCDN(file);
-                                  setFormData(prev => {
-                                    const baseArr = Array.isArray(prev.heroImages) ? [...prev.heroImages] : [];
-                                    while (baseArr.length <= idx) {
-                                      baseArr.push('');
-                                    }
-                                    baseArr[idx] = url;
-                                    return {
-                                      ...prev,
-                                      heroImages: baseArr,
-                                      heroImage: idx === 0 ? url : (prev.heroImage || url)
-                                    };
-                                  });
-                                } finally {
-                                  setUploadingField(null);
-                                  e.target.value = '';
-                                }
-                              }
-                            }}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                          />
-                          <button type="button" className="w-full bg-stone-800 hover:bg-stone-900 text-white text-xs py-1.5 rounded-md font-medium transition-colors cursor-pointer">
-                            {uploadingField === `heroSlide_${idx}` ? '업로드 중...' : '[PC에서 찾기]'}
-                          </button>
-                        </div>
-                        {currentImg && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setFormData(prev => {
-                                const baseArr = Array.isArray(prev.heroImages) ? [...prev.heroImages] : [];
-                                baseArr[idx] = '';
-                                return { ...prev, heroImages: baseArr };
-                              });
-                            }}
-                            className="text-[10px] text-red-500 hover:underline cursor-pointer"
-                          >
-                            삭제
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })}
+              <div className="bg-stone-50 p-5 rounded-2xl border border-stone-200 space-y-4">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                  <input
+                    type="text"
+                    name="heroImage"
+                    value={formData.heroImage || ''}
+                    onChange={handleChange}
+                    placeholder="https://... 이미지 URL 주소 또는 [PC에서 찾기]"
+                    className="flex-1 border border-stone-300 rounded-xl px-4 py-2.5 text-xs bg-white text-stone-900 focus:ring-2 focus:ring-burgundy-500/20"
+                  />
+                  <div className="relative overflow-hidden shrink-0">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'heroImage')}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    />
+                    <button type="button" className="w-full sm:w-auto bg-burgundy-800 hover:bg-burgundy-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm">
+                      {uploadingField === 'heroImage' ? '업로드 중...' : '📷 [PC에서 찾기]'}
+                    </button>
+                  </div>
+                  {formData.heroImage && (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const updatedData = { ...formData, heroImage: '', heroImages: [] };
+                        setFormData(updatedData);
+                        await updateSettings(updatedData);
+                      }}
+                      className="w-full sm:w-auto bg-red-50 hover:bg-red-100 text-red-600 text-xs font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer border border-red-200 shrink-0"
+                    >
+                      🗑️ 사진 삭제
+                    </button>
+                  )}
                 </div>
               </div>
                 {formData.heroImage && (

@@ -560,14 +560,22 @@ export function CMSProvider({ children }: { children: ReactNode }) {
 
   const updateSettings = async (newSettings: Partial<SiteSettings>) => {
     const updated = { ...settings, ...newSettings };
-    // 1. 0.001s Instant UI & LocalStorage update with zero lag
+    // 1. Instant UI State update
     setSettings(updated);
-    localStorage.setItem('ac_studio_settings', JSON.stringify(updated));
     
-    // 2. Non-blocking Async Background Sync to Firebase
-    setDoc(doc(db, 'settings', 'main'), updated, { merge: true }).catch((error) => {
-      console.warn("Background Firebase sync note:", error);
-    });
+    // 2. Safe LocalStorage Cache with Quota Exceeded Safeguard
+    try {
+      localStorage.setItem('ac_studio_settings', JSON.stringify(updated));
+    } catch (e) {
+      console.warn("LocalStorage quota safeguard activated:", e);
+    }
+    
+    // 3. Cloud Firestore Direct Persistence
+    try {
+      await setDoc(doc(db, 'settings', 'main'), updated, { merge: true });
+    } catch (error) {
+      console.warn("Firebase sync note:", error);
+    }
   };
 
   if (isLoading) {

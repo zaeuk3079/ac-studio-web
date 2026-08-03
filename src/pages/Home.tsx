@@ -143,45 +143,21 @@ export default function Home() {
               aspectRatio: settings.heroAspectRatio === '16:9' ? '16/9' : settings.heroAspectRatio === '4:3' ? '4/3' : '3/2'
             }}
           >
-            {/* Cross-Dissolve Fade Images */}
+            {/* Single High-Resolution Premium Hero Banner Image */}
             <div className="absolute inset-0 w-full h-full">
-              <AnimatePresence mode="sync">
-                <motion.img
-                  key={currentSlideIndex}
-                  src={heroImageList[currentSlideIndex % heroImageList.length]}
-                  alt={`${settings.heroText || settings.siteName} - ${currentSlideIndex + 1}`}
-                  initial={{ opacity: 0, scale: 1.02 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.8, ease: 'easeInOut' }}
-                  className="absolute inset-0 w-full h-full object-cover select-none"
-                  style={{ 
-                    objectPosition: settings.heroObjectPosition || 'center',
-                    imageRendering: '-webkit-optimize-contrast',
-                    transform: 'translateZ(0)',
-                    backfaceVisibility: 'hidden'
-                  }}
-                  referrerPolicy="no-referrer"
-                />
-              </AnimatePresence>
+              <img
+                src={settings.heroImage || 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop'}
+                alt={settings.heroText || settings.siteName}
+                className="w-full h-full object-cover select-none"
+                style={{ 
+                  objectPosition: settings.heroObjectPosition || 'center',
+                  imageRendering: '-webkit-optimize-contrast',
+                  transform: 'translateZ(0)',
+                  backfaceVisibility: 'hidden'
+                }}
+                referrerPolicy="no-referrer"
+              />
             </div>
-
-            {/* Slide Navigation Dots (visible when 2 or more images) */}
-            {heroImageList.length > 1 && (
-              <div className="absolute bottom-4 right-4 md:right-6 z-20 flex space-x-2 bg-black/30 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">
-                {heroImageList.map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setCurrentSlideIndex(idx)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                      currentSlideIndex === idx ? 'bg-white w-5' : 'bg-white/50 hover:bg-white/80'
-                    }`}
-                    title={`Slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            )}
             
             {/* Positioned Brand Copy Container - Mobile Responsive clamp */}
             <div
