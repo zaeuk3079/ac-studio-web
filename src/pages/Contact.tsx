@@ -87,32 +87,8 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen py-24 transition-colors duration-500" style={{ backgroundColor: settings.contactBgColor || '#F5F5F0' }}>
+    <div className="min-h-screen pt-12 pb-24 transition-colors duration-500" style={{ backgroundColor: settings.contactBgColor || '#F5F5F0' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-block bg-[#bcd0c9] px-10 py-3.5 rounded-full mb-6 shadow-md font-bold text-white border-none"
-            style={{
-              fontSize: settings.contactTextFontSize ? `${settings.contactTextFontSize}px` : undefined,
-              letterSpacing: settings.contactTextLetterSpacing !== undefined ? `${settings.contactTextLetterSpacing}px` : undefined,
-              fontFamily: settings.contactTextFontFamily || 'Pretendard',
-              color: settings.contactTextColor || '#FFFFFF',
-            }}
-          >
-            {settings.contactTitle === 'Contact' ? '견적문의' : (settings.contactTitle || '견적문의')}
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-stone-500 tracking-widest uppercase text-sm"
-          >
-            {settings.contactSubText}
-          </motion.p>
-        </div>
 
         {/* Service Package Plans (Basic, Standard, Premium, Monthly Subscription) */}
         <motion.div
