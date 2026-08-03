@@ -114,6 +114,94 @@ export default function Contact() {
           </motion.p>
         </div>
 
+        {/* Service Package Plans (Basic, Standard, Premium, Monthly Subscription) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-16"
+        >
+          <div className="text-center mb-8">
+            <span className="text-xs font-mono font-bold tracking-widest text-stone-400 uppercase">Service Package Plans</span>
+            <h2 className="text-2xl font-bold text-stone-900 mt-1">촬영 서비스 및 구독 안내</h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {(settings.servicePlans || [
+              {
+                id: 'basic',
+                name: 'Basic',
+                badge: '상세페이지 특화',
+                description: '브랜드 스타트업을 위한 핵심 상세페이지 제작 플랜',
+                features: ['상세페이지']
+              },
+              {
+                id: 'standard',
+                name: 'Standard',
+                badge: 'Popular 패키지',
+                description: '상세페이지와 SNS 마케팅 브랜드 컨텐츠 종합 패키지',
+                features: ['상세페이지', 'SNS컨텐츠']
+              },
+              {
+                id: 'premium',
+                name: 'Premium',
+                badge: 'All-In-One 프리미엄',
+                description: '상세페이지부터 SNS, 퍼포먼스 광고용 컨텐츠까지 완벽 포함',
+                features: ['상세페이지', 'SNS컨텐츠', '광고용 컨텐츠']
+              },
+              {
+                id: 'subscription',
+                name: '월 단위 구독제',
+                badge: 'Monthly 정기구독',
+                description: '지속적인 브랜드 마케팅을 위한 월 정기 구독형 컨텐츠 제작',
+                features: ['월별 SNS컨텐츠', '월 9개 컨텐츠 (사진/영상 비율 조정가능)']
+              }
+            ]).map((plan, idx) => (
+              <div
+                key={plan.id || idx}
+                className={`p-6 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 shadow-sm hover:shadow-md ${
+                  plan.id === 'subscription' 
+                    ? 'border-burgundy-500 ring-2 ring-burgundy-500/20 bg-gradient-to-b from-stone-900 via-stone-900 to-stone-950 text-white' 
+                    : plan.id === 'premium'
+                    ? 'border-stone-800 bg-stone-900 text-white'
+                    : 'bg-white border-stone-200 text-stone-900'
+                }`}
+              >
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                      plan.id === 'subscription' || plan.id === 'premium'
+                        ? 'bg-burgundy-600 text-white'
+                        : 'bg-stone-100 text-stone-700 border border-stone-200'
+                    }`}>
+                      {plan.badge || plan.name}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">{plan.name}</h3>
+                  <p className={`text-xs mb-6 leading-relaxed ${
+                    plan.id === 'subscription' || plan.id === 'premium' ? 'text-stone-300' : 'text-stone-500'
+                  }`}>
+                    {plan.description}
+                  </p>
+                </div>
+
+                <div className={`pt-4 border-t ${
+                  plan.id === 'subscription' || plan.id === 'premium' ? 'border-stone-800' : 'border-stone-100'
+                }`}>
+                  <ul className="space-y-2.5">
+                    {plan.features.map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start space-x-2 text-xs font-semibold">
+                        <span className={plan.id === 'subscription' || plan.id === 'premium' ? 'text-burgundy-400' : 'text-burgundy-600'}>✓</span>
+                        <span className="whitespace-pre-line">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Info (Left Side) */}
           <motion.div

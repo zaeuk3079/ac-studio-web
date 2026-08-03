@@ -31,9 +31,18 @@ export interface ProcessStep {
   image: string;
 }
 
+export interface ServicePlan {
+  id: string;
+  name: string;
+  badge?: string;
+  description: string;
+  features: string[];
+}
+
 export interface SiteSettings {
   siteName: string;
   logoUrl?: string;
+  servicePlans?: ServicePlan[];
   // Home
   heroText: string;
   heroSubText: string;
@@ -309,6 +318,36 @@ const defaultSettings: SiteSettings = {
   contactEmail: 'contact@agingstudio.com',
   contactPhone: '010-1234-5678',
   instagramUrl: 'https://instagram.com/agingstudio',
+  servicePlans: [
+    {
+      id: 'basic',
+      name: 'Basic',
+      badge: '상세페이지 특화',
+      description: '브랜드 스타트업을 위한 핵심 상세페이지 제작 플랜',
+      features: ['상세페이지']
+    },
+    {
+      id: 'standard',
+      name: 'Standard',
+      badge: 'Popular 패키지',
+      description: '상세페이지와 SNS 마케팅 브랜드 컨텐츠 종합 패키지',
+      features: ['상세페이지', 'SNS컨텐츠']
+    },
+    {
+      id: 'premium',
+      name: 'Premium',
+      badge: 'All-In-One 프리미엄',
+      description: '상세페이지부터 SNS, 퍼포먼스 광고용 컨텐츠까지 완벽 포함',
+      features: ['상세페이지', 'SNS컨텐츠', '광고용 컨텐츠']
+    },
+    {
+      id: 'subscription',
+      name: '월 단위 구독제',
+      badge: 'Monthly 정기구독',
+      description: '지속적인 브랜드 마케팅을 위한 월 정기 구독형 컨텐츠 제작',
+      features: ['월별 SNS컨텐츠', '월 9개 컨텐츠 (사진/영상 비율 조정가능)']
+    }
+  ],
   // Appearance
   themeColor: 'ivory',
   accentColor: 'burgundy',
