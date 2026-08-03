@@ -37,6 +37,11 @@ export interface ServicePlan {
   badge?: string;
   description: string;
   features: string[];
+  bgColor?: string;
+  borderColor?: string;
+  textColor?: string;
+  badgeBgColor?: string;
+  badgeTextColor?: string;
 }
 
 export interface SiteSettings {

@@ -1632,6 +1632,102 @@ export default function Settings() {
                           className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800 resize-y"
                         />
                       </div>
+
+                      {/* Individual Card Color Controls */}
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-stone-200">
+                        <div>
+                          <label className="block text-[11px] font-bold text-stone-600 mb-1">🎨 카드 배경색</label>
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="color"
+                              value={plan.bgColor || (plan.id === 'subscription' ? '#18181B' : '#FFFFFF')}
+                              onChange={(e) => {
+                                const nextPlans = [...(formData.servicePlans || [])];
+                                nextPlans[pIdx] = { ...nextPlans[pIdx], bgColor: e.target.value };
+                                setFormData({ ...formData, servicePlans: nextPlans });
+                              }}
+                              className="w-7 h-7 rounded border border-stone-300 p-0.5 cursor-pointer"
+                            />
+                            <div className="flex space-x-1">
+                              {['#FFFFFF', '#18181B', '#F5F5F0', '#0F172A', '#FAF9F6'].map(c => (
+                                <button
+                                  key={c}
+                                  type="button"
+                                  onClick={() => {
+                                    const nextPlans = [...(formData.servicePlans || [])];
+                                    nextPlans[pIdx] = { ...nextPlans[pIdx], bgColor: c };
+                                    setFormData({ ...formData, servicePlans: nextPlans });
+                                  }}
+                                  className="w-4 h-4 rounded-full border border-stone-300 hover:scale-110"
+                                  style={{ backgroundColor: c }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-stone-600 mb-1">🖼️ 테두리 색상</label>
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="color"
+                              value={plan.borderColor || (plan.id === 'subscription' ? '#800020' : '#E7E5E4')}
+                              onChange={(e) => {
+                                const nextPlans = [...(formData.servicePlans || [])];
+                                nextPlans[pIdx] = { ...nextPlans[pIdx], borderColor: e.target.value };
+                                setFormData({ ...formData, servicePlans: nextPlans });
+                              }}
+                              className="w-7 h-7 rounded border border-stone-300 p-0.5 cursor-pointer"
+                            />
+                            <div className="flex space-x-1">
+                              {['#E7E5E4', '#800020', '#18181B', '#3B82F6', '#D4AF37'].map(c => (
+                                <button
+                                  key={c}
+                                  type="button"
+                                  onClick={() => {
+                                    const nextPlans = [...(formData.servicePlans || [])];
+                                    nextPlans[pIdx] = { ...nextPlans[pIdx], borderColor: c };
+                                    setFormData({ ...formData, servicePlans: nextPlans });
+                                  }}
+                                  className="w-4 h-4 rounded-full border border-stone-300 hover:scale-110"
+                                  style={{ backgroundColor: c }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-bold text-stone-600 mb-1">✏️ 텍스트 글자색</label>
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="color"
+                              value={plan.textColor || (plan.id === 'subscription' ? '#FFFFFF' : '#1C1917')}
+                              onChange={(e) => {
+                                const nextPlans = [...(formData.servicePlans || [])];
+                                nextPlans[pIdx] = { ...nextPlans[pIdx], textColor: e.target.value };
+                                setFormData({ ...formData, servicePlans: nextPlans });
+                              }}
+                              className="w-7 h-7 rounded border border-stone-300 p-0.5 cursor-pointer"
+                            />
+                            <div className="flex space-x-1">
+                              {['#1C1917', '#FFFFFF', '#44403C', '#800020'].map(c => (
+                                <button
+                                  key={c}
+                                  type="button"
+                                  onClick={() => {
+                                    const nextPlans = [...(formData.servicePlans || [])];
+                                    nextPlans[pIdx] = { ...nextPlans[pIdx], textColor: c };
+                                    setFormData({ ...formData, servicePlans: nextPlans });
+                                  }}
+                                  className="w-4 h-4 rounded-full border border-stone-300 hover:scale-110"
+                                  style={{ backgroundColor: c }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

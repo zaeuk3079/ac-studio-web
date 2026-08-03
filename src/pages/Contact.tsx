@@ -140,42 +140,46 @@ export default function Contact() {
                 features: ['카페 · 식당 메뉴', '굿즈 · 인테리어 촬영 등']
               }
             ]).map((plan, idx) => {
-              const isHighlight = plan.id === 'subscription';
+              const cardBg = plan.bgColor || (plan.id === 'subscription' ? '#18181B' : '#FFFFFF');
+              const cardBorder = plan.borderColor || (plan.id === 'subscription' ? '#800020' : '#E7E5E4');
+              const cardText = plan.textColor || (plan.id === 'subscription' ? '#FFFFFF' : '#1C1917');
+              const isDarkCard = cardBg.toLowerCase() === '#18181b' || cardBg.toLowerCase() === '#0f172a' || cardBg.toLowerCase() === '#000000' || cardBg.toLowerCase() === '#1c1917';
+
               return (
                 <div
                   key={plan.id || idx}
-                  className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 shadow-sm hover:shadow-md ${
-                    isHighlight 
-                      ? 'border-burgundy-500 ring-2 ring-burgundy-500/20 bg-gradient-to-b from-stone-900 via-stone-900 to-stone-950 text-white' 
-                      : 'bg-white border-stone-200 text-stone-900'
-                  }`}
+                  className="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 shadow-sm hover:shadow-md"
+                  style={{
+                    backgroundColor: cardBg,
+                    borderColor: cardBorder,
+                    color: cardText,
+                  }}
                 >
                   <div>
                     <div className="flex justify-between items-center mb-3">
-                      <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
-                        isHighlight
-                          ? 'bg-burgundy-600 text-white'
-                          : 'bg-stone-100 text-stone-700 border border-stone-200'
-                      }`}>
+                      <span
+                        className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border shadow-sm"
+                        style={{
+                          backgroundColor: plan.badgeBgColor || (isDarkCard ? '#800020' : '#F5F5F0'),
+                          color: plan.badgeTextColor || (isDarkCard ? '#FFFFFF' : '#44403C'),
+                          borderColor: isDarkCard ? 'transparent' : '#E7E5E4'
+                        }}
+                      >
                         {plan.badge || plan.name}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold mb-2">{plan.name}</h3>
-                    <p className={`text-[11px] mb-5 leading-relaxed ${
-                      isHighlight ? 'text-stone-300' : 'text-stone-500'
-                    }`}>
+                    <h3 className="text-lg font-bold mb-2" style={{ color: cardText }}>{plan.name}</h3>
+                    <p className="text-[11px] mb-5 leading-relaxed opacity-80" style={{ color: cardText }}>
                       {plan.description}
                     </p>
                   </div>
 
-                  <div className={`pt-4 border-t ${
-                    isHighlight ? 'border-stone-800' : 'border-stone-100'
-                  }`}>
+                  <div className="pt-4 border-t" style={{ borderColor: isDarkCard ? '#27272A' : '#F5F5F4' }}>
                     <ul className="space-y-2">
                       {plan.features.map((feat, fIdx) => (
                         <li key={fIdx} className="flex items-start space-x-1.5 text-xs font-semibold">
-                          <span className={isHighlight ? 'text-burgundy-400' : 'text-burgundy-600'}>✓</span>
-                          <span className="whitespace-pre-line leading-snug">{feat}</span>
+                          <span className={isDarkCard ? 'text-burgundy-400' : 'text-burgundy-600'}>✓</span>
+                          <span className="whitespace-pre-line leading-snug" style={{ color: cardText }}>{feat}</span>
                         </li>
                       ))}
                     </ul>
