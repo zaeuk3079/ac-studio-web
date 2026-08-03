@@ -20,11 +20,11 @@ export const uploadImageToCloudCDN = async (file: File): Promise<string> => {
     console.warn('Cloud CDN upload fallback to compressed base64:', err);
   }
 
-  // Fallback if network drops: compress to light base64
-  return compressImage(file, 800, 800, 0.75);
+  // Fallback if network drops: compress to 4K ultra-high resolution
+  return compressImage(file, 3840, 3840, 0.98);
 };
 
-export const compressImage = (file: File, maxWidth = 800, maxHeight = 800, quality = 0.8): Promise<string> => {
+export const compressImage = (file: File, maxWidth = 3840, maxHeight = 3840, quality = 0.98): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);

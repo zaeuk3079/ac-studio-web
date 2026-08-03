@@ -157,7 +157,9 @@ export default function Home() {
                   className="absolute inset-0 w-full h-full object-cover select-none"
                   style={{ 
                     objectPosition: settings.heroObjectPosition || 'center',
-                    imageRendering: 'crisp-edges'
+                    imageRendering: '-webkit-optimize-contrast',
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden'
                   }}
                   referrerPolicy="no-referrer"
                 />

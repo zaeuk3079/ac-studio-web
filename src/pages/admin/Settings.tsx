@@ -173,8 +173,8 @@ export default function Settings() {
         setFormData(prev => ({ ...prev, [fieldName]: cdnUrl }));
       } catch (error) {
         console.error('Error uploading image to cloud CDN:', error);
-        const maxDim = fieldName === 'logoUrl' ? 500 : 1000;
-        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.75);
+        const maxDim = fieldName === 'logoUrl' ? 600 : 3840;
+        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.98);
         setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
       } finally {
         setUploadingField(null);
