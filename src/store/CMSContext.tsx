@@ -467,9 +467,19 @@ export function CMSProvider({ children }: { children: ReactNode }) {
   const updatePortfolioItem = async (id: string, updatedItem: Partial<PortfolioItem>) => {
     const originalPortfolio = [...portfolio];
     const { gallery, ...rest } = updatedItem;
+
+    const existing = portfolio.find(item => item.id === id);
+    const preservedOrderIndex = (updatedItem as any).orderIndex ?? (existing as any)?.orderIndex ?? 9999;
+    const preservedIsPinned = updatedItem.isPinned ?? existing?.isPinned ?? false;
+
+    const updatedDataToSave = {
+      ...rest,
+      orderIndex: preservedOrderIndex,
+      isPinned: preservedIsPinned
+    };
     
     setPortfolio(prev => {
-      const updated = prev.map(item => item.id === id ? { ...item, ...updatedItem } : item);
+      const updated = prev.map(item => item.id === id ? { ...item, ...updatedItem, orderIndex: preservedOrderIndex, isPinned: preservedIsPinned } : item);
       return updated.sort((a, b) => {
         if (a.isPinned && !b.isPinned) return -1;
         if (!a.isPinned && b.isPinned) return 1;
@@ -480,10 +490,10 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     });
     
     try {
-      const { writeBatch, collection, getDocs, deleteDoc, doc } = await import('firebase/firestore');
+      const { writeBatch, collection, getDocs, doc } = await import('firebase/firestore');
       const batch = writeBatch(db);
       
-      batch.update(doc(db, 'portfolio', id), rest);
+      batch.update(doc(db, 'portfolio', id), updatedDataToSave);
       
       if (gallery) {
         const gallerySnap = await getDocs(collection(db, 'portfolio', id, 'gallery'));
