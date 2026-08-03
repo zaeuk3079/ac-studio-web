@@ -407,16 +407,26 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ? fetched.heroImages
             : defaultSettings.heroImages;
 
+          const mergedServicePlans = (fetched.servicePlans && fetched.servicePlans.length >= 5)
+            ? fetched.servicePlans
+            : defaultSettings.servicePlans;
+
           // CRITICAL SAFEGUARD: cachedObj comes AFTER fetched so user local edits NEVER reset!
           const merged: SiteSettings = {
             ...defaultSettings,
             ...fetched,
             ...cachedObj,
             serviceProcessSteps: mergedSteps,
-            heroImages: mergedHeroImages
+            heroImages: mergedHeroImages,
+            servicePlans: mergedServicePlans
           };
           setSettings(merged);
           localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
+          
+          // Auto-seed 5th extra plan to Firestore if missing
+          if (!fetched.servicePlans || fetched.servicePlans.length < 5) {
+            setDoc(doc(db, 'settings', 'main'), { servicePlans: defaultSettings.servicePlans }, { merge: true }).catch(() => {});
+          }
         } else {
           // If Firebase doc is not ready, write defaultSettings directly to Firestore for all domain visitors
           setSettings(defaultSettings);
