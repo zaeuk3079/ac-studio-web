@@ -1518,6 +1518,30 @@ export default function Settings() {
               </div>
 
               <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">🎨 Contact 페이지 전체 배경색 (Background Color)</label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={formData.contactBgColor || '#F5F5F0'}
+                    onChange={(e) => setFormData({ ...formData, contactBgColor: e.target.value })}
+                    className="w-10 h-10 rounded-lg border border-stone-300 p-0.5 cursor-pointer"
+                  />
+                  <div className="flex items-center space-x-1.5 overflow-x-auto py-1">
+                    {['#F5F5F0', '#FFFFFF', '#18181B', '#FAF9F6', '#EFEFE8', '#0F172A'].map(color => (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => setFormData({ ...formData, contactBgColor: color })}
+                        className={`w-6 h-6 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.contactBgColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                        style={{ backgroundColor: color }}
+                        title={color}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">촬영 내용 (컨셉 및 분량) 힌트 안내 문구 (Placeholder)</label>
                 <textarea
                   name="contactMessagePlaceholder"
@@ -1526,6 +1550,91 @@ export default function Settings() {
                   rows={3}
                   className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
                 />
+              </div>
+
+              {/* Service Package Plans Interactive Editor */}
+              <div className="pt-6 border-t border-stone-200 space-y-6">
+                <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
+                  <span>📦 5가지 촬영 서비스 상품 카드 & 텍스트 직접 편집기</span>
+                  <span className="text-xs font-normal text-stone-500">카드 이름, 뱃지, 설명, 체크리스트를 원하는 대로 100% 직접 수정하실 수 있습니다.</span>
+                </h4>
+
+                <div className="space-y-6">
+                  {(formData.servicePlans || [
+                    { id: 'basic', name: 'Basic', badge: '기본 플랜', description: '브랜드 스타트업을 위한 핵심 상세페이지 제작 플랜', features: ['상세페이지'] },
+                    { id: 'standard', name: 'Standard', badge: '인기 패키지', description: '상세페이지와 SNS 마케팅 브랜드 컨텐츠 종합 패키지', features: ['상세페이지', 'SNS컨텐츠'] },
+                    { id: 'premium', name: 'Premium', badge: '올인원 프리미엄', description: '상세페이지부터 SNS, 퍼포먼스 광고용 컨텐츠까지 완벽 포함', features: ['상세페이지', 'SNS컨텐츠', '광고용 컨텐츠'] },
+                    { id: 'subscription', name: '월 단위 구독제', badge: 'Monthly 정기구독', description: '지속적인 브랜드 마케팅을 위한 월 정기 구독형 컨텐츠 제작', features: ['월별 SNS컨텐츠', '월 9개 컨텐츠 (사진/영상 비율 조정가능)'] },
+                    { id: 'extra', name: '그 외 촬영', badge: '별도 문의', description: '카페, 식당 메뉴, 굿즈, 인테리어 촬영 등 건별 맞춤 촬영', features: ['카페 · 식당 메뉴', '굿즈 · 인테리어 촬영 등'] }
+                  ]).map((plan, pIdx) => (
+                    <div key={plan.id || pIdx} className="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
+                      <div className="flex justify-between items-center border-b border-stone-200 pb-3">
+                        <span className="text-xs font-bold text-stone-700 uppercase tracking-wider">
+                          [{pIdx + 1}] {plan.name || `Plan ${pIdx + 1}`} ({plan.id})
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-semibold text-stone-600 mb-1">카드 타이틀 (이름)</label>
+                          <input
+                            type="text"
+                            value={plan.name}
+                            onChange={(e) => {
+                              const nextPlans = [...(formData.servicePlans || [])];
+                              nextPlans[pIdx] = { ...nextPlans[pIdx], name: e.target.value };
+                              setFormData({ ...formData, servicePlans: nextPlans });
+                            }}
+                            className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-semibold text-stone-600 mb-1">뱃지 라벨 (Badge)</label>
+                          <input
+                            type="text"
+                            value={plan.badge || ''}
+                            onChange={(e) => {
+                              const nextPlans = [...(formData.servicePlans || [])];
+                              nextPlans[pIdx] = { ...nextPlans[pIdx], badge: e.target.value };
+                              setFormData({ ...formData, servicePlans: nextPlans });
+                            }}
+                            className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-stone-600 mb-1">카드 설명 문구 (Description)</label>
+                        <input
+                          type="text"
+                          value={plan.description || ''}
+                          onChange={(e) => {
+                            const nextPlans = [...(formData.servicePlans || [])];
+                            nextPlans[pIdx] = { ...nextPlans[pIdx], description: e.target.value };
+                            setFormData({ ...formData, servicePlans: nextPlans });
+                          }}
+                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold text-stone-600 mb-1">포함 내역 체크리스트 (줄바꿈/Enter 로 개별 항목 구분)</label>
+                        <textarea
+                          value={(plan.features || []).join('\n')}
+                          onChange={(e) => {
+                            const nextPlans = [...(formData.servicePlans || [])];
+                            const lines = e.target.value.split('\n');
+                            nextPlans[pIdx] = { ...nextPlans[pIdx], features: lines };
+                            setFormData({ ...formData, servicePlans: nextPlans });
+                          }}
+                          rows={3}
+                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800 resize-y"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               {/* Studio Contact Information Left Card Editor */}
               <div className="pt-6 border-t border-stone-200 space-y-4">

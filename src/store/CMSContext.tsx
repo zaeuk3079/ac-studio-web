@@ -123,6 +123,7 @@ export interface SiteSettings {
   web3FormsKey?: string;
   contactTextFontSize?: number;
   contactTextLetterSpacing?: number;
+  contactBgColor?: string;
   contactTextFontFamily?: string;
   contactTextAlign?: 'left' | 'center' | 'right' | string;
   contactTextColor?: string;
@@ -318,6 +319,7 @@ const defaultSettings: SiteSettings = {
   contactEmail: 'contact@agingstudio.com',
   contactPhone: '010-1234-5678',
   instagramUrl: 'https://instagram.com/agingstudio',
+  contactBgColor: '#F5F5F0',
   servicePlans: [
     {
       id: 'basic',
