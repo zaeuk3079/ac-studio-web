@@ -56,10 +56,7 @@ export default function Home() {
       
       const itemCat = item.category.toUpperCase().replace(/\s+/g, '');
       if (subCategory === 'COMMERCIAL') {
-        return itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL';
-      }
-      if (subCategory === 'FOOD & BEVERAGE') {
-        return itemCat === 'FOOD&BEVERAGE' || itemCat === 'FOOD' || itemCat === 'BEVERAGE';
+        return itemCat === 'PRODUCT' || itemCat === 'COMMERCIAL' || itemCat.includes('FOOD') || itemCat.includes('BEVERAGE');
       }
       if (subCategory === 'MODEL') {
         return itemCat === 'MODEL' || itemCat === 'PORTRAIT' || itemCat === 'SNAP' || itemCat === 'WEDDING';
@@ -265,7 +262,7 @@ export default function Home() {
           {/* Subcategories (only under Photography) */}
           {activeCategory === 'Photography' && (
             <div className="flex flex-wrap gap-3 mt-8 text-[11px] tracking-wider uppercase font-semibold text-stone-500">
-              {['ALL', 'COMMERCIAL', 'FOOD & BEVERAGE', 'MODEL', 'AI'].map((sub) => (
+              {['ALL', 'COMMERCIAL', 'MODEL', 'AI'].map((sub) => (
                 <button
                   key={sub}
                   onClick={() => setSubCategory(sub)}
