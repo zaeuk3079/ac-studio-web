@@ -51,6 +51,9 @@ export interface SiteSettings {
   // Home
   heroText: string;
   heroSubText: string;
+  heroDescription?: string;
+  heroCtaText?: string;
+  heroCtaLink?: string;
   heroImage: string;
   heroImages?: string[];
   heroSlideInterval?: number;
@@ -196,8 +199,11 @@ const defaultSettings: SiteSettings = {
   siteName: 'puff studio',
   logoUrl: '',
   // Home
-  heroText: 'puff studio는 당신의 가장 빛나는 순간을 기록합니다.',
-  heroSubText: '시간이 흘러도 변하지 않는 가치, 그 찰나의 아름다움을 영원히 간직하세요.',
+  heroText: 'PUFF STUDIO',
+  heroSubText: '상업 포토그래피 & 미디어 영상 제작',
+  heroDescription: 'puff studio는 브랜드와 사람의 가장 빛나는 순간을 기록하는 상업 포토그래피 · 영상 제작 스튜디오입니다. 기획부터 촬영, 리터칭까지 하나의 흐름으로 이어지는 원스톱 프로세스로, 시간이 흘러도 변하지 않는 가치를 만들어갑니다.',
+  heroCtaText: '문의하기',
+  heroCtaLink: '/contact',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
   heroImages: [
     'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
@@ -321,7 +327,7 @@ const defaultSettings: SiteSettings = {
   contactTextY: 20,
   contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
   address: '서울특별시 강남구 역삼동 스튜디오',
-  contactBgColor: '#F5F5F0',
+  contactBgColor: '#0B0C10',
   servicePlans: [
     {
       id: 'basic',

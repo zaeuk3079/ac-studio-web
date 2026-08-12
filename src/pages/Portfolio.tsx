@@ -74,44 +74,44 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
     : basePortfolio.filter(item => item.category === filter);
 
   return (
-    <div className="bg-ivory-100 min-h-screen py-24">
+    <div className="bg-ink-950 text-white min-h-screen py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="font-sans text-4xl md:text-5xl text-burgundy-900 mb-6 tracking-[0.2em] uppercase font-bold"
+            className="font-sans text-4xl md:text-5xl text-white mb-6 tracking-[0.2em] uppercase font-black"
           >
             {type === 'video' ? 'VIDEO' : (type === 'photography' ? 'PHOTOGRAPHY' : settings.portfolioTitle)}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-stone-500 tracking-[0.3em] uppercase text-xs font-light"
+            className="text-stone-400 tracking-[0.3em] uppercase text-xs font-light"
           >
             {type === 'video' ? 'Motion Works' : (type === 'photography' ? 'PRODUCT, FOOD&BEVERAGE, MODEL' : settings.portfolioSubText)}
           </motion.p>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-6 mb-20 border-b border-ivory-300 pb-8">
+        <div className="flex flex-wrap justify-center gap-6 mb-20 border-b border-white/10 pb-8">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setFilter(category)}
               className={`text-[11px] tracking-[0.2em] uppercase transition-all duration-300 relative pb-1 ${
                 filter === category
-                  ? 'text-burgundy-800 font-bold'
-                  : 'text-stone-400 hover:text-stone-600'
+                  ? 'text-lime-300 font-bold'
+                  : 'text-stone-400 hover:text-white'
               }`}
             >
               {category}
               {filter === category && (
-                <motion.div 
+                <motion.div
                   layoutId="activeFilter"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-burgundy-800"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 gradient-accent-bg"
                 />
               )}
             </button>
@@ -129,7 +129,7 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
               className="group cursor-pointer"
               onClick={() => handleItemClick(item)}
             >
-              <div className="relative aspect-[4/5] overflow-hidden rounded-sm mb-4 bg-stone-200">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-2xl mb-4 bg-white/5 border border-white/5">
                 <img
                   src={item.imageUrl}
                   alt={item.title}
@@ -137,19 +137,19 @@ export default function Portfolio({ type }: { type?: 'photography' | 'video' }) 
                   referrerPolicy="no-referrer"
                 />
                 {item.videoUrl && (
-                  <div className="absolute top-4 right-4 bg-stone-900/60 backdrop-blur-sm text-white p-2 rounded-full z-10">
+                  <div className="absolute top-4 right-4 bg-ink-950/60 backdrop-blur-sm text-white p-2 rounded-full z-10">
                     <Play size={16} fill="currentColor" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-stone-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div className="absolute inset-0 bg-ink-950/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                   <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <p className="text-ivory-100 text-sm font-light leading-relaxed">{item.description}</p>
+                    <p className="text-white text-sm font-light leading-relaxed">{item.description}</p>
                   </div>
                 </div>
               </div>
               <div>
-                <h3 className="font-sans text-lg font-light text-stone-800 mb-1 tracking-wide">{item.title}</h3>
-                <p className="text-xs text-stone-500 tracking-widest uppercase">{item.category}</p>
+                <h3 className="font-sans text-lg font-light text-white mb-1 tracking-wide">{item.title}</h3>
+                <p className="text-xs text-lime-300/80 tracking-widest uppercase">{item.category}</p>
               </div>
             </motion.div>
           ))}

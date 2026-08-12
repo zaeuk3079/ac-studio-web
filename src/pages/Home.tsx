@@ -128,27 +128,25 @@ export default function Home() {
   const selectedVideoRatio = selectedItem ? getItemVideoAspectRatio(selectedItem) : '16:9';
 
   return (
-    <div className="bg-white min-h-screen py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Main Hero Banner (16:9 Sharp Edges with Draggable Copy Position & Detailed Typography) */}
-        {heroImageList.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="w-full mb-16 rounded-none overflow-hidden relative shadow-xl shadow-stone-200/40 border border-stone-100/60"
-            style={{
-              aspectRatio: settings.heroAspectRatio === '16:9' ? '16/9' : settings.heroAspectRatio === '4:3' ? '4/3' : '3/2'
-            }}
-          >
+    <div className="bg-ink-950 text-white min-h-screen py-16">
+      {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA */}
+      {heroImageList.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          className="w-full mb-16 overflow-hidden relative min-h-[560px] md:min-h-[680px]"
+          style={{
+            aspectRatio: settings.heroAspectRatio === '16:9' ? '16/9' : settings.heroAspectRatio === '4:3' ? '4/3' : '3/2'
+          }}
+        >
             {/* Single High-Resolution Premium Hero Banner Image */}
             <div className="absolute inset-0 w-full h-full">
               <img
                 src={settings.heroImage || 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop'}
                 alt={settings.heroText || settings.siteName}
                 className="w-full h-full object-cover select-none"
-                style={{ 
+                style={{
                   objectPosition: settings.heroObjectPosition || 'center',
                   imageRendering: '-webkit-optimize-contrast',
                   transform: 'translateZ(0)',
@@ -156,22 +154,24 @@ export default function Home() {
                 }}
                 referrerPolicy="no-referrer"
               />
+              {/* Dark fade for legibility, anibada-style */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/50 to-ink-950/10" />
+              <div className="absolute inset-0 bg-gradient-to-r from-ink-950/70 via-transparent to-transparent" />
             </div>
-            
-            {/* Positioned Brand Copy Container - Mobile Responsive clamp */}
+
+            {/* Brand Copy Container — pinned bottom, anibada-style */}
             <div
-              className={`absolute flex flex-col pointer-events-none px-4 sm:px-0 max-w-[90%] md:max-w-2xl ${
+              className={`absolute inset-0 flex flex-col justify-end p-6 sm:p-10 md:p-14 lg:p-16 ${
                 settings.heroTextAlign === 'center'
-                  ? 'items-center text-center left-1/2 -translate-x-1/2'
+                  ? 'items-center text-center'
                   : settings.heroTextAlign === 'right'
-                  ? 'items-end text-right right-4 md:right-8'
-                  : 'items-start text-left left-4 md:left-10'
+                  ? 'items-end text-right'
+                  : 'items-start text-left'
               }`}
-              style={{
-                top: `${settings.heroTextY ?? 80}%`,
-                transform: 'translateY(-100%)',
-              }}
             >
+              <div className="max-w-[92%] md:max-w-2xl flex flex-col"
+                style={settings.heroTextAlign === 'center' ? { alignItems: 'center' } : settings.heroTextAlign === 'right' ? { alignItems: 'flex-end' } : { alignItems: 'flex-start' }}
+              >
               {settings.heroSubText && (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
@@ -181,9 +181,8 @@ export default function Home() {
                     fontSize: `clamp(11px, 2.5vw, ${settings.heroSubTextFontSize || 14}px)`,
                     letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
                     fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
-                    color: settings.heroSubTextColor || '#E7E5E4',
                   }}
-                  className="uppercase font-semibold mb-1 drop-shadow text-stone-200"
+                  className="uppercase font-bold mb-3 tracking-widest gradient-accent-text"
                 >
                   {settings.heroSubText}
                 </motion.p>
@@ -194,25 +193,52 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                   style={{
-                    fontSize: `clamp(20px, 4.5vw, ${settings.heroTextFontSize || 42}px)`,
+                    fontSize: `clamp(32px, 6vw, ${settings.heroTextFontSize || 64}px)`,
                     letterSpacing: `${settings.heroTextLetterSpacing ?? 0}px`,
                     fontFamily: settings.heroTextFontFamily || 'Pretendard',
                     color: settings.heroTextColor || '#FFFFFF',
                   }}
-                  className="font-bold leading-tight drop-shadow-lg whitespace-pre-line"
+                  className="font-black leading-[1.05] drop-shadow-lg whitespace-pre-line"
                 >
                   {settings.heroText}
                 </motion.h2>
               )}
+              {settings.heroDescription && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="mt-5 text-sm md:text-base text-stone-300 leading-relaxed max-w-xl whitespace-pre-line"
+                >
+                  {settings.heroDescription}
+                </motion.p>
+              )}
+              {settings.heroCtaText && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                  className="mt-8"
+                >
+                  <Link
+                    to={settings.heroCtaLink || '/contact'}
+                    className="inline-flex items-center justify-center gradient-accent-bg text-ink-950 font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                  >
+                    {settings.heroCtaText}
+                  </Link>
+                </motion.div>
+              )}
+              </div>
             </div>
-          </motion.div>
-        )}
+        </motion.div>
+      )}
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Category Header & Filter */}
         <div className="mb-16 mt-4">
           <div className="mb-8">
-            <h1 
-              className="text-3xl md:text-5xl text-stone-900 uppercase font-bold"
+            <h1
+              className="text-3xl md:text-5xl text-white uppercase font-black"
               style={{
                 fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
                 letterSpacing: `${settings.homePortfolioTitleLetterSpacing ?? 1}px`,
@@ -225,26 +251,25 @@ export default function Home() {
                 style={{
                   fontSize: `${settings.homePortfolioSubTextFontSize || 14}px`,
                   letterSpacing: `${settings.homePortfolioSubTextLetterSpacing ?? 1}px`,
-                  color: settings.homePortfolioSubTextColor || '#78716C',
                   fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
                 }}
-                className="font-medium mt-2"
+                className="font-medium mt-2 text-stone-400"
               >
                 {settings.homePortfolioSubText}
               </p>
             )}
           </div>
-          
-          <div className="flex space-x-12 text-sm font-semibold tracking-[0.2em] border-b border-stone-100 pb-4">
+
+          <div className="flex space-x-12 text-sm font-semibold tracking-[0.2em] border-b border-white/10 pb-4">
             <button
               onClick={() => {
                 setActiveCategory('Photography');
                 setSubCategory('ALL');
               }}
               className={`transition-all duration-300 cursor-pointer pb-4 -mb-5 border-b-2 ${
-                activeCategory === 'Photography' 
-                  ? 'border-stone-900 text-stone-900 font-bold' 
-                  : 'border-transparent text-stone-400 hover:text-stone-700'
+                activeCategory === 'Photography'
+                  ? 'border-lime-300 text-lime-300 font-bold'
+                  : 'border-transparent text-stone-400 hover:text-white'
               }`}
             >
               사진
@@ -252,9 +277,9 @@ export default function Home() {
             <button
               onClick={() => setActiveCategory('Video')}
               className={`transition-all duration-300 cursor-pointer pb-4 -mb-5 border-b-2 ${
-                activeCategory === 'Video' 
-                  ? 'border-stone-900 text-stone-900 font-bold' 
-                  : 'border-transparent text-stone-400 hover:text-stone-700'
+                activeCategory === 'Video'
+                  ? 'border-lime-300 text-lime-300 font-bold'
+                  : 'border-transparent text-stone-400 hover:text-white'
               }`}
             >
               영상
@@ -262,9 +287,9 @@ export default function Home() {
             <button
               onClick={() => setActiveCategory('AI')}
               className={`transition-all duration-300 cursor-pointer pb-4 -mb-5 border-b-2 ${
-                activeCategory === 'AI' 
-                  ? 'border-stone-900 text-stone-900 font-bold' 
-                  : 'border-transparent text-stone-400 hover:text-stone-700'
+                activeCategory === 'AI'
+                  ? 'border-lime-300 text-lime-300 font-bold'
+                  : 'border-transparent text-stone-400 hover:text-white'
               }`}
             >
               AI
@@ -273,15 +298,15 @@ export default function Home() {
 
           {/* Subcategories (only under Photography) */}
           {activeCategory === 'Photography' && (
-            <div className="flex flex-wrap gap-3 mt-8 text-[11px] tracking-wider uppercase font-semibold text-stone-500">
+            <div className="flex flex-wrap gap-3 mt-8 text-[11px] tracking-wider uppercase font-semibold text-stone-400">
               {['ALL', 'COMMERCIAL', 'MODEL'].map((sub) => (
                 <button
                   key={sub}
                   onClick={() => setSubCategory(sub)}
                   className={`px-5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
-                    subCategory === sub 
-                      ? 'bg-stone-900 border-stone-900 text-white shadow-sm font-bold' 
-                      : 'bg-white border-stone-200 text-stone-500 hover:bg-stone-50'
+                    subCategory === sub
+                      ? 'gradient-accent-bg border-transparent text-ink-950 shadow-sm font-bold'
+                      : 'bg-white/5 border-white/10 text-stone-400 hover:bg-white/10'
                   }`}
                 >
                   {sub}
@@ -363,7 +388,7 @@ export default function Home() {
             )}
 
             {filteredPortfolio.length === 0 && (
-              <div className="text-center py-24 border border-dashed border-stone-200 rounded-[3px] bg-stone-50 text-stone-400 text-sm">
+              <div className="text-center py-24 border border-dashed border-white/10 rounded-2xl bg-white/5 text-stone-400 text-sm">
                 등록된 영상 포트폴리오가 없습니다.
               </div>
             )}
@@ -379,7 +404,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: Math.min(index * 0.05, 0.3) }}
-                  className="w-full group cursor-pointer bg-white border-0 rounded-[3px] overflow-hidden shadow-sm hover:shadow-xl hover:shadow-stone-200/20 transition-all duration-500 hover:-translate-y-1 relative"
+                  className="w-full group cursor-pointer bg-white/5 border border-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-black/20 transition-all duration-500 hover:-translate-y-1 relative"
                   onClick={() => handleItemClick(item)}
                 >
                   <div className="relative overflow-hidden w-full" style={{ aspectRatio: '3/4' }}>
@@ -401,7 +426,7 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-24 border border-dashed border-stone-200 rounded-[3px] bg-stone-50 text-stone-400 text-sm">
+            <div className="text-center py-24 border border-dashed border-white/10 rounded-2xl bg-white/5 text-stone-400 text-sm">
               등록된 포트폴리오가 없습니다.
             </div>
           )
@@ -410,14 +435,14 @@ export default function Home() {
 
       {/* About Snippet */}
       {settings.showHomeAbout !== false && (
-        <section className="py-24 bg-stone-50 border-t border-stone-100 mt-24">
+        <section className="py-24 bg-ink-900 border-t border-white/5 mt-24">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="font-serif text-3xl md:text-4xl text-stone-800 mb-8 italic">The Studio</h2>
-            <p className="text-lg md:text-xl text-stone-500 leading-relaxed font-light">
+            <h2 className="font-serif text-3xl md:text-4xl text-white mb-8 italic">The Studio</h2>
+            <p className="text-lg md:text-xl text-stone-400 leading-relaxed font-light">
               {settings.aboutText}
             </p>
             <div className="mt-12">
-              <Link to="/about" className="text-stone-600 hover:text-stone-900 uppercase tracking-widest text-sm font-semibold border-b border-stone-300 pb-1 transition-colors">
+              <Link to="/about" className="text-lime-300 hover:text-lime-200 uppercase tracking-widest text-sm font-semibold border-b border-lime-300/40 pb-1 transition-colors">
                 Read Our Story
               </Link>
             </div>
@@ -425,16 +450,16 @@ export default function Home() {
         </section>
       )}
 
-      {/* Process Section in Home Page (Matches User Design 100%) */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-28 pt-20 border-t border-stone-200">
+      {/* Process Section in Home Page */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-28 pt-20 border-t border-white/10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: Process Title */}
           <div className="lg:col-span-4 sticky top-32">
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-950 tracking-tight font-sans">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight font-sans">
               {settings.serviceProcessTitle || 'Process'}
             </h2>
             {settings.serviceSubText && (
-              <p className="text-stone-500 text-sm tracking-wide mt-4 whitespace-pre-line">
+              <p className="text-stone-400 text-sm tracking-wide mt-4 whitespace-pre-line">
                 {settings.serviceSubText}
               </p>
             )}
@@ -450,29 +475,29 @@ export default function Home() {
                   { id: '3', stepNumber: '03', title: '셀렉·리터칭', desc1: '정리된 컷에서 고르시면,', desc2: '피드백을 반영해 정성껏 보정합니다.', image: 'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=80&w=600&auto=format&fit=crop' },
                   { id: '4', stepNumber: '04', title: '전달', desc1: '고해상도 완성본을 일정에 맞춰드립니다.', desc2: '', image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=600&auto=format&fit=crop' }
                 ]).map((step, idx) => (
-              <div key={step.id || idx} className="pt-8 border-t border-stone-200 flex flex-col sm:flex-row items-start justify-between gap-6 group">
+              <div key={step.id || idx} className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-start justify-between gap-6 group">
                 <div className="flex items-start space-x-6 flex-1">
-                  <span className="text-xs font-mono font-bold text-stone-400 tracking-wider pt-1 shrink-0">
+                  <span className="text-xs font-mono font-bold text-lime-300 tracking-wider pt-1 shrink-0">
                     {step.stepNumber || `0${idx + 1}`}
                   </span>
                   <div className="space-y-2">
-                    <h3 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight font-sans">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-sans">
                       {step.title}
                     </h3>
-                    <div className="text-sm text-stone-600 space-y-1 font-normal leading-relaxed">
+                    <div className="text-sm text-stone-400 space-y-1 font-normal leading-relaxed">
                       {step.desc1 && <p className="whitespace-pre-line">{step.desc1}</p>}
                       {step.desc2 && <p className="text-stone-500 whitespace-pre-line">{step.desc2}</p>}
                     </div>
                   </div>
                 </div>
                 {step.image && (
-                  <div className="w-full sm:w-44 h-32 rounded-2xl overflow-hidden bg-stone-100 shrink-0 border border-stone-100 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
+                  <div className="w-full sm:w-44 h-32 rounded-2xl overflow-hidden bg-white/5 shrink-0 border border-white/10 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
                     <img src={step.image} alt={step.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                   </div>
                 )}
               </div>
             ))}
-            <div className="border-t border-stone-200 pt-4" />
+            <div className="border-t border-white/10 pt-4" />
           </div>
         </div>
       </div>

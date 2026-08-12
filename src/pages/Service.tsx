@@ -1,4 +1,4 @@
-import { useCMS } from '../store/CMSContext';
+import { useCMS, ProcessStep } from '../store/CMSContext';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Calendar, ArrowRight } from 'lucide-react';
@@ -46,54 +46,54 @@ export default function Service() {
     : defaultSteps;
 
   return (
-    <div className="bg-white min-h-screen py-16 md:py-24">
+    <div className="bg-ink-950 text-white min-h-screen py-16 md:py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Process Layout: Left Title & Right List (Matches Image Design 100%) */}
+
+        {/* Process Layout: Left Title & Right List */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
+
           {/* Left Column: Big Bold Process Title */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }} 
-            animate={{ opacity: 1, x: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             className="lg:col-span-4 sticky top-32"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-950 tracking-tight font-sans">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight font-sans">
               {settings.serviceProcessTitle || 'Process'}
             </h1>
             {settings.serviceSubText && (
-              <p className="text-stone-500 text-sm tracking-wide mt-4 whitespace-pre-line">
+              <p className="text-stone-400 text-sm tracking-wide mt-4 whitespace-pre-line">
                 {settings.serviceSubText}
               </p>
             )}
           </motion.div>
 
           {/* Right Column: Process Steps List */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="lg:col-span-8 space-y-10"
           >
             {steps.map((step, idx) => (
-              <div 
-                key={step.id || idx} 
-                className="pt-8 border-t border-stone-200 flex flex-col sm:flex-row items-start justify-between gap-6 group"
+              <div
+                key={step.id || idx}
+                className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-start justify-between gap-6 group"
               >
                 {/* Step Text Info */}
                 <div className="flex items-start space-x-6 flex-1">
                   {/* Step Number (e.g. 01) */}
-                  <span className="text-xs font-mono font-bold text-stone-400 tracking-wider pt-1 shrink-0">
+                  <span className="text-xs font-mono font-bold text-lime-300 tracking-wider pt-1 shrink-0">
                     {step.stepNumber || `0${idx + 1}`}
                   </span>
 
                   {/* Title & Descriptions */}
                   <div className="space-y-2">
-                    <h3 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight font-sans">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-sans">
                       {step.title}
                     </h3>
-                    <div className="text-sm text-stone-600 space-y-1 font-normal leading-relaxed">
+                    <div className="text-sm text-stone-400 space-y-1 font-normal leading-relaxed">
                       {step.desc1 && <p className="whitespace-pre-line">{step.desc1}</p>}
                       {step.desc2 && <p className="text-stone-500 whitespace-pre-line">{step.desc2}</p>}
                     </div>
@@ -102,7 +102,7 @@ export default function Service() {
 
                 {/* Step Thumbnail Image */}
                 {step.image && (
-                  <div className="w-full sm:w-44 h-32 rounded-2xl overflow-hidden bg-stone-100 shrink-0 border border-stone-100 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
+                  <div className="w-full sm:w-44 h-32 rounded-2xl overflow-hidden bg-white/5 shrink-0 border border-white/10 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
                     <img
                       src={step.image}
                       alt={step.title}
@@ -115,13 +115,13 @@ export default function Service() {
             ))}
 
             {/* Bottom Border */}
-            <div className="border-t border-stone-200 pt-4" />
+            <div className="border-t border-white/10 pt-4" />
 
             {/* Call to Action Button */}
             <div className="pt-6 flex justify-end">
               <Link
                 to="/contact"
-                className="inline-flex items-center space-x-3 bg-[#bcd0c9] hover:bg-[#a9c1b9] text-white px-8 py-3.5 rounded-full text-sm font-bold tracking-wider transition-all duration-300 shadow-sm hover:shadow border-none"
+                className="inline-flex items-center space-x-3 gradient-accent-bg hover:brightness-105 text-ink-950 px-8 py-3.5 rounded-xl text-sm font-bold tracking-wider transition-all duration-300 shadow-sm hover:shadow border-none"
               >
                 <Calendar size={18} />
                 <span>견적 문의하기</span>

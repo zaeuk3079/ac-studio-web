@@ -623,6 +623,40 @@ export default function Settings() {
                 </div>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Description (스튜디오 소개 문구 · 메인 카피 아래 문단)</label>
+                  <textarea
+                    name="heroDescription"
+                    rows={3}
+                    value={formData.heroDescription || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-sm text-stone-800 resize-none"
+                    placeholder="예: puff studio는 브랜드와 사람의 가장 빛나는 순간을 기록하는 상업 포토그래피 · 영상 제작 스튜디오입니다."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">CTA 버튼 문구</label>
+                  <input
+                    type="text"
+                    name="heroCtaText"
+                    value={formData.heroCtaText || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-sm text-stone-800"
+                    placeholder="예: 문의하기"
+                  />
+                  <label className="block text-xs font-medium text-stone-500 mt-3 mb-1">버튼 클릭 시 이동 경로</label>
+                  <input
+                    type="text"
+                    name="heroCtaLink"
+                    value={formData.heroCtaLink || ''}
+                    onChange={handleChange}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-sm text-stone-600"
+                    placeholder="/contact"
+                  />
+                </div>
+              </div>
+
               {/* Photoshop-style Detail Typography Controllers */}
               <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-6">
                 <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
