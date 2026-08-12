@@ -431,16 +431,14 @@ export function CMSProvider({ children }: { children: ReactNode }) {
           };
           setSettings(merged);
           localStorage.setItem('ac_studio_settings', JSON.stringify(merged));
-          
-          // Auto-seed 5th extra plan to Firestore if missing
-          if (!fetched.servicePlans || fetched.servicePlans.length < 5) {
-            setDoc(doc(db, 'settings', 'main'), { servicePlans: defaultSettings.servicePlans }, { merge: true }).catch(() => {});
-          }
         } else {
-          // If Firebase doc is not ready, write defaultSettings directly to Firestore for all domain visitors
+          // The settings document genuinely doesn't exist yet (brand new project).
+          // Render placeholder defaults locally, but never auto-write them to Firestore:
+          // onSnapshot can report a false "document does not exist" during a transient
+          // network hiccup, and blindly persisting defaultSettings here would silently
+          // overwrite real admin-configured content for every visitor on every domain.
+          // The admin Settings page is the only path that should ever create this doc.
           setSettings(defaultSettings);
-          localStorage.setItem('ac_studio_settings', JSON.stringify(defaultSettings));
-          setDoc(doc(db, 'settings', 'main'), defaultSettings, { merge: true }).catch(() => {});
         }
         setIsLoading(false);
       },
@@ -472,9 +470,11 @@ export function CMSProvider({ children }: { children: ReactNode }) {
           
           setPortfolio(loadedPortfolio);
         } else {
-          for (const item of defaultPortfolio) {
-            await setDoc(doc(db, 'portfolio', item.id), item);
-          }
+          // The portfolio collection genuinely has no items yet (brand new project).
+          // Render placeholder items locally, but never auto-write them to Firestore:
+          // a transient read glitch reporting an empty snapshot must not silently
+          // seed (or re-seed) placeholder items into real admin-managed data.
+          setPortfolio(defaultPortfolio);
         }
       } catch (error) {
         console.error("Error loading portfolio:", error);
