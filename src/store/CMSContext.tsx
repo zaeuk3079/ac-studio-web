@@ -52,8 +52,13 @@ export interface SiteSettings {
   heroText: string;
   heroSubText: string;
   heroDescription?: string;
+  heroDescriptionFontSize?: number;
+  heroDescriptionLetterSpacing?: number;
+  heroDescriptionFontFamily?: string;
+  heroDescriptionColor?: string;
   heroCtaText?: string;
   heroCtaLink?: string;
+  heroCtaTextColor?: string;
   heroImage: string;
   heroImages?: string[];
   heroSlideInterval?: number;
@@ -75,6 +80,9 @@ export interface SiteSettings {
   showHomeAbout: boolean;
   homePortfolioTitle: string;
   homePortfolioTitleLetterSpacing?: number;
+  homePortfolioTitleFontSize?: number;
+  homePortfolioTitleFontFamily?: string;
+  homePortfolioTitleColor?: string;
   homePortfolioSubText?: string;
   homePortfolioSubTextFontSize?: number;
   homePortfolioSubTextLetterSpacing?: number;
@@ -202,8 +210,13 @@ const defaultSettings: SiteSettings = {
   heroText: 'PUFF STUDIO',
   heroSubText: '상업 포토그래피 & 미디어 영상 제작',
   heroDescription: 'puff studio는 브랜드와 사람의 가장 빛나는 순간을 기록하는 상업 포토그래피 · 영상 제작 스튜디오입니다. 기획부터 촬영, 리터칭까지 하나의 흐름으로 이어지는 원스톱 프로세스로, 시간이 흘러도 변하지 않는 가치를 만들어갑니다.',
+  heroDescriptionFontSize: 16,
+  heroDescriptionLetterSpacing: 0,
+  heroDescriptionFontFamily: 'Pretendard',
+  heroDescriptionColor: '#D6D3D1',
   heroCtaText: '문의하기',
   heroCtaLink: '/contact',
+  heroCtaTextColor: '#0B0C10',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
   heroImages: [
     'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
@@ -229,10 +242,13 @@ const defaultSettings: SiteSettings = {
   showHomeAbout: true,
   homePortfolioTitle: 'Work',
   homePortfolioTitleLetterSpacing: -1,
+  homePortfolioTitleFontSize: 48,
+  homePortfolioTitleFontFamily: 'Pretendard',
+  homePortfolioTitleColor: '#FFFFFF',
   homePortfolioSubText: '에이징스튜디오의 포트폴리오를 소개합니다.',
   homePortfolioSubTextFontSize: 14,
   homePortfolioSubTextLetterSpacing: 1,
-  homePortfolioSubTextColor: '#78716C',
+  homePortfolioSubTextColor: '#A8A29E',
   // Portfolio
   portfolioTitle: 'Portfolio',
   portfolioSubText: 'Our Selected Works',

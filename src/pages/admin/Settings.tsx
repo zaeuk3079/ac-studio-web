@@ -477,21 +477,15 @@ export default function Settings() {
               </div>
                 {formData.heroImage && (
                   <div className="mt-4 space-y-3">
-                    <label className="block text-xs font-semibold text-stone-600 uppercase tracking-wider flex items-center justify-between">
+                    <label className="block text-xs font-semibold text-stone-600 uppercase tracking-wider">
                       <span className="flex items-center space-x-1.5 text-stone-800">
                         <Move size={14} className="text-burgundy-600" />
-                        <span>포토샵 스타일 드래그 미리보기 (화면 위 텍스트를 마우스로 잡고 이동하세요)</span>
+                        <span>실제 사이트 미리보기 (텍스트는 항상 좌하단 고정)</span>
                       </span>
-                      <span className="text-[11px] text-stone-400 font-normal">좌표: X {formData.heroTextX ?? 6}%, Y {formData.heroTextY ?? 82}%</span>
                     </label>
-                    
+
                     <div
-                      ref={bannerContainerRef}
-                      onMouseDown={handleBannerMouseDown}
-                      onMouseMove={handleBannerMouseMove}
-                      onMouseUp={handleBannerMouseUp}
-                      onMouseLeave={handleBannerMouseUp}
-                      className="w-full rounded-lg overflow-hidden border border-stone-300 relative select-none cursor-move group shadow-lg transition-all"
+                      className="w-full rounded-lg overflow-hidden border border-stone-300 relative shadow-lg"
                       style={{
                         aspectRatio: formData.heroAspectRatio === '16:9' ? '16/9' : formData.heroAspectRatio === '4:3' ? '4/3' : '3/2'
                       }}
@@ -503,72 +497,59 @@ export default function Settings() {
                         style={{ objectPosition: formData.heroObjectPosition || 'center' }}
                         referrerPolicy="no-referrer"
                       />
+                      {/* Dark fade matching the real hero */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10 pointer-events-none" />
 
-                      {/* Smart Center Alignment Grid Lines & Magnetic Snap Feedback */}
-                      <div className="absolute inset-0 pointer-events-none z-10">
-                        {/* Vertical Center Line (50%) */}
-                        <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
-                          activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/40'
-                        }`} />
-                        {/* Horizontal Center Line (50%) */}
-                        <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
-                          activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/40'
-                        }`} />
-                        
-                        {/* Magnetic Snap Badge Feedback */}
-                        {(activeSnapX || activeSnapY) && (
-                          <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
-                            🎯 중앙 50% 자석 스냅!
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* Draggable Text Block */}
-                      <div
-                        className={`absolute pointer-events-none transition-transform duration-75 flex flex-col ${
-                          formData.heroTextAlign === 'center'
-                            ? 'items-center text-center'
-                            : formData.heroTextAlign === 'right'
-                            ? 'items-end text-right'
-                            : 'items-start text-left'
-                        }`}
-                        style={{
-                          left: `${formData.heroTextX ?? 6}%`,
-                          top: `${formData.heroTextY ?? 82}%`,
-                          transform: formData.heroTextAlign === 'center'
-                            ? 'translate(-50%, -100%)'
-                            : formData.heroTextAlign === 'right'
-                            ? 'translate(-100%, -100%)'
-                            : 'translate(0%, -100%)',
-                          textAlign: (formData.heroTextAlign || 'left') as any,
-                        }}
-                      >
-                        {formData.heroSubText && (
-                          <div
-                            style={{
-                              fontSize: `${Math.max(10, Math.round((formData.heroSubTextFontSize || 14) * 0.45))}px`,
-                              letterSpacing: `${formData.heroSubTextLetterSpacing ?? 1}px`,
-                              fontFamily: formData.heroSubTextFontFamily || 'Pretendard',
-                              color: formData.heroSubTextColor || '#E7E5E4',
-                            }}
-                            className="font-semibold uppercase drop-shadow mb-1"
-                          >
-                            {formData.heroSubText}
-                          </div>
-                        )}
-                        {formData.heroText && (
-                          <div
-                            style={{
-                              fontSize: `${Math.max(14, Math.round((formData.heroTextFontSize || 42) * 0.45))}px`,
-                              letterSpacing: `${formData.heroTextLetterSpacing ?? 0}px`,
-                              fontFamily: formData.heroTextFontFamily || 'Pretendard',
-                              color: formData.heroTextColor || '#FFFFFF',
-                            }}
-                            className="font-bold drop-shadow-md leading-tight"
-                          >
-                            {formData.heroText}
-                          </div>
-                        )}
+                      {/* Fixed Bottom-Left Text Block (matches live layout) */}
+                      <div className="absolute inset-0 flex flex-col justify-end items-start text-left p-4 sm:p-6 pointer-events-none">
+                        <div className="max-w-[85%] flex flex-col items-start">
+                          {formData.heroSubText && (
+                            <div
+                              style={{
+                                fontSize: `${Math.max(9, Math.round((formData.heroSubTextFontSize || 14) * 0.45))}px`,
+                                letterSpacing: `${formData.heroSubTextLetterSpacing ?? 1}px`,
+                                fontFamily: formData.heroSubTextFontFamily || 'Pretendard',
+                              }}
+                              className="font-bold uppercase mb-1 gradient-accent-text"
+                            >
+                              {formData.heroSubText}
+                            </div>
+                          )}
+                          {formData.heroText && (
+                            <div
+                              style={{
+                                fontSize: `${Math.max(14, Math.round((formData.heroTextFontSize || 42) * 0.45))}px`,
+                                letterSpacing: `${formData.heroTextLetterSpacing ?? 0}px`,
+                                fontFamily: formData.heroTextFontFamily || 'Pretendard',
+                                color: formData.heroTextColor || '#FFFFFF',
+                              }}
+                              className="font-black drop-shadow-md leading-tight"
+                            >
+                              {formData.heroText}
+                            </div>
+                          )}
+                          {formData.heroDescription && (
+                            <div
+                              style={{
+                                fontSize: `${Math.max(9, Math.round((formData.heroDescriptionFontSize || 16) * 0.55))}px`,
+                                letterSpacing: `${formData.heroDescriptionLetterSpacing ?? 0}px`,
+                                fontFamily: formData.heroDescriptionFontFamily || 'Pretendard',
+                                color: formData.heroDescriptionColor || '#D6D3D1',
+                              }}
+                              className="mt-1.5 leading-snug line-clamp-2"
+                            >
+                              {formData.heroDescription}
+                            </div>
+                          )}
+                          {formData.heroCtaText && (
+                            <div
+                              style={{ color: formData.heroCtaTextColor || '#0B0C10' }}
+                              className="mt-2 gradient-accent-bg font-bold text-[10px] px-3 py-1.5 rounded-lg"
+                            >
+                              {formData.heroCtaText}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div className="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2.5 py-1 rounded pointer-events-none">
@@ -670,56 +651,12 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Photoshop-style Detail Typography Controllers */}
+              {/* Typography Controllers (텍스트는 항상 좌하단 고정 배치) */}
               <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200 space-y-6">
                 <h4 className="font-semibold text-stone-900 text-sm flex items-center justify-between">
-                  <span>🎨 메인 카피 디테일 편집기 (글자 크기 / 자간 / 폰트 / 위치)</span>
-                  <span className="text-xs text-stone-500 font-normal">Photoshop Style Controls</span>
+                  <span>🎨 히어로 카피 디테일 편집기 (글자 크기 / 자간 / 폰트 / 색상)</span>
+                  <span className="text-xs text-stone-500 font-normal">텍스트 위치는 실제 화면과 동일하게 좌하단 고정</span>
                 </h4>
-                {/* Text Alignment Controls */}
-                <div className="pt-3 border-t border-stone-200/80">
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-2">
-                    글자 정렬 (Text Alignment)
-                  </label>
-                  <div className="flex space-x-2">
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, heroTextAlign: 'left' })}
-                      className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                        (!formData.heroTextAlign || formData.heroTextAlign === 'left')
-                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
-                          : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-100'
-                      }`}
-                    >
-                      <AlignLeft size={14} />
-                      <span>왼쪽 정렬</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, heroTextAlign: 'center' })}
-                      className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                        formData.heroTextAlign === 'center'
-                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
-                          : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-100'
-                      }`}
-                    >
-                      <AlignCenter size={14} />
-                      <span>가운데 정렬</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData({ ...formData, heroTextAlign: 'right' })}
-                      className={`flex-1 py-2 px-3 rounded-lg border text-xs font-medium flex items-center justify-center space-x-2 transition-all cursor-pointer ${
-                        formData.heroTextAlign === 'right'
-                          ? 'bg-stone-900 text-white border-stone-900 shadow-sm'
-                          : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-100'
-                      }`}
-                    >
-                      <AlignRight size={14} />
-                      <span>오른쪽 정렬</span>
-                    </button>
-                  </div>
-                </div>
 
                 {/* Main Copy Controls */}
                 <div className="space-y-4 pt-3 border-t border-stone-200/80">
@@ -868,35 +805,174 @@ export default function Settings() {
                     </div>
                   </div>
                 </div>
+
+                {/* Description Copy Controls */}
+                <div className="space-y-4 pt-4 border-t border-stone-200/80">
+                  <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">소개 문구 디테일 (Description)</span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.heroDescriptionFontSize || 16}px)</label>
+                      <input
+                        type="range"
+                        min="12"
+                        max="24"
+                        value={formData.heroDescriptionFontSize || 16}
+                        onChange={(e) => setFormData({ ...formData, heroDescriptionFontSize: Number(e.target.value) })}
+                        className="w-full accent-stone-800 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.heroDescriptionLetterSpacing ?? 0}px)</label>
+                      <input
+                        type="range"
+                        min="-2"
+                        max="6"
+                        value={formData.heroDescriptionLetterSpacing ?? 0}
+                        onChange={(e) => setFormData({ ...formData, heroDescriptionLetterSpacing: Number(e.target.value) })}
+                        className="w-full accent-stone-800 cursor-pointer"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류 (Font Family)</label>
+                      <select
+                        value={formData.heroDescriptionFontFamily || 'Pretendard'}
+                        onChange={(e) => setFormData({ ...formData, heroDescriptionFontFamily: e.target.value })}
+                        className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium"
+                      >
+                        <option value="Pretendard">Pretendard (Regular)</option>
+                        <option value="Pretendard-Medium">Pretendard (Medium)</option>
+                        <option value="Pretendard-Light">Pretendard (Light)</option>
+                        <option value="Playfair Display">Playfair Display</option>
+                        <option value="Cormorant Garamond">Cormorant Garamond</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상 (Color Palette)</label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="color"
+                          value={formData.heroDescriptionColor || '#D6D3D1'}
+                          onChange={(e) => setFormData({ ...formData, heroDescriptionColor: e.target.value })}
+                          className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
+                        />
+                        <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                          {['#D6D3D1', '#FFFFFF', '#A8A29E', '#D0FF62'].map(color => (
+                            <button
+                              key={color}
+                              type="button"
+                              onClick={() => setFormData({ ...formData, heroDescriptionColor: color })}
+                              className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.heroDescriptionColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                              style={{ backgroundColor: color }}
+                              title={color}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Button Text Color */}
+                <div className="space-y-4 pt-4 border-t border-stone-200/80">
+                  <span className="text-xs font-bold text-stone-700 uppercase tracking-wider block">CTA 버튼 글자 색상</span>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="color"
+                      value={formData.heroCtaTextColor || '#0B0C10'}
+                      onChange={(e) => setFormData({ ...formData, heroCtaTextColor: e.target.value })}
+                      className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
+                    />
+                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                      {['#0B0C10', '#FFFFFF', '#1C1917'].map(color => (
+                        <button
+                          key={color}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, heroCtaTextColor: color })}
+                          className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.heroCtaTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                          style={{ backgroundColor: color }}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[11px] text-stone-500">버튼 배경은 라임 그라데이션으로 고정, 글자 색상만 조절합니다.</span>
+                  </div>
+                </div>
               </div>
-            
+
             {/* Work Section Settings (Title, Letter Spacing & Sub Copy) */}
             <div className="pt-6 border-t border-stone-200 space-y-4">
               <h3 className="text-base font-semibold text-stone-800">Work 포트폴리오 섹션 타이틀 & 카피 편집</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <div>
+                <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 제목 (Title)</label>
+                <input
+                  type="text"
+                  name="homePortfolioTitle"
+                  value={formData.homePortfolioTitle || 'Work'}
+                  onChange={handleChange}
+                  className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  placeholder="Work"
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 제목 (Title)</label>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.homePortfolioTitleFontSize || 48}px)</label>
                   <input
-                    type="text"
-                    name="homePortfolioTitle"
-                    value={formData.homePortfolioTitle || 'Work'}
-                    onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
-                    placeholder="Work"
+                    type="range"
+                    min="24"
+                    max="80"
+                    value={formData.homePortfolioTitleFontSize || 48}
+                    onChange={(e) => setFormData({ ...formData, homePortfolioTitleFontSize: Number(e.target.value) })}
+                    className="w-full accent-stone-800 cursor-pointer"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-stone-700 mb-1">제목 자간 조절 ({formData.homePortfolioTitleLetterSpacing ?? 1}px)</label>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.homePortfolioTitleLetterSpacing ?? 1}px)</label>
                   <input
                     type="range"
                     min="-4"
                     max="15"
-                    name="homePortfolioTitleLetterSpacing"
                     value={formData.homePortfolioTitleLetterSpacing ?? 1}
                     onChange={(e) => setFormData({ ...formData, homePortfolioTitleLetterSpacing: Number(e.target.value) })}
                     className="w-full accent-stone-800 cursor-pointer"
                   />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">폰트 종류</label>
+                  <select
+                    value={formData.homePortfolioTitleFontFamily || 'Pretendard'}
+                    onChange={(e) => setFormData({ ...formData, homePortfolioTitleFontFamily: e.target.value })}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-1.5 text-xs bg-white font-medium"
+                  >
+                    <option value="Pretendard">Pretendard (Regular)</option>
+                    <option value="Pretendard-Bold">Pretendard (Bold)</option>
+                    <option value="Pretendard-Black">Pretendard (Black)</option>
+                    <option value="Playfair Display">Playfair Display</option>
+                    <option value="Cinzel">Cinzel</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="color"
+                      value={formData.homePortfolioTitleColor || '#FFFFFF'}
+                      onChange={(e) => setFormData({ ...formData, homePortfolioTitleColor: e.target.value })}
+                      className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
+                    />
+                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                      {['#FFFFFF', '#D0FF62', '#E7E5E4', '#18181B'].map(color => (
+                        <button
+                          key={color}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, homePortfolioTitleColor: color })}
+                          className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.homePortfolioTitleColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                          style={{ backgroundColor: color }}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -910,6 +986,53 @@ export default function Settings() {
                   className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
                   placeholder="예: aging studio의 감각적인 대표 포트폴리오 작품입니다."
                 />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 크기 ({formData.homePortfolioSubTextFontSize || 14}px)</label>
+                  <input
+                    type="range"
+                    min="10"
+                    max="24"
+                    value={formData.homePortfolioSubTextFontSize || 14}
+                    onChange={(e) => setFormData({ ...formData, homePortfolioSubTextFontSize: Number(e.target.value) })}
+                    className="w-full accent-stone-800 cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">자간 조절 ({formData.homePortfolioSubTextLetterSpacing ?? 1}px)</label>
+                  <input
+                    type="range"
+                    min="-2"
+                    max="10"
+                    value={formData.homePortfolioSubTextLetterSpacing ?? 1}
+                    onChange={(e) => setFormData({ ...formData, homePortfolioSubTextLetterSpacing: Number(e.target.value) })}
+                    className="w-full accent-stone-800 cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-stone-600 mb-1">글자 색상</label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="color"
+                      value={formData.homePortfolioSubTextColor || '#A8A29E'}
+                      onChange={(e) => setFormData({ ...formData, homePortfolioSubTextColor: e.target.value })}
+                      className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
+                    />
+                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
+                      {['#A8A29E', '#FFFFFF', '#D0FF62', '#57534E'].map(color => (
+                        <button
+                          key={color}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, homePortfolioSubTextColor: color })}
+                          className={`w-5 h-5 rounded-full border border-stone-300 transition-transform cursor-pointer ${formData.homePortfolioSubTextColor === color ? 'scale-125 ring-2 ring-stone-900 z-10' : 'hover:scale-110'}`}
+                          style={{ backgroundColor: color }}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

@@ -196,7 +196,13 @@ export default function Home() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
-                  className="mt-5 text-sm md:text-base text-stone-300 leading-relaxed max-w-xl whitespace-pre-line"
+                  style={{
+                    fontSize: `clamp(12px, 2vw, ${settings.heroDescriptionFontSize || 16}px)`,
+                    letterSpacing: `${settings.heroDescriptionLetterSpacing ?? 0}px`,
+                    fontFamily: settings.heroDescriptionFontFamily || 'Pretendard',
+                    color: settings.heroDescriptionColor || '#D6D3D1',
+                  }}
+                  className="mt-5 leading-relaxed max-w-xl whitespace-pre-line"
                 >
                   {settings.heroDescription}
                 </motion.p>
@@ -210,7 +216,8 @@ export default function Home() {
                 >
                   <Link
                     to={settings.heroCtaLink || '/contact'}
-                    className="inline-flex items-center justify-center gradient-accent-bg text-ink-950 font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                    style={{ color: settings.heroCtaTextColor || '#0B0C10' }}
+                    className="inline-flex items-center justify-center gradient-accent-bg font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                   >
                     {settings.heroCtaText}
                   </Link>
@@ -227,10 +234,12 @@ export default function Home() {
         <div className="mb-16 mt-4">
           <div className="mb-8">
             <h1
-              className="text-3xl md:text-5xl text-white uppercase font-black"
+              className="uppercase font-black"
               style={{
-                fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
+                fontSize: `clamp(28px, 5vw, ${settings.homePortfolioTitleFontSize || 48}px)`,
+                fontFamily: settings.homePortfolioTitleFontFamily || '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
                 letterSpacing: `${settings.homePortfolioTitleLetterSpacing ?? 1}px`,
+                color: settings.homePortfolioTitleColor || '#FFFFFF',
               }}
             >
               {settings.homePortfolioTitle || 'Work'}
@@ -241,6 +250,7 @@ export default function Home() {
                   fontSize: `${settings.homePortfolioSubTextFontSize || 14}px`,
                   letterSpacing: `${settings.homePortfolioSubTextLetterSpacing ?? 1}px`,
                   fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
+                  color: settings.homePortfolioSubTextColor || undefined,
                 }}
                 className="font-medium mt-2 text-stone-400"
               >
