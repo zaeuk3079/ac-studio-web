@@ -402,22 +402,19 @@ export function CMSProvider({ children }: { children: ReactNode }) {
       } catch (e) {}
     }
 
-    // 2. Real-time Firebase Settings Listener with Smart Local Merge Safeguard
+    // 2. Real-time Firebase Settings Listener
+    // Firestore is the single source of truth for every visitor. localStorage is only used
+    // above for an instant first paint before this listener's first callback arrives — once
+    // real data is fetched, it must always win, otherwise a device that cached settings once
+    // (e.g. a phone that visited before an admin update) would keep showing stale content
+    // forever, out of sync with every other visitor and with what the admin just published.
     const unsubscribeSettings = onSnapshot(
       doc(db, 'settings', 'main'),
       (docSnap) => {
-        let cachedObj: Partial<SiteSettings> = {};
-        const localRaw = localStorage.getItem('ac_studio_settings');
-        if (localRaw) {
-          try { cachedObj = JSON.parse(localRaw); } catch (e) {}
-        }
-
         if (docSnap.exists()) {
           const fetched = docSnap.data() as SiteSettings;
-          
-          const mergedSteps = (cachedObj.serviceProcessSteps && cachedObj.serviceProcessSteps.length > 0)
-            ? cachedObj.serviceProcessSteps
-            : (fetched.serviceProcessSteps && fetched.serviceProcessSteps.length > 0)
+
+          const mergedSteps = (fetched.serviceProcessSteps && fetched.serviceProcessSteps.length > 0)
             ? fetched.serviceProcessSteps
             : defaultSettings.serviceProcessSteps;
 
@@ -425,11 +422,9 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ? fetched.servicePlans
             : defaultSettings.servicePlans;
 
-          // CRITICAL SAFEGUARD: cachedObj comes AFTER fetched so user local edits NEVER reset!
           const merged: SiteSettings = {
             ...defaultSettings,
             ...fetched,
-            ...cachedObj,
             serviceProcessSteps: mergedSteps,
             heroImages: [],
             servicePlans: mergedServicePlans
