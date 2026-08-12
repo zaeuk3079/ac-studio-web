@@ -4,7 +4,7 @@ export const uploadImageToCloudCDN = async (file: File): Promise<string> => {
     formData.append('image', file);
 
     // High-Speed Unlimited Free Image Cloud CDN (ImgBB API)
-    const apiKey = '3b8fae923e4210e7b8f9e2b17b629b35';
+    const apiKey = '7d9e84bbaa599699b9053b415d84bd89';
     const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
       method: 'POST',
       body: formData,
