@@ -61,7 +61,6 @@ export interface SiteSettings {
   heroCtaTextColor?: string;
   heroImage: string;
   heroImages?: string[];
-  heroSlideInterval?: number;
   heroAspectRatio?: '3:2' | '16:9' | '4:3' | string;
   heroObjectPosition?: 'top' | 'center' | 'bottom' | string;
   heroTextFontSize?: number;
@@ -218,12 +217,7 @@ const defaultSettings: SiteSettings = {
   heroCtaLink: '/contact',
   heroCtaTextColor: '#0B0C10',
   heroImage: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
-  heroImages: [
-    'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=100&w=2800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1554046920-90dcac0536d1?q=100&w=2800&auto=format&fit=crop'
-  ],
-  heroSlideInterval: 2500,
+  heroImages: [],
   heroAspectRatio: '3:2',
   heroObjectPosition: 'center',
   heroTextFontSize: 42,
@@ -427,12 +421,6 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ? fetched.serviceProcessSteps
             : defaultSettings.serviceProcessSteps;
 
-          const mergedHeroImages = (cachedObj.heroImages && cachedObj.heroImages.length > 0)
-            ? cachedObj.heroImages
-            : (fetched.heroImages && fetched.heroImages.length > 0)
-            ? fetched.heroImages
-            : defaultSettings.heroImages;
-
           const mergedServicePlans = (fetched.servicePlans && fetched.servicePlans.length >= 5)
             ? fetched.servicePlans
             : defaultSettings.servicePlans;
@@ -443,7 +431,7 @@ export function CMSProvider({ children }: { children: ReactNode }) {
             ...fetched,
             ...cachedObj,
             serviceProcessSteps: mergedSteps,
-            heroImages: mergedHeroImages,
+            heroImages: [],
             servicePlans: mergedServicePlans
           };
           setSettings(merged);

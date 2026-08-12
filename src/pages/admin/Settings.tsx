@@ -128,18 +128,15 @@ export default function Settings() {
       const aboutImageConverted = await ensureCloudUrl(formData.aboutImage);
       const serviceImageConverted = await ensureCloudUrl(formData.serviceImage);
 
-      // Auto migrate heroImages array items to Cloud CDN URLs
-      const heroImagesConverted = (formData.heroImages && formData.heroImages.length > 0)
-        ? await Promise.all(formData.heroImages.map(img => ensureCloudUrl(img)))
-        : [];
-
       const cleanedData = {
         ...formData,
         logoUrl: logoUrlConverted,
         heroImage: heroImageConverted,
         aboutImage: aboutImageConverted,
         serviceImage: serviceImageConverted,
-        heroImages: heroImagesConverted,
+        // 예전 슬라이드 캐러셀 기능은 완전히 폐지 — 메인 배너는 항상 heroImage 한 장만 사용.
+        // 배열을 계속 비워서 저장해 과거에 남아있던 값이 되살아나지 않도록 함.
+        heroImages: [],
         heroNukiImages: [],
         heroNukiConfigs: []
       };
@@ -160,13 +157,6 @@ export default function Settings() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    // heroImages(슬라이드 배열)가 남아있으면 화면에서는 그게 우선 표시되어, heroImage 한 장만
-    // 바꿔도 실제로는 안 바뀐 것처럼 보이는 문제가 있었음. 단일 배너 이미지를 바꾸면 항상
-    // 그 이미지 하나로 배열도 함께 맞춰서, 바꾼 이미지가 즉시 반영되도록 함.
-    if (name === 'heroImage') {
-      setFormData({ ...formData, heroImage: value, heroImages: value ? [value] : [] });
-      return;
-    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -177,20 +167,12 @@ export default function Settings() {
       try {
         // High-Speed Unlimited Cloud CDN Upload
         const cdnUrl = await uploadImageToCloudCDN(file);
-        setFormData(prev => ({
-          ...prev,
-          [fieldName]: cdnUrl,
-          ...(fieldName === 'heroImage' ? { heroImages: [cdnUrl] } : {})
-        }));
+        setFormData(prev => ({ ...prev, [fieldName]: cdnUrl }));
       } catch (error) {
         console.error('Error uploading image to cloud CDN:', error);
         const maxDim = fieldName === 'logoUrl' ? 600 : 3840;
         const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.98);
-        setFormData(prev => ({
-          ...prev,
-          [fieldName]: compressedBase64,
-          ...(fieldName === 'heroImage' ? { heroImages: [compressedBase64] } : {})
-        }));
+        setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
       } finally {
         setUploadingField(null);
         e.target.value = '';
@@ -498,7 +480,7 @@ export default function Settings() {
                         referrerPolicy="no-referrer"
                       />
                       {/* Dark fade matching the real hero */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-black/10 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/25 to-black/5 pointer-events-none" />
 
                       {/* Fixed Bottom-Left Text Block (matches live layout) */}
                       <div className="absolute inset-0 flex flex-col justify-end items-start text-left p-4 sm:p-6 pointer-events-none">

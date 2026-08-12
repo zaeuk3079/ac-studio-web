@@ -107,30 +107,13 @@ export default function Home() {
     return () => { document.body.style.overflow = 'unset'; };
   }, [selectedItem]);
 
-  // Hero Cross-Dissolve Image Slider Logic
-  const heroImageList = (() => {
-    const listFromArr = (settings.heroImages || []).filter(url => typeof url === 'string' && url.trim().length > 0);
-    if (listFromArr.length > 0) return listFromArr;
-    return settings.heroImage ? [settings.heroImage] : [];
-  })();
-
-  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-
-  useEffect(() => {
-    if (heroImageList.length <= 1) return;
-    const interval = setInterval(() => {
-      setCurrentSlideIndex((prev) => (prev + 1) % heroImageList.length);
-    }, settings.heroSlideInterval || 2500);
-    return () => clearInterval(interval);
-  }, [heroImageList.length, settings.heroSlideInterval]);
-
   const isSelectedVideo = selectedItem && (!!selectedItem.videoUrl || selectedItem.category === 'Video');
   const selectedVideoRatio = selectedItem ? getItemVideoAspectRatio(selectedItem) : '16:9';
 
   return (
     <div className="bg-ink-950 text-white min-h-screen py-16">
       {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA */}
-      {heroImageList.length > 0 && (
+      {settings.heroImage && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -151,9 +134,9 @@ export default function Home() {
                 }}
                 referrerPolicy="no-referrer"
               />
-              {/* Dark fade for legibility, anibada-style */}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/50 to-ink-950/10" />
-              <div className="absolute inset-0 bg-gradient-to-r from-ink-950/70 via-transparent to-transparent" />
+              {/* Dark fade for legibility, anibada-style (halved strength) */}
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/50 via-ink-950/25 to-ink-950/5" />
+              <div className="absolute inset-0 bg-gradient-to-r from-ink-950/35 via-transparent to-transparent" />
             </div>
 
             {/* Brand Copy Container — pinned bottom, left edge aligned with WORK section below */}
