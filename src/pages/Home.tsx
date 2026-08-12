@@ -124,109 +124,113 @@ export default function Home() {
     <div className="bg-ink-950 text-white min-h-screen pb-16">
       {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA, sits flush under header */}
       {settings.heroImage && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-          className="w-full mb-16 overflow-hidden relative sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
-          style={isMobileViewport ? { aspectRatio: heroImageAspectRatio ?? 1.5, maxHeight: 520 } : undefined}
-        >
-            {/* Single High-Resolution Premium Hero Banner Image */}
-            <div className="absolute inset-0 w-full h-full">
-              <img
-                src={settings.heroImage || 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop'}
-                alt={settings.heroText || settings.siteName}
-                className="w-full h-full object-cover select-none"
-                style={{
-                  objectPosition: settings.heroObjectPosition || 'center',
-                  imageRendering: '-webkit-optimize-contrast',
-                  transform: 'translateZ(0)',
-                  backfaceVisibility: 'hidden'
-                }}
-                referrerPolicy="no-referrer"
-                onLoad={(e) => {
-                  const img = e.currentTarget;
-                  if (img.naturalWidth && img.naturalHeight) {
-                    setHeroImageAspectRatio(img.naturalWidth / img.naturalHeight);
-                  }
-                }}
-              />
-              {/* Dark fade for legibility, anibada-style (halved strength) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/50 via-ink-950/25 to-ink-950/5" />
-              <div className="absolute inset-0 bg-gradient-to-r from-ink-950/35 via-transparent to-transparent" />
-            </div>
+        <div className="w-full mb-16 sm:mb-16 relative">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="w-full overflow-hidden relative sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
+            style={isMobileViewport ? { aspectRatio: heroImageAspectRatio ?? 1.5, maxHeight: 520 } : undefined}
+          >
+              {/* Single High-Resolution Premium Hero Banner Image */}
+              <div className="absolute inset-0 w-full h-full">
+                <img
+                  src={settings.heroImage || 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=100&w=2800&auto=format&fit=crop'}
+                  alt={settings.heroText || settings.siteName}
+                  className="w-full h-full object-cover select-none"
+                  style={{
+                    objectPosition: settings.heroObjectPosition || 'center',
+                    imageRendering: '-webkit-optimize-contrast',
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden'
+                  }}
+                  referrerPolicy="no-referrer"
+                  onLoad={(e) => {
+                    const img = e.currentTarget;
+                    if (img.naturalWidth && img.naturalHeight) {
+                      setHeroImageAspectRatio(img.naturalWidth / img.naturalHeight);
+                    }
+                  }}
+                />
+                {/* Dark fade for legibility, anibada-style (halved strength) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/50 via-ink-950/25 to-ink-950/5" />
+                <div className="absolute inset-0 bg-gradient-to-r from-ink-950/35 via-transparent to-transparent" />
+              </div>
+          </motion.div>
 
-            {/* Brand Copy Container — pinned bottom, left edge aligned with WORK section below */}
-            <div className="absolute inset-0 flex flex-col justify-end pb-5 sm:pb-7 md:pb-8 lg:pb-10">
-              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
-              {settings.heroSubText && (
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  style={{
-                    fontSize: `clamp(11px, 2.5vw, ${settings.heroSubTextFontSize || 14}px)`,
-                    letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
-                    fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
-                  }}
-                  className="uppercase font-bold leading-tight mb-1.5 sm:mb-3 tracking-widest gradient-accent-text"
+          {/* Brand Copy Container — sits outside the image's overflow-hidden box so it can shift
+              further down on mobile (revealing more of the image up top) without being clipped;
+              pinned to the image's bottom edge and shifted down by 35% of its own height on mobile only. */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end pb-5 sm:pb-7 md:pb-8 lg:pb-10 translate-y-[35%] sm:translate-y-0">
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
+            {settings.heroSubText && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                style={{
+                  fontSize: `clamp(11px, 2.5vw, ${settings.heroSubTextFontSize || 14}px)`,
+                  letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
+                  fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
+                }}
+                className="uppercase font-bold leading-tight mb-1.5 sm:mb-3 tracking-widest gradient-accent-text"
+              >
+                {settings.heroSubText}
+              </motion.p>
+            )}
+            {settings.heroText && (
+              <motion.h2
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                style={{
+                  fontSize: `clamp(24px, 6vw, ${settings.heroTextFontSize || 64}px)`,
+                  letterSpacing: `${settings.heroTextLetterSpacing ?? 0}px`,
+                  fontFamily: settings.heroTextFontFamily || 'Pretendard',
+                  color: settings.heroTextColor || '#FFFFFF',
+                }}
+                className="font-black leading-none sm:leading-[1.05] drop-shadow-lg whitespace-pre-line"
+              >
+                {settings.heroText}
+              </motion.h2>
+            )}
+            {settings.heroDescription && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                style={{
+                  fontSize: `clamp(10.5px, 2vw, ${settings.heroDescriptionFontSize || 16}px)`,
+                  letterSpacing: `${settings.heroDescriptionLetterSpacing ?? 0}px`,
+                  fontFamily: settings.heroDescriptionFontFamily || 'Pretendard',
+                  color: settings.heroDescriptionColor || (isMobileViewport ? '#F5F5F4' : '#D6D3D1'),
+                }}
+                className="mt-3 sm:mt-5 leading-snug sm:leading-relaxed max-w-xl whitespace-pre-line"
+              >
+                {settings.heroDescription}
+              </motion.p>
+            )}
+            {settings.heroCtaText && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="mt-5 sm:mt-8"
+              >
+                <Link
+                  to={settings.heroCtaLink || '/contact'}
+                  style={{ color: settings.heroCtaTextColor || '#0B0C10' }}
+                  className="inline-flex items-center justify-center gradient-accent-bg font-bold text-xs sm:text-base px-4 py-2 sm:px-7 sm:py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                 >
-                  {settings.heroSubText}
-                </motion.p>
-              )}
-              {settings.heroText && (
-                <motion.h2
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                  style={{
-                    fontSize: `clamp(24px, 6vw, ${settings.heroTextFontSize || 64}px)`,
-                    letterSpacing: `${settings.heroTextLetterSpacing ?? 0}px`,
-                    fontFamily: settings.heroTextFontFamily || 'Pretendard',
-                    color: settings.heroTextColor || '#FFFFFF',
-                  }}
-                  className="font-black leading-none sm:leading-[1.05] drop-shadow-lg whitespace-pre-line"
-                >
-                  {settings.heroText}
-                </motion.h2>
-              )}
-              {settings.heroDescription && (
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.4 }}
-                  style={{
-                    fontSize: `clamp(11px, 2vw, ${settings.heroDescriptionFontSize || 16}px)`,
-                    letterSpacing: `${settings.heroDescriptionLetterSpacing ?? 0}px`,
-                    fontFamily: settings.heroDescriptionFontFamily || 'Pretendard',
-                    color: settings.heroDescriptionColor || '#D6D3D1',
-                  }}
-                  className="mt-3 sm:mt-5 leading-snug sm:leading-relaxed max-w-xl whitespace-pre-line"
-                >
-                  {settings.heroDescription}
-                </motion.p>
-              )}
-              {settings.heroCtaText && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="mt-5 sm:mt-8"
-                >
-                  <Link
-                    to={settings.heroCtaLink || '/contact'}
-                    style={{ color: settings.heroCtaTextColor || '#0B0C10' }}
-                    className="inline-flex items-center justify-center gradient-accent-bg font-bold text-xs sm:text-base px-4 py-2 sm:px-7 sm:py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
-                  >
-                    {settings.heroCtaText}
-                  </Link>
-                </motion.div>
-              )}
-              </div>
-              </div>
+                  {settings.heroCtaText}
+                </Link>
+              </motion.div>
+            )}
             </div>
-        </motion.div>
+            </div>
+          </div>
+        </div>
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
