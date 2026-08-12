@@ -671,7 +671,10 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     try {
       await setDoc(doc(db, 'settings', 'main'), updated, { merge: true });
     } catch (error) {
-      console.warn("Firebase sync note:", error);
+      console.error("Firebase settings save failed:", error);
+      // Re-throw so callers (e.g. the admin Save button) can detect the failure
+      // instead of assuming success just because the local/optimistic state updated.
+      throw error;
     }
   };
 

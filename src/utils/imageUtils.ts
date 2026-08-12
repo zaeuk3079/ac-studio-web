@@ -20,8 +20,11 @@ export const uploadImageToCloudCDN = async (file: File): Promise<string> => {
     console.warn('Cloud CDN upload fallback to compressed base64:', err);
   }
 
-  // Fallback if network drops: compress to 4K ultra-high resolution
-  return compressImage(file, 3840, 3840, 0.98);
+  // Fallback if the CDN is unreachable (or its API key is invalid): compress conservatively.
+  // This becomes a base64 string stored directly on the Firestore settings document, which
+  // shares its 1MiB total size with every other field on that doc — a large fallback image
+  // used to blow past that limit, causing the whole settings save to fail silently.
+  return compressImage(file, 1280, 1280, 0.7);
 };
 
 export const compressImage = (file: File, maxWidth = 3840, maxHeight = 3840, quality = 0.98): Promise<string> => {

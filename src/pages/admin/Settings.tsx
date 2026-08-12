@@ -149,7 +149,12 @@ export default function Settings() {
       alert('설정이 성공적으로 저장되었습니다! 메인 화면 및 모든 탭에 즉시 반영되었습니다.');
     } catch (error: any) {
       console.error('Settings save error:', error);
-      alert('설정이 저장되었습니다!');
+      const isTooLarge = error?.code === 'invalid-argument' || /longer than|exceeds|too large/i.test(error?.message || '');
+      alert(
+        isTooLarge
+          ? '저장에 실패했습니다: 이미지 용량이 너무 큽니다. 다른 이미지로 다시 시도해주세요.'
+          : `저장에 실패했습니다: ${error?.message || '알 수 없는 오류'}`
+      );
     } finally {
       setIsSaving(false);
     }
@@ -170,8 +175,8 @@ export default function Settings() {
         setFormData(prev => ({ ...prev, [fieldName]: cdnUrl }));
       } catch (error) {
         console.error('Error uploading image to cloud CDN:', error);
-        const maxDim = fieldName === 'logoUrl' ? 600 : 3840;
-        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.98);
+        const maxDim = fieldName === 'logoUrl' ? 600 : 1280;
+        const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.7);
         setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
       } finally {
         setUploadingField(null);
