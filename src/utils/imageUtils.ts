@@ -15,19 +15,23 @@ export const uploadImageToCloudCDN = async (file: File): Promise<string> => {
       if (data.success && data.data?.url) {
         return data.data.url; // Return fast, unlimited CDN URL
       }
+      console.warn('Cloud CDN upload rejected by server, falling back to compressed base64:', data);
+    } else {
+      console.warn('Cloud CDN upload HTTP error, falling back to compressed base64:', response.status, await response.text().catch(() => ''));
     }
   } catch (err) {
-    console.warn('Cloud CDN upload fallback to compressed base64:', err);
+    console.warn('Cloud CDN upload network error, falling back to compressed base64:', err);
   }
 
-  // Fallback if the CDN is unreachable (or its API key is invalid): compress conservatively.
+  // Fallback if the CDN is unreachable (or its API key is invalid): compress conservatively
+  // and always re-encode as JPEG (forceJpeg), since PNG re-encoding is lossless and barely
+  // shrinks a photo at all — a "700KB" source PNG could still balloon past 1MiB as base64.
   // This becomes a base64 string stored directly on the Firestore settings document, which
-  // shares its 1MiB total size with every other field on that doc — a large fallback image
-  // used to blow past that limit, causing the whole settings save to fail silently.
-  return compressImage(file, 1280, 1280, 0.7);
+  // shares its 1MiB total size with every other field on that doc.
+  return compressImage(file, 1280, 1280, 0.65, true);
 };
 
-export const compressImage = (file: File, maxWidth = 3840, maxHeight = 3840, quality = 0.98): Promise<string> => {
+export const compressImage = (file: File, maxWidth = 3840, maxHeight = 3840, quality = 0.98, forceJpeg = false): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -58,7 +62,7 @@ export const compressImage = (file: File, maxWidth = 3840, maxHeight = 3840, qua
           ctx.clearRect(0, 0, width, height);
           ctx.drawImage(img, 0, 0, width, height);
           
-          const isPng = file.type?.includes('png') || file.name?.toLowerCase().endsWith('.png');
+          const isPng = !forceJpeg && (file.type?.includes('png') || file.name?.toLowerCase().endsWith('.png'));
           if (isPng) {
             resolve(canvas.toDataURL('image/png'));
           } else {
