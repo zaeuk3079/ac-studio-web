@@ -47,6 +47,16 @@ export default function Home() {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
+  const [heroImageAspectRatio, setHeroImageAspectRatio] = useState<number | null>(null);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 639px)');
+    setIsMobileViewport(mql.matches);
+    const handleChange = (e: MediaQueryListEvent) => setIsMobileViewport(e.matches);
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
 
   // Filter portfolio based on 3 main categories: Photography, Video, AI
   const filteredPortfolio = portfolio.filter(item => {
@@ -118,7 +128,8 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="w-full mb-16 overflow-hidden relative aspect-[3/2] max-h-[420px] sm:aspect-auto sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
+          className="w-full mb-16 overflow-hidden relative sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
+          style={isMobileViewport ? { aspectRatio: heroImageAspectRatio ?? 1.5, maxHeight: 520 } : undefined}
         >
             {/* Single High-Resolution Premium Hero Banner Image */}
             <div className="absolute inset-0 w-full h-full">
@@ -133,6 +144,12 @@ export default function Home() {
                   backfaceVisibility: 'hidden'
                 }}
                 referrerPolicy="no-referrer"
+                onLoad={(e) => {
+                  const img = e.currentTarget;
+                  if (img.naturalWidth && img.naturalHeight) {
+                    setHeroImageAspectRatio(img.naturalWidth / img.naturalHeight);
+                  }
+                }}
               />
               {/* Dark fade for legibility, anibada-style (halved strength) */}
               <div className="absolute inset-0 bg-gradient-to-t from-ink-950/50 via-ink-950/25 to-ink-950/5" />
