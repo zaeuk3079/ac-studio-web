@@ -164,7 +164,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                   style={{
-                    fontSize: `clamp(32px, 6vw, ${settings.heroTextFontSize || 64}px)`,
+                    fontSize: `clamp(24px, 6vw, ${settings.heroTextFontSize || 64}px)`,
                     letterSpacing: `${settings.heroTextLetterSpacing ?? 0}px`,
                     fontFamily: settings.heroTextFontFamily || 'Pretendard',
                     color: settings.heroTextColor || '#FFFFFF',
@@ -180,7 +180,7 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
                   style={{
-                    fontSize: `clamp(12px, 2vw, ${settings.heroDescriptionFontSize || 16}px)`,
+                    fontSize: `clamp(11px, 2vw, ${settings.heroDescriptionFontSize || 16}px)`,
                     letterSpacing: `${settings.heroDescriptionLetterSpacing ?? 0}px`,
                     fontFamily: settings.heroDescriptionFontFamily || 'Pretendard',
                     color: settings.heroDescriptionColor || '#D6D3D1',
@@ -200,7 +200,7 @@ export default function Home() {
                   <Link
                     to={settings.heroCtaLink || '/contact'}
                     style={{ color: settings.heroCtaTextColor || '#0B0C10' }}
-                    className="inline-flex items-center justify-center gradient-accent-bg font-bold px-7 py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                    className="inline-flex items-center justify-center gradient-accent-bg font-bold text-sm sm:text-base px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                   >
                     {settings.heroCtaText}
                   </Link>
