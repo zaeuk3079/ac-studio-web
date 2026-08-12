@@ -118,7 +118,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="w-full mb-16 overflow-hidden relative h-[44vh] min-h-[340px] max-h-[460px] sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
+          className="w-full mb-16 overflow-hidden relative aspect-[3/2] max-h-[420px] sm:aspect-auto sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
         >
             {/* Single High-Resolution Premium Hero Banner Image */}
             <div className="absolute inset-0 w-full h-full">
