@@ -535,32 +535,49 @@ export function CMSProvider({ children }: { children: ReactNode }) {
     const { gallery, ...rest } = updatedItem;
 
     const existing = portfolio.find(item => item.id === id);
-    const preservedOrderIndex = (updatedItem as any).orderIndex ?? (existing as any)?.orderIndex ?? 9999;
     const preservedIsPinned = updatedItem.isPinned ?? existing?.isPinned ?? false;
+    const pinChanged = 'isPinned' in updatedItem && updatedItem.isPinned !== existing?.isPinned;
+
+    // Only reorder when the pin status actually changes (e.g. toggling "메인 상단 고정").
+    // A plain field edit (title, description, 대표 이미지 등) must never silently move the
+    // item's position — some legacy items lack an explicit orderIndex in Firestore, and
+    // falling back to a default there used to bump them to the end of the list on every save.
+    const nextPortfolio = portfolio.map(item =>
+      item.id === id ? { ...item, ...updatedItem, isPinned: preservedIsPinned } : item
+    );
+    const sortedPortfolio = pinChanged
+      ? [...nextPortfolio].sort((a, b) => {
+          if (a.isPinned && !b.isPinned) return -1;
+          if (!a.isPinned && b.isPinned) return 1;
+          return 0; // stable sort keeps relative order within each pinned/unpinned group
+        })
+      : nextPortfolio;
+
+    const preservedOrderIndex = sortedPortfolio.findIndex(item => item.id === id);
 
     const updatedDataToSave = {
       ...rest,
       orderIndex: preservedOrderIndex,
       isPinned: preservedIsPinned
     };
-    
-    setPortfolio(prev => {
-      const updated = prev.map(item => item.id === id ? { ...item, ...updatedItem, orderIndex: preservedOrderIndex, isPinned: preservedIsPinned } : item);
-      return updated.sort((a, b) => {
-        if (a.isPinned && !b.isPinned) return -1;
-        if (!a.isPinned && b.isPinned) return 1;
-        const orderA = (a as any).orderIndex ?? 9999;
-        const orderB = (b as any).orderIndex ?? 9999;
-        return orderA - orderB;
-      });
-    });
-    
+
+    setPortfolio(sortedPortfolio);
+
     try {
       const { writeBatch, collection, getDocs, doc } = await import('firebase/firestore');
       const batch = writeBatch(db);
-      
+
       batch.update(doc(db, 'portfolio', id), updatedDataToSave);
-      
+
+      // Normalize orderIndex on every save so items that never had one stop drifting
+      // to the bottom of the list on unrelated edits — the whole list is re-pinned to
+      // match exactly what's currently on screen.
+      sortedPortfolio.forEach((item, idx) => {
+        if (item.id !== id) {
+          batch.update(doc(db, 'portfolio', item.id), { orderIndex: idx });
+        }
+      });
+
       if (gallery) {
         const gallerySnap = await getDocs(collection(db, 'portfolio', id, 'gallery'));
         gallerySnap.forEach((d) => {
