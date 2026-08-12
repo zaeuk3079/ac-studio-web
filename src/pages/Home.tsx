@@ -111,8 +111,8 @@ export default function Home() {
   const selectedVideoRatio = selectedItem ? getItemVideoAspectRatio(selectedItem) : '16:9';
 
   return (
-    <div className="bg-ink-950 text-white min-h-screen py-16">
-      {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA */}
+    <div className="bg-ink-950 text-white min-h-screen pb-16">
+      {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA, sits flush under header */}
       {settings.heroImage && (
         <motion.div
           initial={{ opacity: 0 }}
