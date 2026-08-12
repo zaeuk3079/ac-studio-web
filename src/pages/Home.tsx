@@ -153,7 +153,7 @@ export default function Home() {
                     letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
                     fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
                   }}
-                  className="uppercase font-bold mb-3 tracking-widest gradient-accent-text"
+                  className="uppercase font-bold leading-tight mb-1.5 sm:mb-3 tracking-widest gradient-accent-text"
                 >
                   {settings.heroSubText}
                 </motion.p>
@@ -169,7 +169,7 @@ export default function Home() {
                     fontFamily: settings.heroTextFontFamily || 'Pretendard',
                     color: settings.heroTextColor || '#FFFFFF',
                   }}
-                  className="font-black leading-[1.05] drop-shadow-lg whitespace-pre-line"
+                  className="font-black leading-none sm:leading-[1.05] drop-shadow-lg whitespace-pre-line"
                 >
                   {settings.heroText}
                 </motion.h2>
@@ -185,7 +185,7 @@ export default function Home() {
                     fontFamily: settings.heroDescriptionFontFamily || 'Pretendard',
                     color: settings.heroDescriptionColor || '#D6D3D1',
                   }}
-                  className="mt-5 leading-relaxed max-w-xl whitespace-pre-line"
+                  className="mt-3 sm:mt-5 leading-snug sm:leading-relaxed max-w-xl whitespace-pre-line"
                 >
                   {settings.heroDescription}
                 </motion.p>
@@ -195,7 +195,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.5 }}
-                  className="mt-8"
+                  className="mt-5 sm:mt-8"
                 >
                   <Link
                     to={settings.heroCtaLink || '/contact'}
