@@ -140,7 +140,7 @@ export default function Home() {
             </div>
 
             {/* Brand Copy Container — pinned bottom, left edge aligned with WORK section below */}
-            <div className="absolute inset-0 flex flex-col justify-end pb-10 sm:pb-14 md:pb-16 lg:pb-20">
+            <div className="absolute inset-0 flex flex-col justify-end pb-5 sm:pb-14 md:pb-16 lg:pb-20">
               <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
               {settings.heroSubText && (
@@ -200,7 +200,7 @@ export default function Home() {
                   <Link
                     to={settings.heroCtaLink || '/contact'}
                     style={{ color: settings.heroCtaTextColor || '#0B0C10' }}
-                    className="inline-flex items-center justify-center gradient-accent-bg font-bold text-sm sm:text-base px-5 py-2.5 sm:px-7 sm:py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                    className="inline-flex items-center justify-center gradient-accent-bg font-bold text-xs sm:text-base px-4 py-2 sm:px-7 sm:py-3.5 rounded-xl shadow-lg shadow-lime-300/10 hover:brightness-105 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                   >
                     {settings.heroCtaText}
                   </Link>
