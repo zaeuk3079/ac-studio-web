@@ -1,7 +1,22 @@
-export const uploadImageToCloudCDN = async (file: File): Promise<string> => {
+export const uploadImageToCloudCDN = async (file: File, maxDim = 2000, quality = 0.82): Promise<string> => {
   try {
+    // Compress client-side before upload. Uploading the original camera-resolution file
+    // as-is meant every visitor — mobile included — downloaded the same multi-MB image
+    // even though it's rendered far smaller on their screen, making the hero banner load
+    // noticeably slower on mobile connections.
+    let uploadFile: File | Blob = file;
+    try {
+      const compressedBase64 = await compressImage(file, maxDim, maxDim, quality);
+      const compressedBlob = await (await fetch(compressedBase64)).blob();
+      if (compressedBlob.size < file.size) {
+        uploadFile = compressedBlob;
+      }
+    } catch (compressErr) {
+      console.warn('Pre-upload compression skipped, uploading original file:', compressErr);
+    }
+
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('image', uploadFile);
 
     // High-Speed Unlimited Free Image Cloud CDN (ImgBB API)
     const apiKey = '7d9e84bbaa599699b9053b415d84bd89';
