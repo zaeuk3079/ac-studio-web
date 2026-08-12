@@ -40,17 +40,17 @@
   --color-burgundy-800: #4D1316;
   --color-burgundy-900: #26090B;
 
-  /* Lime accent scale — primary point color #D0FF62 */
-  --color-lime-50: #F7FFE8;
-  --color-lime-100: #ECFFC7;
-  --color-lime-200: #DEFF9C;
-  --color-lime-300: #D0FF62;
-  --color-lime-400: #B8ED42;
-  --color-lime-500: #9BD62C;
-  --color-lime-600: #7CB020;
-  --color-lime-700: #5E8618;
-  --color-lime-800: #435F11;
-  --color-lime-900: #2B3D0A;
+  /* Pink accent scale — matches the puff studio logo's coral-pink (#FB8296) */
+  --color-lime-50: #FFF0F5;
+  --color-lime-100: #FFD6E4;
+  --color-lime-200: #FFB0CB;
+  --color-lime-300: #FF87AC;
+  --color-lime-400: #FF5C90;
+  --color-lime-500: #FB3D74;
+  --color-lime-600: #E22A5E;
+  --color-lime-700: #B81F49;
+  --color-lime-800: #8A1738;
+  --color-lime-900: #5C0F26;
 
   /* Dark theme surfaces for the public site */
   --color-ink-950: #060608;
@@ -59,7 +59,7 @@
   --color-ink-700: #1E2027;
   --color-ink-600: #2A2C35;
 
-  --gradient-accent: linear-gradient(135deg, #D0FF62 0%, #7FE787 100%);
+  --gradient-accent: linear-gradient(135deg, #FFA6C9 0%, #FB6F92 100%);
 
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;

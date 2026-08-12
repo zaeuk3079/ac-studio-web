@@ -838,7 +838,7 @@ export default function Settings() {
                           className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
                         />
                         <div className="flex items-center space-x-1 overflow-x-auto py-1">
-                          {['#D6D3D1', '#FFFFFF', '#A8A29E', '#D0FF62'].map(color => (
+                          {['#D6D3D1', '#FFFFFF', '#A8A29E', '#FF87AC'].map(color => (
                             <button
                               key={color}
                               type="button"
@@ -943,7 +943,7 @@ export default function Settings() {
                       className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
                     />
                     <div className="flex items-center space-x-1 overflow-x-auto py-1">
-                      {['#FFFFFF', '#D0FF62', '#E7E5E4', '#18181B'].map(color => (
+                      {['#FFFFFF', '#FF87AC', '#E7E5E4', '#18181B'].map(color => (
                         <button
                           key={color}
                           type="button"
@@ -1002,7 +1002,7 @@ export default function Settings() {
                       className="w-8 h-8 rounded-lg cursor-pointer border border-stone-300 p-0.5 bg-white shrink-0"
                     />
                     <div className="flex items-center space-x-1 overflow-x-auto py-1">
-                      {['#A8A29E', '#FFFFFF', '#D0FF62', '#57534E'].map(color => (
+                      {['#A8A29E', '#FFFFFF', '#FF87AC', '#57534E'].map(color => (
                         <button
                           key={color}
                           type="button"
