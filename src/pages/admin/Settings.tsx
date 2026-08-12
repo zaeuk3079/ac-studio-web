@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCMS, SiteSettings } from '../../store/CMSContext';
 import { motion } from 'motion/react';
-import { Save, Home, Image as ImageIcon, Info, Phone, Palette, Download, Globe, Layers, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
+import { Save, Home, Image as ImageIcon, Phone, Palette, Download, Globe, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { compressImage, compressBase64String, uploadImageToCloudCDN } from '../../utils/imageUtils';
 
 export default function Settings() {
@@ -160,6 +160,13 @@ export default function Settings() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    // heroImages(슬라이드 배열)가 남아있으면 화면에서는 그게 우선 표시되어, heroImage 한 장만
+    // 바꿔도 실제로는 안 바뀐 것처럼 보이는 문제가 있었음. 단일 배너 이미지를 바꾸면 항상
+    // 그 이미지 하나로 배열도 함께 맞춰서, 바꾼 이미지가 즉시 반영되도록 함.
+    if (name === 'heroImage') {
+      setFormData({ ...formData, heroImage: value, heroImages: value ? [value] : [] });
+      return;
+    }
     setFormData({ ...formData, [name]: value });
   };
 
@@ -170,12 +177,20 @@ export default function Settings() {
       try {
         // High-Speed Unlimited Cloud CDN Upload
         const cdnUrl = await uploadImageToCloudCDN(file);
-        setFormData(prev => ({ ...prev, [fieldName]: cdnUrl }));
+        setFormData(prev => ({
+          ...prev,
+          [fieldName]: cdnUrl,
+          ...(fieldName === 'heroImage' ? { heroImages: [cdnUrl] } : {})
+        }));
       } catch (error) {
         console.error('Error uploading image to cloud CDN:', error);
         const maxDim = fieldName === 'logoUrl' ? 600 : 3840;
         const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.98);
-        setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
+        setFormData(prev => ({
+          ...prev,
+          [fieldName]: compressedBase64,
+          ...(fieldName === 'heroImage' ? { heroImages: [compressedBase64] } : {})
+        }));
       } finally {
         setUploadingField(null);
         e.target.value = '';
@@ -312,8 +327,6 @@ export default function Settings() {
 
   const tabs = [
     { id: 'home', label: 'Home', icon: Home },
-    { id: 'about', label: 'About', icon: Info },
-    { id: 'service', label: 'Service', icon: Layers },
     { id: 'contact', label: '견적문의', icon: Phone },
     { id: 'deployment', label: 'Deployment', icon: Globe },
   ];
