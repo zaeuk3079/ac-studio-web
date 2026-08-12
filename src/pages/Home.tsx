@@ -140,7 +140,7 @@ export default function Home() {
             </div>
 
             {/* Brand Copy Container — pinned bottom, left edge aligned with WORK section below */}
-            <div className="absolute inset-0 flex flex-col justify-end pb-5 sm:pb-14 md:pb-16 lg:pb-20">
+            <div className="absolute inset-0 flex flex-col justify-end pb-5 sm:pb-7 md:pb-8 lg:pb-10">
               <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
               {settings.heroSubText && (
