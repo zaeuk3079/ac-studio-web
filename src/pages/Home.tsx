@@ -156,8 +156,9 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-r from-ink-950/70 via-transparent to-transparent" />
             </div>
 
-            {/* Brand Copy Container — pinned bottom-left, anibada-style */}
-            <div className="absolute inset-0 flex flex-col justify-end items-start text-left p-6 sm:p-10 md:p-14 lg:p-16">
+            {/* Brand Copy Container — pinned bottom, left edge aligned with WORK section below */}
+            <div className="absolute inset-0 flex flex-col justify-end pb-10 sm:pb-14 md:pb-16 lg:pb-20">
+              <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
               {settings.heroSubText && (
                 <motion.p
@@ -215,6 +216,7 @@ export default function Home() {
                   </Link>
                 </motion.div>
               )}
+              </div>
               </div>
             </div>
         </motion.div>
