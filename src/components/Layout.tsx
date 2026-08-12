@@ -9,13 +9,13 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-ink-950 text-white font-sans selection:bg-lime-300/30 selection:text-lime-100">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-ink-950/80 backdrop-blur-lg border-b border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
+      <header className="sticky top-0 z-50 bg-ink-950/80 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-24 md:h-28">
             {/* Logo */}
             <Link to="/" className="flex items-center p-1 hover:opacity-90 transition-opacity cursor-pointer">
               {settings.logoUrl ? (
-                <img src={settings.logoUrl} alt={settings.siteName} className="max-h-14 md:max-h-16 w-auto object-contain" referrerPolicy="no-referrer" />
+                <img src={settings.logoUrl} alt={settings.siteName} className="max-h-20 md:max-h-24 w-auto object-contain" referrerPolicy="no-referrer" />
               ) : (
                 <span className="font-sans text-xl md:text-2xl tracking-[0.2em] text-white font-bold uppercase whitespace-nowrap">
                   {settings.siteName}
