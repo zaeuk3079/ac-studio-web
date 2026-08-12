@@ -156,19 +156,9 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-r from-ink-950/70 via-transparent to-transparent" />
             </div>
 
-            {/* Brand Copy Container — pinned bottom, anibada-style */}
-            <div
-              className={`absolute inset-0 flex flex-col justify-end p-6 sm:p-10 md:p-14 lg:p-16 ${
-                settings.heroTextAlign === 'center'
-                  ? 'items-center text-center'
-                  : settings.heroTextAlign === 'right'
-                  ? 'items-end text-right'
-                  : 'items-start text-left'
-              }`}
-            >
-              <div className="max-w-[92%] md:max-w-2xl flex flex-col"
-                style={settings.heroTextAlign === 'center' ? { alignItems: 'center' } : settings.heroTextAlign === 'right' ? { alignItems: 'flex-end' } : { alignItems: 'flex-start' }}
-              >
+            {/* Brand Copy Container — pinned bottom-left, anibada-style */}
+            <div className="absolute inset-0 flex flex-col justify-end items-start text-left p-6 sm:p-10 md:p-14 lg:p-16">
+              <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
               {settings.heroSubText && (
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
