@@ -53,6 +53,7 @@ export interface ContactPackage {
   description: string;
   features: string[];
   highlight?: boolean;
+  featuresFirst?: boolean;
 }
 
 export interface SiteSettings {
@@ -397,6 +398,7 @@ const defaultSettings: SiteSettings = {
         '제형·디테일컷 — 50,000원',
       ],
       highlight: false,
+      featuresFirst: true,
     },
   ],
   contactExtensionText: '촬영 연장은 시간당 150,000원입니다.',
