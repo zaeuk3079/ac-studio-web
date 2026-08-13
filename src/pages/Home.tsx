@@ -123,7 +123,7 @@ export default function Home() {
     <div className="bg-ink-950 text-white min-h-screen pb-16">
       {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA, sits flush under header */}
       {settings.heroImage && (
-        <div className="w-full mb-16 relative">
+        <div className="w-full mb-8 relative">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -232,7 +232,7 @@ export default function Home() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Category Header & Filter */}
-        <div className="mb-16 mt-4">
+        <div className="mb-16 mt-2">
           <div className="mb-8">
             <h1
               className="uppercase font-black"
