@@ -1515,146 +1515,10 @@ export default function Settings() {
         {/* CONTACT TAB */}
         {activeTab === 'contact' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 space-y-8">
-            {/* Interactive Visual Drag Canvas Editor for Contact (Home Tab Style) */}
-            <div className="bg-stone-900 text-stone-100 p-6 rounded-2xl border border-stone-800 space-y-4">
-              <div className="flex items-center justify-between border-b border-stone-800 pb-3">
-                <div className="flex items-center space-x-2">
-                  <Move size={18} className="text-burgundy-400" />
-                  <span className="font-semibold text-stone-200 text-sm">견적문의 텍스트 위치 드래그 캔버스 (Visual Canvas)</span>
-                </div>
-                <span className="text-xs text-stone-400">💡 마우스로 텍스트를 잡고 끌어서 위치를 정해보세요</span>
-              </div>
-
-              <div
-                ref={contactCanvasRef}
-                onMouseDown={(e) => {
-                  const updater = updateTabDragPosition(contactCanvasRef, 'contactTextX', 'contactTextY');
-                  updater(e.clientX, e.clientY);
-                  const onMove = (mv: MouseEvent) => updater(mv.clientX, mv.clientY);
-                  const onUp = () => {
-                    window.removeEventListener('mousemove', onMove);
-                    window.removeEventListener('mouseup', onUp);
-                  };
-                  window.addEventListener('mousemove', onMove);
-                  window.addEventListener('mouseup', onUp);
-                }}
-                className="relative w-full aspect-[16/9] bg-stone-950 rounded-xl overflow-hidden cursor-crosshair border border-stone-800 select-none shadow-inner"
-              >
-                <div className="w-full h-full bg-stone-900 flex flex-col items-center justify-center text-stone-600 text-xs">
-                  <span className="text-stone-500 font-serif text-lg">견적문의 캔버스</span>
-                </div>
-
-                {/* Smart Center Grid Lines & Magnetic Snap Feedback */}
-                <div className="absolute inset-0 pointer-events-none z-10">
-                  <div className={`absolute top-0 bottom-0 left-1/2 -translate-x-1/2 transition-all ${
-                    activeSnapX ? 'border-r-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-r border-dashed border-white/20'
-                  }`} />
-                  <div className={`absolute left-0 right-0 top-1/2 -translate-y-1/2 transition-all ${
-                    activeSnapY ? 'border-b-2 border-red-500 shadow-[0_0_10px_rgba(239,68,68,0.9)]' : 'border-b border-dashed border-white/20'
-                  }`} />
-                  {(activeSnapX || activeSnapY) && (
-                    <div className="absolute top-3 left-1/2 -translate-x-1/2 bg-red-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-md z-30 animate-pulse">
-                      🎯 중앙 50% 자석 스냅!
-                    </div>
-                  )}
-                </div>
-                
-                {/* Positioned Text Box */}
-                <div
-                  className="absolute p-4 rounded-xl border border-dashed border-burgundy-400/80 bg-stone-900/80 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-white transition-all shadow-2xl"
-                  style={{
-                    left: `${formData.contactTextX ?? 50}%`,
-                    top: `${formData.contactTextY ?? 20}%`,
-                    transform: (formData.contactTextAlign === 'center')
-                      ? 'translate(-50%, -50%)'
-                      : (formData.contactTextAlign === 'right')
-                      ? 'translate(-100%, -50%)'
-                      : 'translate(0%, -50%)',
-                  }}
-                >
-                  <span
-                    className="inline-block bg-[#bcd0c9] text-white px-6 py-2 rounded-full font-bold shadow-md whitespace-nowrap"
-                    style={{
-                      fontSize: `${Math.max(14, Math.round((formData.contactTextFontSize || 42) * 0.5))}px`,
-                      letterSpacing: `${formData.contactTextLetterSpacing ?? 0}px`,
-                      fontFamily: formData.contactTextFontFamily || 'Pretendard',
-                      color: formData.contactTextColor || '#FFFFFF',
-                    }}
-                  >
-                    {formData.contactTitle || '견적문의'}
-                  </span>
-                  <p className="text-[10px] text-stone-300 opacity-90 mt-1.5 whitespace-nowrap text-center">{formData.contactSubText || '견적 및 촬영 문의'}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Photoshop-style Detail Typography Controller for Contact */}
-            <div className="bg-stone-900 text-white p-6 rounded-2xl border border-stone-800 space-y-6 shadow-xl">
-              <h4 className="font-semibold text-stone-100 text-base flex items-center justify-between border-b border-stone-800 pb-3">
-                <span className="flex items-center space-x-2">
-                  <span>🎨 견적문의 포토샵 디테일 타이포그래피 편집기</span>
-                  <span className="bg-burgundy-600 text-white text-[10px] px-2.5 py-0.5 rounded-full uppercase font-bold">Home Style Editor</span>
-                </span>
-                <span className="text-xs text-stone-400 font-normal">위치 / 정렬 / 글자 크기 / 자간 / 폰트 / 색상</span>
-              </h4>
-
-              {/* Position Controls */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">가로 위치 (X: {formData.contactTextX ?? 50}%)</label>
-                  <input type="range" min="0" max="100" name="contactTextX" value={formData.contactTextX ?? 50} onChange={(e) => setFormData({ ...formData, contactTextX: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-stone-300 uppercase tracking-wider mb-1">세로 위치 (Y: {formData.contactTextY ?? 20}%)</label>
-                  <input type="range" min="0" max="100" name="contactTextY" value={formData.contactTextY ?? 20} onChange={(e) => setFormData({ ...formData, contactTextY: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
-                </div>
-              </div>
-
-              {/* Sliders & Color */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-3 border-t border-stone-800">
-                <div>
-                  <label className="block text-xs font-medium text-stone-300 mb-1">글자 크기 ({formData.contactTextFontSize || 42}px)</label>
-                  <input type="range" min="18" max="80" name="contactTextFontSize" value={formData.contactTextFontSize || 42} onChange={(e) => setFormData({ ...formData, contactTextFontSize: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-stone-300 mb-1">자간 조절 ({formData.contactTextLetterSpacing ?? 0}px)</label>
-                  <input type="range" min="-4" max="16" name="contactTextLetterSpacing" value={formData.contactTextLetterSpacing ?? 0} onChange={(e) => setFormData({ ...formData, contactTextLetterSpacing: Number(e.target.value) })} className="w-full accent-burgundy-500 cursor-pointer" />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-stone-300 mb-1">폰트 종류</label>
-                  <select name="contactTextFontFamily" value={formData.contactTextFontFamily || 'Pretendard'} onChange={handleChange as any} className="w-full border border-stone-700 rounded-lg px-3 py-2 text-xs bg-stone-800 text-stone-200 font-medium">
-                    <option value="Pretendard">Pretendard (Regular 400)</option>
-                    <option value="Pretendard-Medium">Pretendard (Medium 500)</option>
-                    <option value="Pretendard-SemiBold">Pretendard (SemiBold 600)</option>
-                    <option value="Pretendard-Bold">Pretendard (Bold 700)</option>
-                    <option value="Pretendard-Black">Pretendard (Black 900)</option>
-                    <option value="Pretendard-Light">Pretendard (Light 300)</option>
-                    <option value="Moneygraphy-Rounded">Moneygraphy Rounded (머니그라피 둥근체)</option>
-                    <option value="Moneygraphy-Pixel">Moneygraphy Pixel (머니그라피 픽셀체)</option>
-                    <option value="Playfair Display">Playfair Display (고급 Serif)</option>
-                    <option value="Cormorant Garamond">Cormorant Garamond (클래식 Serif)</option>
-                    <option value="Cinzel">Cinzel (명품 비주얼)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-stone-300 mb-1">글자 색상</label>
-                  <div className="flex items-center space-x-2">
-                    <input type="color" value={formData.contactTextColor || '#FFFFFF'} onChange={(e) => setFormData({ ...formData, contactTextColor: e.target.value })} className="w-8 h-8 rounded-lg cursor-pointer border border-stone-700 p-0.5 bg-stone-800 shrink-0" />
-                    <div className="flex items-center space-x-1 overflow-x-auto py-1">
-                      {['#FFFFFF', '#F5F5F0', '#D4AF37', '#18181B', '#800020', '#3B82F6'].map(color => (
-                        <button key={color} type="button" onClick={() => setFormData({ ...formData, contactTextColor: color })} className={`w-5 h-5 rounded-full border border-stone-600 transition-transform cursor-pointer ${formData.contactTextColor === color ? 'scale-125 ring-2 ring-white z-10' : 'hover:scale-110'}`} style={{ backgroundColor: color }} title={color} />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Edit Fields */}
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Title (대제목)</label>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Title (상단 대제목)</label>
                   <input
                     type="text"
                     name="contactTitle"
@@ -1664,7 +1528,7 @@ export default function Settings() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Sub Title (서브 타이틀)</label>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Sub Title (상단 서브 타이틀)</label>
                   <input
                     type="text"
                     name="contactSubText"
@@ -1699,202 +1563,40 @@ export default function Settings() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">촬영 내용 (컨셉 및 분량) 힌트 안내 문구 (Placeholder)</label>
-                <textarea
-                  name="contactMessagePlaceholder"
-                  value={formData.contactMessagePlaceholder ?? "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요"}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
-                />
-              </div>
-
-              {/* Service Package Plans Interactive Editor */}
-              <div className="pt-6 border-t border-stone-200 space-y-6">
+              {/* Left panel: service intro card */}
+              <div className="pt-6 border-t border-stone-200 space-y-4">
                 <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
-                  <span>📦 5가지 촬영 서비스 상품 카드 & 텍스트 직접 편집기</span>
-                  <span className="text-xs font-normal text-stone-500">카드 이름, 뱃지, 설명, 체크리스트를 원하는 대로 100% 직접 수정하실 수 있습니다.</span>
+                  <span>📝 좌측 서비스 소개 카드</span>
+                  <span className="text-xs font-normal text-stone-500">문의하기 페이지 좌측 카드 상단 문구에 반영됩니다.</span>
                 </h4>
-
-                <div className="space-y-6">
-                  {(formData.servicePlans || [
-                    { id: 'basic', name: 'Basic', badge: '기본 플랜', description: '브랜드 스타트업을 위한 핵심 상세페이지 제작 플랜', features: ['상세페이지'] },
-                    { id: 'standard', name: 'Standard', badge: '인기 패키지', description: '상세페이지와 SNS 마케팅 브랜드 컨텐츠 종합 패키지', features: ['상세페이지', 'SNS컨텐츠'] },
-                    { id: 'premium', name: 'Premium', badge: '올인원 프리미엄', description: '상세페이지부터 SNS, 퍼포먼스 광고용 컨텐츠까지 완벽 포함', features: ['상세페이지', 'SNS컨텐츠', '광고용 컨텐츠'] },
-                    { id: 'subscription', name: '월 단위 구독제', badge: 'Monthly 정기구독', description: '지속적인 브랜드 마케팅을 위한 월 정기 구독형 컨텐츠 제작', features: ['월별 SNS컨텐츠', '월 9개 컨텐츠 (사진/영상 비율 조정가능)'] },
-                    { id: 'extra', name: '그 외 촬영', badge: '별도 문의', description: '카페, 식당 메뉴, 굿즈, 인테리어 촬영 등 건별 맞춤 촬영', features: ['카페 · 식당 메뉴', '굿즈 · 인테리어 촬영 등'] }
-                  ]).map((plan, pIdx) => (
-                    <div key={plan.id || pIdx} className="bg-stone-50 p-5 rounded-xl border border-stone-200 space-y-4">
-                      <div className="flex justify-between items-center border-b border-stone-200 pb-3">
-                        <span className="text-xs font-bold text-stone-700 uppercase tracking-wider">
-                          [{pIdx + 1}] {plan.name || `Plan ${pIdx + 1}`} ({plan.id})
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-xs font-semibold text-stone-600 mb-1">카드 타이틀 (이름)</label>
-                          <input
-                            type="text"
-                            value={plan.name}
-                            onChange={(e) => {
-                              const nextPlans = [...(formData.servicePlans || [])];
-                              nextPlans[pIdx] = { ...nextPlans[pIdx], name: e.target.value };
-                              setFormData({ ...formData, servicePlans: nextPlans });
-                            }}
-                            className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-xs font-semibold text-stone-600 mb-1">뱃지 라벨 (Badge)</label>
-                          <input
-                            type="text"
-                            value={plan.badge || ''}
-                            onChange={(e) => {
-                              const nextPlans = [...(formData.servicePlans || [])];
-                              nextPlans[pIdx] = { ...nextPlans[pIdx], badge: e.target.value };
-                              setFormData({ ...formData, servicePlans: nextPlans });
-                            }}
-                            className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-600 mb-1">카드 설명 문구 (Description)</label>
-                        <input
-                          type="text"
-                          value={plan.description || ''}
-                          onChange={(e) => {
-                            const nextPlans = [...(formData.servicePlans || [])];
-                            nextPlans[pIdx] = { ...nextPlans[pIdx], description: e.target.value };
-                            setFormData({ ...formData, servicePlans: nextPlans });
-                          }}
-                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-stone-600 mb-1">포함 내역 체크리스트 (줄바꿈/Enter 로 개별 항목 구분)</label>
-                        <textarea
-                          value={(plan.features || []).join('\n')}
-                          onChange={(e) => {
-                            const nextPlans = [...(formData.servicePlans || [])];
-                            const lines = e.target.value.split('\n');
-                            nextPlans[pIdx] = { ...nextPlans[pIdx], features: lines };
-                            setFormData({ ...formData, servicePlans: nextPlans });
-                          }}
-                          rows={3}
-                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800 resize-y"
-                        />
-                      </div>
-
-                      {/* Individual Card Color Controls */}
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-3 border-t border-stone-200">
-                        <div>
-                          <label className="block text-[11px] font-bold text-stone-600 mb-1">🎨 카드 배경색</label>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="color"
-                              value={plan.bgColor || (plan.id === 'subscription' ? '#18181B' : '#FFFFFF')}
-                              onChange={(e) => {
-                                const nextPlans = [...(formData.servicePlans || [])];
-                                nextPlans[pIdx] = { ...nextPlans[pIdx], bgColor: e.target.value };
-                                setFormData({ ...formData, servicePlans: nextPlans });
-                              }}
-                              className="w-7 h-7 rounded border border-stone-300 p-0.5 cursor-pointer"
-                            />
-                            <div className="flex space-x-1">
-                              {['#FFFFFF', '#18181B', '#F5F5F0', '#0F172A', '#FAF9F6'].map(c => (
-                                <button
-                                  key={c}
-                                  type="button"
-                                  onClick={() => {
-                                    const nextPlans = [...(formData.servicePlans || [])];
-                                    nextPlans[pIdx] = { ...nextPlans[pIdx], bgColor: c };
-                                    setFormData({ ...formData, servicePlans: nextPlans });
-                                  }}
-                                  className="w-4 h-4 rounded-full border border-stone-300 hover:scale-110"
-                                  style={{ backgroundColor: c }}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-[11px] font-bold text-stone-600 mb-1">🖼️ 테두리 색상</label>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="color"
-                              value={plan.borderColor || (plan.id === 'subscription' ? '#800020' : '#E7E5E4')}
-                              onChange={(e) => {
-                                const nextPlans = [...(formData.servicePlans || [])];
-                                nextPlans[pIdx] = { ...nextPlans[pIdx], borderColor: e.target.value };
-                                setFormData({ ...formData, servicePlans: nextPlans });
-                              }}
-                              className="w-7 h-7 rounded border border-stone-300 p-0.5 cursor-pointer"
-                            />
-                            <div className="flex space-x-1">
-                              {['#E7E5E4', '#800020', '#18181B', '#3B82F6', '#D4AF37'].map(c => (
-                                <button
-                                  key={c}
-                                  type="button"
-                                  onClick={() => {
-                                    const nextPlans = [...(formData.servicePlans || [])];
-                                    nextPlans[pIdx] = { ...nextPlans[pIdx], borderColor: c };
-                                    setFormData({ ...formData, servicePlans: nextPlans });
-                                  }}
-                                  className="w-4 h-4 rounded-full border border-stone-300 hover:scale-110"
-                                  style={{ backgroundColor: c }}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block text-[11px] font-bold text-stone-600 mb-1">✏️ 텍스트 글자색</label>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="color"
-                              value={plan.textColor || (plan.id === 'subscription' ? '#FFFFFF' : '#1C1917')}
-                              onChange={(e) => {
-                                const nextPlans = [...(formData.servicePlans || [])];
-                                nextPlans[pIdx] = { ...nextPlans[pIdx], textColor: e.target.value };
-                                setFormData({ ...formData, servicePlans: nextPlans });
-                              }}
-                              className="w-7 h-7 rounded border border-stone-300 p-0.5 cursor-pointer"
-                            />
-                            <div className="flex space-x-1">
-                              {['#1C1917', '#FFFFFF', '#44403C', '#800020'].map(c => (
-                                <button
-                                  key={c}
-                                  type="button"
-                                  onClick={() => {
-                                    const nextPlans = [...(formData.servicePlans || [])];
-                                    nextPlans[pIdx] = { ...nextPlans[pIdx], textColor: c };
-                                    setFormData({ ...formData, servicePlans: nextPlans });
-                                  }}
-                                  className="w-4 h-4 rounded-full border border-stone-300 hover:scale-110"
-                                  style={{ backgroundColor: c }}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">카드 제목 (Message Title)</label>
+                  <input
+                    type="text"
+                    name="contactMessageTitle"
+                    value={formData.contactMessageTitle || ''}
+                    onChange={handleChange}
+                    placeholder="예: Let's Create Together"
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">카드 설명 문구 (Message Text)</label>
+                  <textarea
+                    name="contactMessageText"
+                    value={formData.contactMessageText || ''}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  />
                 </div>
               </div>
+
               {/* Studio Contact Information Left Card Editor */}
               <div className="pt-6 border-t border-stone-200 space-y-4">
                 <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
                   <span>📍 좌측 스튜디오 주소 & 연락처 정보 편집</span>
-                  <span className="text-xs font-normal text-stone-500">견적문의 페이지 좌측 안내 카드에 100% 반영됩니다.</span>
+                  <span className="text-xs font-normal text-stone-500">문의하기 페이지 좌측 안내 카드에 100% 반영됩니다.</span>
                 </h4>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1952,49 +1654,70 @@ export default function Settings() {
                     />
                   </div>
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Contact Message Text (안내 카드 상세 설명)</label>
-                <textarea
-                  name="contactMessageText"
-                  value={formData.contactMessageText || ''}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-stone-800 font-medium"
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Email (이메일 주소)</label>
-                  <input
-                    type="text"
-                    name="contactEmail"
-                    value={formData.contactEmail || ''}
-                    onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Instagram URL (인스타그램 주소)</label>
-                  <input
-                    type="text"
-                    name="instagramUrl"
-                    value={formData.instagramUrl || ''}
-                    onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">카카오톡 채널 URL (문의하기 페이지 채널 추가 버튼)</label>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">카카오톡 채널 URL (채널 추가 버튼)</label>
                   <input
                     type="text"
                     name="kakaoChannelUrl"
                     value={formData.kakaoChannelUrl || ''}
                     onChange={handleChange}
                     placeholder="https://pf.kakao.com/_xxxxx"
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
                   />
                   <p className="text-xs text-stone-400 mt-1">비워두면 문의하기 페이지에 카카오톡 버튼이 표시되지 않습니다.</p>
+                </div>
+              </div>
+
+              {/* Right panel: consultation form */}
+              <div className="pt-6 border-t border-stone-200 space-y-4">
+                <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
+                  <span>📋 우측 상담 신청 폼</span>
+                  <span className="text-xs font-normal text-stone-500">문의하기 페이지 우측 폼 제목/설명/버튼에 반영됩니다.</span>
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">폼 제목 (Form Title)</label>
+                    <input
+                      type="text"
+                      name="contactFormTitle"
+                      value={formData.contactFormTitle || ''}
+                      onChange={handleChange}
+                      placeholder="예: 상담 신청"
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-stone-700 mb-1">제출 버튼 문구 (Button Text)</label>
+                    <input
+                      type="text"
+                      name="contactFormButtonText"
+                      value={formData.contactFormButtonText || ''}
+                      onChange={handleChange}
+                      placeholder="예: 상담 신청하기"
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">폼 안내 문구 (Form Description)</label>
+                  <textarea
+                    name="contactFormDescription"
+                    value={formData.contactFormDescription || ''}
+                    onChange={handleChange}
+                    rows={2}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">촬영 목적 및 내용 입력란 힌트 문구 (Placeholder)</label>
+                  <textarea
+                    name="contactMessagePlaceholder"
+                    value={formData.contactMessagePlaceholder ?? "촬영 목적(SNS 컨텐츠, 상세페이지, 숏폼 등)과 원하는 컨셉, 필요한 예상 컷 수/영상 갯수를 자유롭게 적어주세요.\n상담을 먼저 원하시면 '상담희망'이라고 남겨주셔도 됩니다."}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  />
                 </div>
               </div>
             </div>

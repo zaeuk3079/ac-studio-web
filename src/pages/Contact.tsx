@@ -179,9 +179,9 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-white/5 p-10 md:p-12 rounded-2xl shadow-sm border border-white/10 w-full"
           >
-            <h2 className="font-serif text-3xl text-white mb-2">상담 신청</h2>
+            <h2 className="font-serif text-3xl text-white mb-2">{settings.contactFormTitle || '상담 신청'}</h2>
             <p className="text-stone-400 font-light text-sm mb-8 leading-relaxed">
-              원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.
+              {settings.contactFormDescription || '원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.'}
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -279,7 +279,7 @@ export default function Contact() {
                 ) : (
                   <>
                     <Send size={16} />
-                    <span>상담 신청하기</span>
+                    <span>{settings.contactFormButtonText || '상담 신청하기'}</span>
                   </>
                 )}
               </button>
