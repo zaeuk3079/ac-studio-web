@@ -477,6 +477,32 @@ export default function Settings() {
               )}
             </div>
 
+            {/* Footer (사이트 전체 하단 영역) */}
+            <div className="pt-6 border-t border-stone-200 space-y-4">
+              <h3 className="text-base font-bold text-stone-900">Footer (모든 페이지 하단 영역)</h3>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Footer 제목 (비워두면 Site Name 사용)</label>
+                <input
+                  type="text"
+                  name="footerTitle"
+                  value={formData.footerTitle || ''}
+                  onChange={handleChange}
+                  placeholder="예: puff studio"
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-stone-700 mb-2">Footer 설명 문구 — Enter로 줄바꿈 가능</label>
+                <textarea
+                  name="footerText"
+                  value={formData.footerText || ''}
+                  onChange={handleChange}
+                  rows={2}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-y"
+                />
+              </div>
+            </div>
+
             {/* Main Banner (Hero Visual) Settings */}
             {/* Single Main Hero Image Settings */}
             <div className="pt-6 border-t border-stone-200 space-y-6">
