@@ -129,6 +129,9 @@ export interface SiteSettings {
   contactSubText: string;
   contactMessageTitle: string;
   contactMessageText: string;
+  contactFormTitle?: string;
+  contactFormDescription?: string;
+  contactFormButtonText?: string;
   contactEmail: string;
   contactPhone: string;
   contactAddress: string;
@@ -321,7 +324,10 @@ const defaultSettings: SiteSettings = {
   contactTitle: '견적문의',
   contactSubText: '견적 및 촬영 문의',
   contactMessageTitle: "Let's Create Together",
-  contactMessageText: '촬영 문의 및 예약은 아래 연락처나 우측의 구글 폼을 통해 남겨주시면, 최대한 빠르게 답변해 드리겠습니다. 당신의 특별한 순간을 함께할 수 있기를 기대합니다.',
+  contactMessageText: '촬영 문의 및 예약은 아래 연락처나 우측의 상담 신청 폼을 통해 남겨주시면, 최대한 빠르게 답변해 드리겠습니다. 당신의 특별한 순간을 함께할 수 있기를 기대합니다.',
+  contactFormTitle: '상담 신청',
+  contactFormDescription: '원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.',
+  contactFormButtonText: '상담 신청하기',
   contactEmail: 'contact@puffstudio.com',
   contactPhone: '010-1234-5678',
   contactAddress: '서울특별시 강남구 역삼동 스튜디오',
