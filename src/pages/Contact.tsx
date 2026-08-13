@@ -60,6 +60,7 @@ const DEFAULT_PACKAGES: ContactPackage[] = [
       '제형·디테일컷 — 50,000원',
     ],
     highlight: false,
+    featuresFirst: true,
   },
 ];
 
@@ -197,40 +198,11 @@ export default function Contact() {
           transition={{ duration: 0.8, delay: 0.1 }}
           className="mb-20"
         >
-          <div className="text-center mb-10">
-            <span className="text-xs font-mono font-bold tracking-widest text-stone-400 uppercase">Pricing</span>
-            <h2 className="font-serif text-2xl sm:text-3xl text-white mt-1">상품 구성</h2>
-          </div>
-
           {/* Package cards (4th card = 컷 당 촬영 단가표) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-            {(settings.contactPackages && settings.contactPackages.length > 0 ? settings.contactPackages : DEFAULT_PACKAGES).map((pkg) => (
-              <div
-                key={pkg.id}
-                className={`p-6 rounded-2xl border flex flex-col ${
-                  pkg.highlight
-                    ? 'bg-lime-300/5 border-lime-300/40 shadow-lg shadow-lime-300/5'
-                    : 'bg-white/5 border-white/10'
-                }`}
-              >
-                {pkg.highlight && (
-                  <span className="self-start text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-lime-300 text-ink-950 mb-3">
-                    추천
-                  </span>
-                )}
-                <h3 className="text-lg font-bold text-white">{pkg.name}</h3>
-                <div className="mt-2 flex items-baseline gap-2 min-h-[28px]">
-                  {pkg.price && <span className="text-xl font-black gradient-accent-text">{pkg.price}</span>}
-                  {pkg.duration && (
-                    <span className="text-xs text-stone-400 flex items-center gap-1">
-                      <Clock size={12} />
-                      {pkg.duration}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-stone-400 mt-3 leading-relaxed">{pkg.tagline}</p>
-                <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">{pkg.description}</p>
-                <ul className="mt-5 pt-5 border-t border-white/10 space-y-2 flex-1">
+            {(settings.contactPackages && settings.contactPackages.length > 0 ? settings.contactPackages : DEFAULT_PACKAGES).map((pkg) => {
+              const featuresList = (
+                <ul className="space-y-2 flex-1">
                   {pkg.features.map((feat, idx) => {
                     const [label, price] = feat.split(' — ');
                     return (
@@ -238,18 +210,62 @@ export default function Contact() {
                         <span className="text-lime-300 mt-0.5 shrink-0">✓</span>
                         {price ? (
                           <span className="leading-relaxed flex-1 flex items-baseline justify-between gap-2">
-                            <span>{label}</span>
+                            <span className="whitespace-pre-line">{label}</span>
                             <span className="text-lime-300 font-semibold whitespace-nowrap">{price}</span>
                           </span>
                         ) : (
-                          <span className="leading-relaxed">{feat}</span>
+                          <span className="leading-relaxed whitespace-pre-line">{feat}</span>
                         )}
                       </li>
                     );
                   })}
                 </ul>
-              </div>
-            ))}
+              );
+              const taglineDescription = (
+                <div>
+                  <p className="text-xs text-stone-400 leading-relaxed whitespace-pre-line">{pkg.tagline}</p>
+                  <p className="text-xs text-stone-500 mt-1.5 leading-relaxed whitespace-pre-line">{pkg.description}</p>
+                </div>
+              );
+
+              return (
+                <div
+                  key={pkg.id}
+                  className={`p-6 rounded-2xl border flex flex-col ${
+                    pkg.highlight
+                      ? 'bg-lime-300/5 border-lime-300/40 shadow-lg shadow-lime-300/5'
+                      : 'bg-white/5 border-white/10'
+                  }`}
+                >
+                  {pkg.highlight && (
+                    <span className="self-start text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider bg-lime-300 text-ink-950 mb-3">
+                      추천
+                    </span>
+                  )}
+                  <h3 className="text-lg font-bold text-white">{pkg.name}</h3>
+                  <div className="mt-2 flex items-baseline gap-2 min-h-[28px]">
+                    {pkg.price && <span className="text-xl font-black gradient-accent-text">{pkg.price}</span>}
+                    {pkg.duration && (
+                      <span className="text-xs text-stone-400 flex items-center gap-1">
+                        <Clock size={12} />
+                        {pkg.duration}
+                      </span>
+                    )}
+                  </div>
+                  {pkg.featuresFirst ? (
+                    <>
+                      <div className="mt-4">{featuresList}</div>
+                      <div className="mt-5 pt-5 border-t border-white/10">{taglineDescription}</div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mt-3">{taglineDescription}</div>
+                      <div className="mt-5 pt-5 border-t border-white/10 flex-1 flex flex-col">{featuresList}</div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <p className="text-center text-[11px] text-stone-500 mb-10 max-w-2xl mx-auto leading-relaxed">
             * 하프데이 · 풀데이는 따로 컷 수 제한이 없으며, 연출 난이도에 따라 완성 가능한 컷 수가 달라질 수 있습니다.
@@ -258,7 +274,7 @@ export default function Contact() {
           {/* Time extension */}
           <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 mb-5 flex items-center gap-3">
             <Clock size={16} className="text-lime-300 shrink-0" />
-            <p className="text-sm text-stone-300 leading-relaxed">
+            <p className="text-sm text-stone-300 leading-relaxed whitespace-pre-line">
               {settings.contactExtensionText || '촬영 연장은 시간당 150,000원입니다.'}
             </p>
           </div>
@@ -369,7 +385,7 @@ export default function Contact() {
             className="bg-white/5 p-10 md:p-12 rounded-2xl shadow-sm border border-white/10 w-full"
           >
             <h2 className="font-serif text-3xl text-white mb-2">{settings.contactFormTitle || '상담 신청'}</h2>
-            <p className="text-stone-400 font-light text-sm mb-8 leading-relaxed">
+            <p className="text-stone-400 font-light text-sm mb-8 leading-relaxed whitespace-pre-line">
               {settings.contactFormDescription || '원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.'}
             </p>
 

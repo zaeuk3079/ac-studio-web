@@ -60,6 +60,7 @@ const DEFAULT_CONTACT_PACKAGES: ContactPackage[] = [
       '제형·디테일컷 — 50,000원',
     ],
     highlight: false,
+    featuresFirst: true,
   },
 ];
 
@@ -1794,19 +1795,34 @@ export default function Settings() {
                         <span className="text-xs font-bold text-stone-700 uppercase tracking-wider">
                           [{pIdx + 1}] {pkg.name || `카드 ${pIdx + 1}`}
                         </span>
-                        <label className="flex items-center gap-1.5 text-[11px] text-stone-500 cursor-pointer select-none">
-                          <input
-                            type="checkbox"
-                            checked={!!pkg.highlight}
-                            onChange={(e) => {
-                              const base = formData.contactPackages && formData.contactPackages.length > 0 ? formData.contactPackages : DEFAULT_CONTACT_PACKAGES;
-                              const next = [...base];
-                              next[pIdx] = { ...next[pIdx], highlight: e.target.checked };
-                              setFormData({ ...formData, contactPackages: next });
-                            }}
-                          />
-                          추천 뱃지 표시
-                        </label>
+                        <div className="flex items-center gap-3">
+                          <label className="flex items-center gap-1.5 text-[11px] text-stone-500 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={!!pkg.highlight}
+                              onChange={(e) => {
+                                const base = formData.contactPackages && formData.contactPackages.length > 0 ? formData.contactPackages : DEFAULT_CONTACT_PACKAGES;
+                                const next = [...base];
+                                next[pIdx] = { ...next[pIdx], highlight: e.target.checked };
+                                setFormData({ ...formData, contactPackages: next });
+                              }}
+                            />
+                            추천 뱃지 표시
+                          </label>
+                          <label className="flex items-center gap-1.5 text-[11px] text-stone-500 cursor-pointer select-none">
+                            <input
+                              type="checkbox"
+                              checked={!!pkg.featuresFirst}
+                              onChange={(e) => {
+                                const base = formData.contactPackages && formData.contactPackages.length > 0 ? formData.contactPackages : DEFAULT_CONTACT_PACKAGES;
+                                const next = [...base];
+                                next[pIdx] = { ...next[pIdx], featuresFirst: e.target.checked };
+                                setFormData({ ...formData, contactPackages: next });
+                              }}
+                            />
+                            가격/포함내역을 위로
+                          </label>
+                        </div>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1857,9 +1873,8 @@ export default function Settings() {
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">한 줄 소개 (Tagline)</label>
-                        <input
-                          type="text"
+                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">한 줄 소개 (Tagline) — Enter로 줄바꿈 가능</label>
+                        <textarea
                           value={pkg.tagline}
                           onChange={(e) => {
                             const base = formData.contactPackages && formData.contactPackages.length > 0 ? formData.contactPackages : DEFAULT_CONTACT_PACKAGES;
@@ -1867,14 +1882,14 @@ export default function Settings() {
                             next[pIdx] = { ...next[pIdx], tagline: e.target.value };
                             setFormData({ ...formData, contactPackages: next });
                           }}
-                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
+                          rows={2}
+                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800 resize-y"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">설명 문구</label>
-                        <input
-                          type="text"
+                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">설명 문구 — Enter로 줄바꿈 가능</label>
+                        <textarea
                           value={pkg.description}
                           onChange={(e) => {
                             const base = formData.contactPackages && formData.contactPackages.length > 0 ? formData.contactPackages : DEFAULT_CONTACT_PACKAGES;
@@ -1882,7 +1897,8 @@ export default function Settings() {
                             next[pIdx] = { ...next[pIdx], description: e.target.value };
                             setFormData({ ...formData, contactPackages: next });
                           }}
-                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800"
+                          rows={2}
+                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800 resize-y"
                         />
                       </div>
 
@@ -1908,14 +1924,14 @@ export default function Settings() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">시간 연장 안내 문구</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-stone-700 mb-2">시간 연장 안내 문구 — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="contactExtensionText"
                     value={formData.contactExtensionText || ''}
                     onChange={handleChange}
                     placeholder="예: 촬영 연장은 시간당 150,000원입니다."
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-sm"
+                    rows={2}
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-sm resize-y"
                   />
                 </div>
               </div>
