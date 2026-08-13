@@ -1984,6 +1984,18 @@ export default function Settings() {
                     className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-stone-700 mb-2">카카오톡 채널 URL (문의하기 페이지 채널 추가 버튼)</label>
+                  <input
+                    type="text"
+                    name="kakaoChannelUrl"
+                    value={formData.kakaoChannelUrl || ''}
+                    onChange={handleChange}
+                    placeholder="https://pf.kakao.com/_xxxxx"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  />
+                  <p className="text-xs text-stone-400 mt-1">비워두면 문의하기 페이지에 카카오톡 버튼이 표시되지 않습니다.</p>
+                </div>
               </div>
             </div>
           </motion.div>
