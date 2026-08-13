@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useCMS } from '../store/CMSContext';
 import { motion } from 'motion/react';
 import { Mail, Phone, MapPin, Instagram, MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck } from 'lucide-react';
+import { ContactPackage } from '../store/CMSContext';
 
-// 상품 구성 — 패키지 3종 (제품 촬영 기준)
-const PACKAGES = [
+const DEFAULT_PACKAGES: ContactPackage[] = [
   {
+    id: 'starter',
     name: '시작 패키지',
     price: '590,000원',
     duration: '',
@@ -19,6 +20,7 @@ const PACKAGES = [
     highlight: false,
   },
   {
+    id: 'halfday',
     name: '하프데이',
     price: '890,000원',
     duration: '4시간',
@@ -32,6 +34,7 @@ const PACKAGES = [
     highlight: true,
   },
   {
+    id: 'fullday',
     name: '풀데이',
     price: '1,290,000원',
     duration: '9시간',
@@ -44,13 +47,20 @@ const PACKAGES = [
     ],
     highlight: false,
   },
-];
-
-// 컷 당 추가 촬영 단가 (보정 포함)
-const PER_CUT_PRICING = [
-  { label: '일반 누끼', price: '40,000원', note: '' },
-  { label: '반사체 누끼', price: '60,000원', note: '거울·은박·유광 뚜껑 등' },
-  { label: '제형·디테일컷', price: '50,000원', note: '' },
+  {
+    id: 'per-cut',
+    name: '컷 당 촬영',
+    price: '',
+    duration: '',
+    tagline: '보정 포함 단가입니다.',
+    description: '패키지 없이 컷 단위로만 촬영이 필요할 때 이용해주세요.',
+    features: [
+      '일반 누끼 — 40,000원',
+      '반사체 누끼 (거울·은박·유광 뚜껑 등) — 60,000원',
+      '제형·디테일컷 — 50,000원',
+    ],
+    highlight: false,
+  },
 ];
 
 // 정책 안내 그룹 (보정&납품 / 비용관련 / 예약&결제)
@@ -192,12 +202,12 @@ export default function Contact() {
             <h2 className="font-serif text-2xl sm:text-3xl text-white mt-1">상품 구성</h2>
           </div>
 
-          {/* Package cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
-            {PACKAGES.map((pkg) => (
+          {/* Package cards (4th card = 컷 당 촬영 단가표) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+            {(settings.contactPackages && settings.contactPackages.length > 0 ? settings.contactPackages : DEFAULT_PACKAGES).map((pkg) => (
               <div
-                key={pkg.name}
-                className={`p-7 rounded-2xl border flex flex-col ${
+                key={pkg.id}
+                className={`p-6 rounded-2xl border flex flex-col ${
                   pkg.highlight
                     ? 'bg-lime-300/5 border-lime-300/40 shadow-lg shadow-lime-300/5'
                     : 'bg-white/5 border-white/10'
@@ -208,9 +218,9 @@ export default function Contact() {
                     추천
                   </span>
                 )}
-                <h3 className="text-xl font-bold text-white">{pkg.name}</h3>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-black gradient-accent-text">{pkg.price}</span>
+                <h3 className="text-lg font-bold text-white">{pkg.name}</h3>
+                <div className="mt-2 flex items-baseline gap-2 min-h-[28px]">
+                  {pkg.price && <span className="text-xl font-black gradient-accent-text">{pkg.price}</span>}
                   {pkg.duration && (
                     <span className="text-xs text-stone-400 flex items-center gap-1">
                       <Clock size={12} />
@@ -221,12 +231,22 @@ export default function Contact() {
                 <p className="text-xs text-stone-400 mt-3 leading-relaxed">{pkg.tagline}</p>
                 <p className="text-xs text-stone-500 mt-1.5 leading-relaxed">{pkg.description}</p>
                 <ul className="mt-5 pt-5 border-t border-white/10 space-y-2 flex-1">
-                  {pkg.features.map((feat, idx) => (
-                    <li key={idx} className="flex items-start gap-1.5 text-xs text-stone-300">
-                      <span className="text-lime-300 mt-0.5 shrink-0">✓</span>
-                      <span className="leading-relaxed">{feat}</span>
-                    </li>
-                  ))}
+                  {pkg.features.map((feat, idx) => {
+                    const [label, price] = feat.split(' — ');
+                    return (
+                      <li key={idx} className="flex items-start gap-1.5 text-xs text-stone-300">
+                        <span className="text-lime-300 mt-0.5 shrink-0">✓</span>
+                        {price ? (
+                          <span className="leading-relaxed flex-1 flex items-baseline justify-between gap-2">
+                            <span>{label}</span>
+                            <span className="text-lime-300 font-semibold whitespace-nowrap">{price}</span>
+                          </span>
+                        ) : (
+                          <span className="leading-relaxed">{feat}</span>
+                        )}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}
@@ -235,32 +255,12 @@ export default function Contact() {
             * 하프데이 · 풀데이는 따로 컷 수 제한이 없으며, 연출 난이도에 따라 완성 가능한 컷 수가 달라질 수 있습니다.
           </p>
 
-          {/* Per-cut add-on pricing + time extension */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4">컷 당 촬영 (보정 포함)</h3>
-              <ul className="space-y-3">
-                {PER_CUT_PRICING.map((item) => (
-                  <li key={item.label} className="flex items-center justify-between text-sm border-b border-white/5 pb-3 last:border-0 last:pb-0">
-                    <div>
-                      <span className="text-stone-200 font-medium">{item.label}</span>
-                      {item.note && <span className="text-stone-500 text-xs ml-1.5">({item.note})</span>}
-                    </div>
-                    <span className="text-lime-300 font-semibold whitespace-nowrap ml-3">{item.price}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-                <Clock size={14} className="text-lime-300" />
-                시간 연장
-              </h3>
-              <p className="text-sm text-stone-300 leading-relaxed flex-1 flex items-center">
-                촬영 연장은 시간당 <span className="text-lime-300 font-semibold mx-1">150,000원</span>입니다.
-              </p>
-            </div>
+          {/* Time extension */}
+          <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 mb-5 flex items-center gap-3">
+            <Clock size={16} className="text-lime-300 shrink-0" />
+            <p className="text-sm text-stone-300 leading-relaxed">
+              {settings.contactExtensionText || '촬영 연장은 시간당 150,000원입니다.'}
+            </p>
           </div>
 
           {/* Policy groups */}
