@@ -299,17 +299,17 @@ export default function Home() {
           {/* Subcategories (only under Photography) */}
           {activeCategory === 'Photography' && (
             <div className="flex flex-wrap gap-3 mt-8 text-[11px] tracking-wider uppercase font-semibold text-stone-400">
-              {['ALL', 'COMMERCIAL', 'MODEL'].map((sub) => (
+              {[{ value: 'ALL', label: 'ALL' }, { value: 'COMMERCIAL', label: 'PRODUCT' }, { value: 'MODEL', label: 'MODEL' }].map(({ value, label }) => (
                 <button
-                  key={sub}
-                  onClick={() => setSubCategory(sub)}
+                  key={value}
+                  onClick={() => setSubCategory(value)}
                   className={`px-5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
-                    subCategory === sub
+                    subCategory === value
                       ? 'gradient-accent-bg border-transparent text-ink-950 shadow-sm font-bold'
                       : 'bg-white/5 border-white/10 text-stone-400 hover:bg-white/10'
                   }`}
                 >
-                  {sub}
+                  {label}
                 </button>
               ))}
             </div>
