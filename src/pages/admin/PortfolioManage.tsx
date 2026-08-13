@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCMS, PortfolioItem } from '../../store/CMSContext';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Edit2, Trash2, X, Check, GripVertical, Loader2, Pin } from 'lucide-react';
-import { compressImage } from '../../utils/imageUtils';
+import { uploadImageToCloudCDN } from '../../utils/imageUtils';
 import {
   DndContext,
   closestCenter,
@@ -108,6 +108,48 @@ export default function PortfolioManage() {
   const [formData, setFormData] = useState<Partial<PortfolioItem>>({});
   const [tempUrl, setTempUrl] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [migrationProgress, setMigrationProgress] = useState({ done: 0, total: 0 });
+
+  const legacyBase64Items = portfolio.filter(item => item.imageUrl?.startsWith('data:image'));
+
+  const migrateBase64ImagesToCDN = async () => {
+    if (legacyBase64Items.length === 0) return;
+    if (!window.confirm(
+      `${legacyBase64Items.length}개의 대표 이미지가 아직 Firestore에 base64로 저장되어 있어 페이지 로딩을 느리게 만들고 있습니다. ` +
+      `지금 전부 CDN(imgbb)으로 이전할까요? 이전 중에는 이 탭을 닫지 마세요.`
+    )) return;
+
+    setIsMigrating(true);
+    setMigrationProgress({ done: 0, total: legacyBase64Items.length });
+    let failCount = 0;
+
+    for (const item of legacyBase64Items) {
+      try {
+        const res = await fetch(item.imageUrl);
+        const blob = await res.blob();
+        const file = new File([blob], `${item.id}.jpg`, { type: blob.type || 'image/jpeg' });
+        const cdnUrl = await uploadImageToCloudCDN(file);
+        if (cdnUrl.startsWith('data:image')) {
+          // CDN upload itself failed and fell back to base64 again — don't count as success.
+          failCount++;
+        } else {
+          await updatePortfolioItem(item.id, { imageUrl: cdnUrl });
+        }
+      } catch (err) {
+        console.error('Migration failed for portfolio item', item.id, err);
+        failCount++;
+      }
+      setMigrationProgress(prev => ({ ...prev, done: prev.done + 1 }));
+    }
+
+    setIsMigrating(false);
+    alert(
+      failCount === 0
+        ? `이전 완료: ${legacyBase64Items.length}개 모두 성공했습니다.`
+        : `이전 완료: ${legacyBase64Items.length - failCount}개 성공, ${failCount}개 실패했습니다. 실패한 항목은 다시 시도해주세요.`
+    );
+  };
 
   // Normalize mapping for categories (matching Home.tsx filters)
   const filteredPortfolio = portfolio.filter(item => {
@@ -164,15 +206,18 @@ export default function PortfolioManage() {
     setIsProcessing(true);
     try {
       for (const file of files) {
-        // 2K resolution (2560px), quality 0.7 for optimal size/quality balance in Firestore
-        const compressedBase64 = await compressImage(file, 2560, 1800, 0.7);
-        
+        // Upload to the CDN (imgbb) and store a URL instead of a base64 data URI: embedding
+        // full-resolution base64 images directly in Firestore documents made the portfolio
+        // collection's read payload balloon to tens of MB, which every visitor downloaded in
+        // full on every page load (the main cause of slow mobile loading).
+        const cdnUrl = await uploadImageToCloudCDN(file, 2560, 0.82);
+
         setFormData(prev => {
-          const newGallery = [...(prev.gallery || []), compressedBase64];
+          const newGallery = [...(prev.gallery || []), cdnUrl];
           return {
             ...prev,
             gallery: newGallery,
-            imageUrl: prev.imageUrl || compressedBase64
+            imageUrl: prev.imageUrl || cdnUrl
           };
         });
       }
@@ -301,6 +346,23 @@ export default function PortfolioManage() {
           </button>
         )}
       </div>
+
+      {legacyBase64Items.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <p className="text-sm text-amber-800">
+            대표 이미지 <strong>{legacyBase64Items.length}개</strong>가 아직 Firestore에 직접 저장되어 있어 사이트 로딩을 느리게 만들고 있어요.
+            {isMigrating && ` (이전 중: ${migrationProgress.done}/${migrationProgress.total})`}
+          </p>
+          <button
+            onClick={migrateBase64ImagesToCDN}
+            disabled={isMigrating}
+            className="shrink-0 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2"
+          >
+            {isMigrating && <Loader2 size={14} className="animate-spin" />}
+            <span>{isMigrating ? '이전 중...' : 'CDN으로 이전하기 (속도 개선)'}</span>
+          </button>
+        </div>
+      )}
 
       <AnimatePresence>
         {(isAdding || isEditing) && (

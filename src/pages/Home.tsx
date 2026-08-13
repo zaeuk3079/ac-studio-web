@@ -47,7 +47,6 @@ export default function Home() {
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [isLoadingGallery, setIsLoadingGallery] = useState(false);
-  const [heroImageAspectRatio, setHeroImageAspectRatio] = useState<number | null>(null);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   useEffect(() => {
@@ -124,13 +123,18 @@ export default function Home() {
     <div className="bg-ink-950 text-white min-h-screen pb-16">
       {/* Main Hero Banner — edge-to-edge, square corners, dark fade + brand copy + CTA, sits flush under header */}
       {settings.heroImage && (
-        <div className="w-full mb-16 sm:mb-16 relative">
+        <div className="w-full mb-16 relative">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className="w-full overflow-hidden relative sm:h-[78vh] sm:min-h-[500px] sm:max-h-[820px]"
-            style={isMobileViewport ? { aspectRatio: heroImageAspectRatio ?? 1.5, maxHeight: 520 } : undefined}
+            className="w-full overflow-hidden relative sm:min-h-[500px] sm:max-h-[820px]"
+            style={{
+              aspectRatio: isMobileViewport
+                ? 4 / 3
+                : (settings.heroAspectRatio === '16:9' ? 16 / 9 : settings.heroAspectRatio === '4:3' ? 4 / 3 : 3 / 2),
+              maxHeight: isMobileViewport ? 520 : undefined,
+            }}
           >
               {/* Single High-Resolution Premium Hero Banner Image */}
               <div className="absolute inset-0 w-full h-full">
@@ -145,23 +149,15 @@ export default function Home() {
                     backfaceVisibility: 'hidden'
                   }}
                   referrerPolicy="no-referrer"
-                  onLoad={(e) => {
-                    const img = e.currentTarget;
-                    if (img.naturalWidth && img.naturalHeight) {
-                      setHeroImageAspectRatio(img.naturalWidth / img.naturalHeight);
-                    }
-                  }}
                 />
                 {/* Dark fade for legibility, anibada-style (halved strength) */}
                 <div className="absolute inset-0 bg-gradient-to-t from-ink-950/50 via-ink-950/25 to-ink-950/5" />
                 <div className="absolute inset-0 bg-gradient-to-r from-ink-950/35 via-transparent to-transparent" />
               </div>
-          </motion.div>
 
-          {/* Brand Copy Container — sits outside the image's overflow-hidden box so it can shift
-              further down on mobile (revealing more of the image up top) without being clipped;
-              pinned to the image's bottom edge and shifted down by 35% of its own height on mobile only. */}
-          <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end pb-5 sm:pb-7 md:pb-8 lg:pb-10 translate-y-[35%] sm:translate-y-0">
+              {/* Brand Copy Container — stays within the image's own box so the CTA button never
+                  spills outside the banner; anchored to the bottom with mobile-friendly padding. */}
+              <div className="absolute inset-x-0 bottom-0 flex flex-col justify-end pb-4 sm:pb-7 md:pb-8 lg:pb-10">
             <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-[92%] md:max-w-2xl flex flex-col items-start">
             {settings.heroSubText && (
@@ -230,6 +226,7 @@ export default function Home() {
             </div>
             </div>
           </div>
+          </motion.div>
         </div>
       )}
 
