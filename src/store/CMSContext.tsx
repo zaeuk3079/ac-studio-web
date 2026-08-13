@@ -44,6 +44,17 @@ export interface ServicePlan {
   badgeTextColor?: string;
 }
 
+export interface ContactPackage {
+  id: string;
+  name: string;
+  price: string;
+  duration?: string;
+  tagline: string;
+  description: string;
+  features: string[];
+  highlight?: boolean;
+}
+
 export interface SiteSettings {
   siteName: string;
   logoUrl?: string;
@@ -132,6 +143,8 @@ export interface SiteSettings {
   contactFormTitle?: string;
   contactFormDescription?: string;
   contactFormButtonText?: string;
+  contactPackages?: ContactPackage[];
+  contactExtensionText?: string;
   contactEmail: string;
   contactPhone: string;
   contactAddress: string;
@@ -328,6 +341,65 @@ const defaultSettings: SiteSettings = {
   contactFormTitle: '상담 신청',
   contactFormDescription: '원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.',
   contactFormButtonText: '상담 신청하기',
+  contactPackages: [
+    {
+      id: 'starter',
+      name: '시작 패키지',
+      price: '590,000원',
+      duration: '',
+      tagline: '빠른 오픈을 준비하는 1인 셀러를 위한 구성입니다.',
+      description: '제품 1종을 실촬영하고, 그 원본으로 AI 연출 이미지를 제작합니다.',
+      features: [
+        '실촬영 누끼·디테일컷 (제품에 필요한 만큼)',
+        'AI 연출 이미지 (기획에 맞춰 제작)',
+        '누끼 및 AI 이미지 +5일 이내 전달',
+      ],
+      highlight: false,
+    },
+    {
+      id: 'halfday',
+      name: '하프데이',
+      price: '890,000원',
+      duration: '4시간',
+      tagline: '컷 수 제한 없이, 연출 난이도에 따라 유동적으로 진행합니다.',
+      description: '대략적으로 연출 5~7컷, 누끼+연출 3~4컷 정도가 나옵니다.',
+      features: [
+        '촬영 시간 4시간',
+        '연출 난이도에 따라 완성 컷 수 조정',
+        '연출 약 5~7컷 · 누끼+연출 약 3~4컷',
+      ],
+      highlight: true,
+    },
+    {
+      id: 'fullday',
+      name: '풀데이',
+      price: '1,290,000원',
+      duration: '9시간',
+      tagline: '컷 수 제한 없이, 넉넉한 시간으로 다양한 컨셉을 소화합니다.',
+      description: '대략적으로 연출 8~15컷, 누끼+연출 4~7컷 정도가 나옵니다.',
+      features: [
+        '촬영 시간 9시간',
+        '연출 난이도에 따라 완성 컷 수 조정',
+        '연출 약 8~15컷 · 누끼+연출 약 4~7컷',
+      ],
+      highlight: false,
+    },
+    {
+      id: 'per-cut',
+      name: '컷 당 촬영',
+      price: '',
+      duration: '',
+      tagline: '보정 포함 단가입니다.',
+      description: '패키지 없이 컷 단위로만 촬영이 필요할 때 이용해주세요.',
+      features: [
+        '일반 누끼 — 40,000원',
+        '반사체 누끼 (거울·은박·유광 뚜껑 등) — 60,000원',
+        '제형·디테일컷 — 50,000원',
+      ],
+      highlight: false,
+    },
+  ],
+  contactExtensionText: '촬영 연장은 시간당 150,000원입니다.',
   contactEmail: 'contact@puffstudio.com',
   contactPhone: '010-1234-5678',
   contactAddress: '서울특별시 강남구 역삼동 스튜디오',
