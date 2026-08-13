@@ -133,6 +133,7 @@ export interface SiteSettings {
   contactPhone: string;
   contactAddress: string;
   instagramUrl: string;
+  kakaoChannelUrl?: string;
   googleFormUrl: string;
   formDownloadUrl: string;
   web3FormsKey?: string;
@@ -325,6 +326,7 @@ const defaultSettings: SiteSettings = {
   contactPhone: '010-1234-5678',
   contactAddress: '서울특별시 강남구 역삼동 스튜디오',
   instagramUrl: 'https://instagram.com/puffstudio',
+  kakaoChannelUrl: '',
   googleFormUrl: 'https://docs.google.com/forms',
   formDownloadUrl: '#',
   web3FormsKey: '2ad41e7e-6c9c-4c9b-b14a-d160b8fc15bf',

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCMS } from '../store/CMSContext';
 import { motion } from 'motion/react';
-import { Mail, Phone, MapPin, Instagram, FileText, Download, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, MessageCircle, Send } from 'lucide-react';
 
 export default function Contact() {
   const { settings } = useCMS();
@@ -10,11 +10,10 @@ export default function Contact() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [purpose, setPurpose] = useState(''); // 촬영 목적 (SNS/상세페이지/숏츠 등)
   const [date, setDate] = useState(''); // 희망 일정
   const [budget, setBudget] = useState(''); // 촬영 예산
-  const [message, setMessage] = useState(''); // 촬영 내용 (컨셉 및 분량)
-  
+  const [message, setMessage] = useState(''); // 촬영 목적 및 내용 (자유 서술)
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -27,7 +26,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Web3Forms 키 확인 (폴백 처리)
     if (!settings.web3FormsKey) {
       const confirmFallback = window.confirm(
@@ -51,13 +50,12 @@ export default function Contact() {
         },
         body: JSON.stringify({
           access_key: settings.web3FormsKey,
-          subject: `[견적 문의] ${name}님 - 촬영 문의`,
+          subject: `[상담 문의] ${name}님 - 촬영 문의`,
           from_name: name,
           name,
           phone,
           email,
           category: 'INQUIRY',
-          purpose,
           date,
           budget: budget || '협의/미정',
           message
@@ -71,7 +69,6 @@ export default function Contact() {
         setName('');
         setPhone('');
         setEmail('');
-        setPurpose('');
         setDate('');
         setBudget('');
         setMessage('');
@@ -90,108 +87,19 @@ export default function Contact() {
     <div className="min-h-screen pt-12 pb-24 transition-colors duration-500 text-white" style={{ backgroundColor: settings.contactBgColor || '#0B0C10' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Service Package Plans (Basic, Standard, Premium, Monthly Subscription) */}
+        {/* Page intro */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-14"
         >
-          <div className="text-center mb-8">
-            <span className="text-xs font-mono font-bold tracking-widest text-stone-400 uppercase">Service Package Plans</span>
-            <h2 className="text-2xl font-bold text-white mt-1">촬영 서비스 및 구독 안내</h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-            {(settings.servicePlans || [
-              {
-                id: 'basic',
-                name: 'Basic',
-                badge: '기본 플랜',
-                description: '브랜드 스타트업을 위한 핵심 상세페이지 제작 플랜',
-                features: ['상세페이지']
-              },
-              {
-                id: 'standard',
-                name: 'Standard',
-                badge: '인기 패키지',
-                description: '상세페이지와 SNS 마케팅 브랜드 컨텐츠 종합 패키지',
-                features: ['상세페이지', 'SNS컨텐츠']
-              },
-              {
-                id: 'premium',
-                name: 'Premium',
-                badge: '올인원 프리미엄',
-                description: '상세페이지부터 SNS, 퍼포먼스 광고용 컨텐츠까지 완벽 포함',
-                features: ['상세페이지', 'SNS컨텐츠', '광고용 컨텐츠']
-              },
-              {
-                id: 'subscription',
-                name: '월 단위 구독제',
-                badge: 'Monthly 정기구독',
-                description: '지속적인 브랜드 마케팅을 위한 월 정기 구독형 컨텐츠 제작',
-                features: ['월별 SNS컨텐츠', '월 9개 컨텐츠 (사진/영상 비율 조정가능)']
-              },
-              {
-                id: 'extra',
-                name: '그 외 촬영',
-                badge: '별도 문의',
-                description: '카페, 식당 메뉴, 굿즈, 인테리어 촬영 등 건별 맞춤 촬영',
-                features: ['카페 · 식당 메뉴', '굿즈 · 인테리어 촬영 등']
-              }
-            ]).map((plan, idx) => {
-              const cardBg = plan.bgColor || (plan.id === 'subscription' ? '#18181B' : '#FFFFFF');
-              const cardBorder = plan.borderColor || (plan.id === 'subscription' ? '#800020' : '#E7E5E4');
-              const cardText = plan.textColor || (plan.id === 'subscription' ? '#FFFFFF' : '#1C1917');
-              const isDarkCard = cardBg.toLowerCase() === '#18181b' || cardBg.toLowerCase() === '#0f172a' || cardBg.toLowerCase() === '#000000' || cardBg.toLowerCase() === '#1c1917';
-
-              return (
-                <div
-                  key={plan.id || idx}
-                  className="p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 shadow-sm hover:shadow-md"
-                  style={{
-                    backgroundColor: cardBg,
-                    borderColor: cardBorder,
-                    color: cardText,
-                  }}
-                >
-                  <div>
-                    <div className="flex justify-between items-center mb-3">
-                      <span
-                        className="text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border shadow-sm"
-                        style={{
-                          backgroundColor: plan.badgeBgColor || (isDarkCard ? '#800020' : '#F5F5F0'),
-                          color: plan.badgeTextColor || (isDarkCard ? '#FFFFFF' : '#44403C'),
-                          borderColor: isDarkCard ? 'transparent' : '#E7E5E4'
-                        }}
-                      >
-                        {plan.badge || plan.name}
-                      </span>
-                    </div>
-                    <h3 className="text-lg font-bold mb-2" style={{ color: cardText }}>{plan.name}</h3>
-                    <p className="text-[11px] mb-5 leading-relaxed opacity-80" style={{ color: cardText }}>
-                      {plan.description}
-                    </p>
-                  </div>
-
-                  <div className="pt-4 border-t" style={{ borderColor: isDarkCard ? '#27272A' : '#F5F5F4' }}>
-                    <ul className="space-y-2">
-                      {plan.features.map((feat, fIdx) => (
-                        <li key={fIdx} className="flex items-start space-x-1.5 text-xs font-semibold">
-                          <span className="text-lime-500">✓</span>
-                          <span className="whitespace-pre-line leading-snug" style={{ color: cardText }}>{feat}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <span className="text-xs font-mono font-bold tracking-widest text-stone-400 uppercase">{settings.contactSubText || 'Contact'}</span>
+          <h1 className="font-serif text-3xl sm:text-4xl text-white mt-2">{settings.contactTitle || '견적문의'}</h1>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Contact Info (Left Side) */}
+          {/* Service intro + Contact info (Left Side) */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -200,9 +108,21 @@ export default function Contact() {
           >
             <div>
               <h2 className="font-serif text-3xl text-white mb-8">{settings.contactMessageTitle}</h2>
-              <p className="text-stone-400 font-light leading-relaxed mb-12">
+              <p className="text-stone-400 font-light leading-relaxed mb-12 whitespace-pre-line">
                 {settings.contactMessageText}
               </p>
+
+              {settings.kakaoChannelUrl && (
+                <a
+                  href={settings.kakaoChannelUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center space-x-2 bg-[#FEE500] hover:brightness-95 text-[#191919] font-bold tracking-wide py-3.5 rounded-xl transition-all duration-300 shadow-sm mb-12"
+                >
+                  <MessageCircle size={18} />
+                  <span>카카오톡 채널로 문의하기</span>
+                </a>
+              )}
 
               <div className="space-y-8">
                 <div className="flex items-start space-x-4">
@@ -221,7 +141,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold tracking-widest uppercase text-white mb-1">Email</h3>
-                    <p className="text-stone-400 font-light">{settings.contactEmail || 'contact@agingstudio.com'}</p>
+                    <p className="text-stone-400 font-light">{settings.contactEmail || 'contact@puffstudio.com'}</p>
                   </div>
                 </div>
 
@@ -252,28 +172,28 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Contact Inquiry Form (Right Side) */}
+          {/* Consultation Form (Right Side) */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-white/5 p-10 md:p-12 rounded-2xl shadow-sm border border-white/10 w-full"
           >
-            <h2 className="font-serif text-3xl text-white mb-2">온라인 견적 문의</h2>
+            <h2 className="font-serif text-3xl text-white mb-2">상담 신청</h2>
             <p className="text-stone-400 font-light text-sm mb-8 leading-relaxed">
-              원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 견적 안내를 드리겠습니다.
+              원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">브랜드명 혹은 성함 <span className="text-lime-300">*</span></label>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">이름 / 브랜드명 <span className="text-lime-300">*</span></label>
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="예: 홍길동 (또는 에이징스튜디오)"
+                    placeholder="예: 홍길동 (또는 puff studio)"
                     className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
                   />
                 </div>
@@ -304,10 +224,9 @@ export default function Contact() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">희망 일정 <span className="text-lime-300">*</span></label>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">희망 일정</label>
                   <input
                     type="text"
-                    required
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
                     placeholder="대략적으로"
@@ -315,7 +234,7 @@ export default function Contact() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">촬영 예산</label>
+                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">예산</label>
                   <input
                     type="text"
                     value={budget}
@@ -327,32 +246,20 @@ export default function Contact() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">촬영 목적 <span className="text-lime-300">*</span></label>
-                <input
-                  type="text"
-                  required
-                  value={purpose}
-                  onChange={(e) => setPurpose(e.target.value)}
-                  placeholder="예: sns 컨텐츠, 상세페이지, 숏폼"
-                  className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">촬영 내용 (컨셉 및 분량) <span className="text-lime-300">*</span></label>
+                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">촬영 목적 및 내용 <span className="text-lime-300">*</span></label>
                 <textarea
                   required
-                  rows={4}
+                  rows={5}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder={settings.contactMessagePlaceholder || "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요"}
+                  placeholder={settings.contactMessagePlaceholder || "촬영 목적(SNS 컨텐츠, 상세페이지, 숏폼 등)과 원하는 컨셉, 필요한 예상 컷 수/영상 갯수를 자유롭게 적어주세요.\n상담을 먼저 원하시면 '상담희망'이라고 남겨주셔도 됩니다."}
                   className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors resize-none leading-relaxed"
                 />
               </div>
 
               {submitStatus === 'success' && (
                 <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 rounded-lg text-sm text-center">
-                  ✨ 견적 문의가 성공적으로 접수되었습니다. 지정하신 메일/연락처로 곧 연락해 드리겠습니다!
+                  ✨ 상담 신청이 성공적으로 접수되었습니다. 지정하신 메일/연락처로 곧 연락해 드리겠습니다!
                 </div>
               )}
 
@@ -372,7 +279,7 @@ export default function Contact() {
                 ) : (
                   <>
                     <Send size={16} />
-                    <span>견적 문의 제출하기</span>
+                    <span>상담 신청하기</span>
                   </>
                 )}
               </button>
