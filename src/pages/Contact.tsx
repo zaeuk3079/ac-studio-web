@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useCMS } from '../store/CMSContext';
 import { motion } from 'motion/react';
-import { MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck } from 'lucide-react';
-import { ContactPackage } from '../store/CMSContext';
+import { MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck, LucideIcon } from 'lucide-react';
+import { ContactPackage, ContactPolicyGroup } from '../store/CMSContext';
 
 const DEFAULT_PACKAGES: ContactPackage[] = [
   {
@@ -64,41 +64,50 @@ const DEFAULT_PACKAGES: ContactPackage[] = [
   },
 ];
 
+const DEFAULT_POLICY_GROUPS: ContactPolicyGroup[] = [
+  {
+    id: 'retouch',
+    title: '보정 & 납품',
+    items: [
+      '원본은 촬영 다음 날 전달됩니다',
+      '정밀 보정본은 셀렉 완료일로부터 +7일 이내 전달됩니다',
+      '리터칭 수정 3회까지 무료, 그 이후 50,000원 (촬영비에 포함되어 있는 리터칭 비용과 별개)',
+      '촬영·보정만 제공하며, 텍스트·레이아웃 디자인은 포함되지 않습니다',
+    ],
+  },
+  {
+    id: 'cost',
+    title: '비용 관련',
+    items: [
+      '출장 촬영: 서울/경기 100,000원, 그 외 지역 협의',
+      '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
+      '촬영 연장은 시간당 150,000원입니다.',
+      '부가세 별도',
+    ],
+  },
+  {
+    id: 'booking',
+    title: '예약 & 결제',
+    items: [
+      '계약금 50% 입금 시 예약이 확정됩니다',
+      '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
+      '촬영 7일 전까지 일정 변경·취소가 가능합니다',
+    ],
+  },
+];
+
+const POLICY_ICONS: Record<string, LucideIcon> = {
+  retouch: Sparkles,
+  cost: Wallet,
+  booking: CalendarCheck,
+};
+
 export default function Contact() {
   const { settings } = useCMS();
 
-  // 정책 안내 그룹 (보정&납품 / 비용관련 / 예약&결제)
-  const policyGroups = [
-    {
-      icon: Sparkles,
-      title: '보정 & 납품',
-      items: [
-        '원본은 촬영 다음 날 전달됩니다',
-        '정밀 보정본은 셀렉 완료일로부터 +7일 이내 전달됩니다',
-        '리터칭 수정 3회까지 무료, 그 이후 50,000원 (촬영비에 포함되어 있는 리터칭 비용과 별개)',
-        '촬영·보정만 제공하며, 텍스트·레이아웃 디자인은 포함되지 않습니다',
-      ],
-    },
-    {
-      icon: Wallet,
-      title: '비용 관련',
-      items: [
-        '출장 촬영: 서울/경기 100,000원, 그 외 지역 협의',
-        '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
-        settings.contactExtensionText || '촬영 연장은 시간당 150,000원입니다.',
-        '부가세 별도',
-      ],
-    },
-    {
-      icon: CalendarCheck,
-      title: '예약 & 결제',
-      items: [
-        '계약금 50% 입금 시 예약이 확정됩니다',
-        '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
-        '촬영 7일 전까지 일정 변경·취소가 가능합니다',
-      ],
-    },
-  ];
+  const policyGroups = settings.contactPolicyGroups && settings.contactPolicyGroups.length > 0
+    ? settings.contactPolicyGroups
+    : DEFAULT_POLICY_GROUPS;
 
   // Form states
   const [name, setName] = useState('');
@@ -272,9 +281,6 @@ export default function Contact() {
           >
             <div>
               <h2 className="font-serif text-3xl text-white mb-8 whitespace-pre-line">{settings.contactMessageTitle}</h2>
-              <p className="text-stone-400 font-light leading-relaxed mb-12 whitespace-pre-line">
-                {settings.contactMessageText}
-              </p>
 
               {settings.kakaoChannelUrl && (
                 <a
@@ -290,9 +296,9 @@ export default function Contact() {
 
               <div className="space-y-6">
                 {policyGroups.map((group, groupIdx) => {
-                  const Icon = group.icon;
+                  const Icon = POLICY_ICONS[group.id] || Sparkles;
                   return (
-                    <div key={group.title} className={groupIdx > 0 ? 'pt-6 border-t border-white/10' : ''}>
+                    <div key={group.id} className={groupIdx > 0 ? 'pt-6 border-t border-white/10' : ''}>
                       <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                         <Icon size={14} className="text-lime-300" />
                         {group.title}

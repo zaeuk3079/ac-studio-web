@@ -56,6 +56,12 @@ export interface ContactPackage {
   featuresFirst?: boolean;
 }
 
+export interface ContactPolicyGroup {
+  id: string;
+  title: string;
+  items: string[];
+}
+
 export interface SiteSettings {
   siteName: string;
   logoUrl?: string;
@@ -140,15 +146,13 @@ export interface SiteSettings {
   contactTitle: string;
   contactSubText: string;
   contactMessageTitle: string;
-  contactMessageText: string;
   contactFormTitle?: string;
   contactFormDescription?: string;
   contactFormButtonText?: string;
   contactPackages?: ContactPackage[];
-  contactExtensionText?: string;
+  contactPolicyGroups?: ContactPolicyGroup[];
   contactEmail: string;
   contactPhone: string;
-  contactAddress: string;
   instagramUrl: string;
   kakaoChannelUrl?: string;
   googleFormUrl: string;
@@ -163,10 +167,6 @@ export interface SiteSettings {
   contactTextX?: number;
   contactTextY?: number;
   contactMessagePlaceholder?: string;
-  address?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  instagramUrl?: string;
   // Appearance
   themeColor: string; // 'ivory' or other
   accentColor: string; // 'burgundy' or other
@@ -338,7 +338,6 @@ const defaultSettings: SiteSettings = {
   contactTitle: '견적문의',
   contactSubText: '견적 및 촬영 문의',
   contactMessageTitle: "Let's Create Together",
-  contactMessageText: '촬영 문의 및 예약은 아래 연락처나 우측의 상담 신청 폼을 통해 남겨주시면, 최대한 빠르게 답변해 드리겠습니다. 당신의 특별한 순간을 함께할 수 있기를 기대합니다.',
   contactFormTitle: '상담 신청',
   contactFormDescription: '원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.',
   contactFormButtonText: '상담 신청하기',
@@ -401,10 +400,39 @@ const defaultSettings: SiteSettings = {
       featuresFirst: true,
     },
   ],
-  contactExtensionText: '촬영 연장은 시간당 150,000원입니다.',
+  contactPolicyGroups: [
+    {
+      id: 'retouch',
+      title: '보정 & 납품',
+      items: [
+        '원본은 촬영 다음 날 전달됩니다',
+        '정밀 보정본은 셀렉 완료일로부터 +7일 이내 전달됩니다',
+        '리터칭 수정 3회까지 무료, 그 이후 50,000원 (촬영비에 포함되어 있는 리터칭 비용과 별개)',
+        '촬영·보정만 제공하며, 텍스트·레이아웃 디자인은 포함되지 않습니다',
+      ],
+    },
+    {
+      id: 'cost',
+      title: '비용 관련',
+      items: [
+        '출장 촬영: 서울/경기 100,000원, 그 외 지역 협의',
+        '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
+        '촬영 연장은 시간당 150,000원입니다.',
+        '부가세 별도',
+      ],
+    },
+    {
+      id: 'booking',
+      title: '예약 & 결제',
+      items: [
+        '계약금 50% 입금 시 예약이 확정됩니다',
+        '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
+        '촬영 7일 전까지 일정 변경·취소가 가능합니다',
+      ],
+    },
+  ],
   contactEmail: 'contact@puffstudio.com',
   contactPhone: '010-1234-5678',
-  contactAddress: '서울특별시 강남구 역삼동 스튜디오',
   instagramUrl: 'https://instagram.com/puffstudio',
   kakaoChannelUrl: '',
   googleFormUrl: 'https://docs.google.com/forms',
@@ -418,7 +446,6 @@ const defaultSettings: SiteSettings = {
   contactTextX: 50,
   contactTextY: 20,
   contactMessagePlaceholder: "원하는 컨셉과 무드 필요한 예상 컷 수 또는 영상 갯수를 적어주세요.\n상담희망 하시는 경우 '상담희망'이라고 기입해주세요",
-  address: '서울특별시 강남구 역삼동 스튜디오',
   contactBgColor: '#0B0C10',
   servicePlans: [
     {
