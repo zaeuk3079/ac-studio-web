@@ -256,12 +256,12 @@ export default function Contact() {
                   )}
                   {pkg.featuresFirst ? (
                     <>
-                      <div className={`${pkg.price || pkg.duration ? 'mt-3' : 'mt-2'} min-h-[92px]`}>{featuresList}</div>
+                      <div className={pkg.price || pkg.duration ? 'mt-3 min-h-[92px]' : 'mt-2 min-h-[132px]'}>{featuresList}</div>
                       <div className="mt-5 pt-5 border-t border-white/10">{taglineDescription}</div>
                     </>
                   ) : (
                     <>
-                      <div className={`${pkg.price || pkg.duration ? 'mt-3' : 'mt-2'} min-h-[92px]`}>{taglineDescription}</div>
+                      <div className={pkg.price || pkg.duration ? 'mt-3 min-h-[92px]' : 'mt-2 min-h-[132px]'}>{taglineDescription}</div>
                       <div className="mt-5 pt-5 border-t border-white/10 flex-1 flex flex-col">{featuresList}</div>
                     </>
                   )}
