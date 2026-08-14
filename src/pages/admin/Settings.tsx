@@ -263,12 +263,15 @@ export default function Settings() {
       setUploadingField(fieldName);
       try {
         // High-Speed Unlimited Cloud CDN Upload
-        const cdnUrl = await uploadImageToCloudCDN(file);
+        // The header logo only ever renders at ~96px tall, so uploading it at the default
+        // 2000px cap wastes bandwidth on every page load — cap it much smaller here.
+        const isLogo = fieldName === 'logoUrl';
+        const cdnUrl = isLogo ? await uploadImageToCloudCDN(file, 400, 0.9) : await uploadImageToCloudCDN(file);
         setFormData(prev => ({ ...prev, [fieldName]: cdnUrl }));
       } catch (error) {
         console.error('Error uploading image to cloud CDN:', error);
         const isLogo = fieldName === 'logoUrl';
-        const maxDim = isLogo ? 600 : 1280;
+        const maxDim = isLogo ? 400 : 1280;
         const compressedBase64 = await compressImage(file, maxDim, maxDim, 0.65, !isLogo);
         setFormData(prev => ({ ...prev, [fieldName]: compressedBase64 }));
       } finally {
