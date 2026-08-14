@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useCMS } from '../store/CMSContext';
 import { motion } from 'motion/react';
-import { MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck, LucideIcon } from 'lucide-react';
+import { MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck, Calendar, LucideIcon } from 'lucide-react';
 import { ContactPackage, ContactPolicyGroup } from '../store/CMSContext';
 
 const DEFAULT_PACKAGES: ContactPackage[] = [
@@ -76,6 +76,15 @@ const DEFAULT_POLICY_GROUPS: ContactPolicyGroup[] = [
     ],
   },
   {
+    id: 'booking',
+    title: '예약 & 결제',
+    items: [
+      '계약금 50% 입금 시 예약이 확정됩니다',
+      '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
+      '촬영 7일 전까지 일정 변경·취소가 가능합니다',
+    ],
+  },
+  {
     id: 'cost',
     title: '비용 관련',
     items: [
@@ -83,15 +92,6 @@ const DEFAULT_POLICY_GROUPS: ContactPolicyGroup[] = [
       '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
       '촬영 연장은 시간당 150,000원입니다.',
       '부가세 별도',
-    ],
-  },
-  {
-    id: 'booking',
-    title: '예약 & 결제',
-    items: [
-      '계약금 50% 입금 시 예약이 확정됩니다',
-      '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
-      '촬영 7일 전까지 일정 변경·취소가 가능합니다',
     ],
   },
 ];
@@ -115,9 +115,27 @@ export default function Contact() {
   const [email, setEmail] = useState('');
   const [date, setDate] = useState(''); // 희망 일정
   const [message, setMessage] = useState(''); // 촬영 목적 및 내용 (자유 서술)
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const openDatePicker = () => {
+    const input = dateInputRef.current;
+    if (!input) return;
+    if (typeof (input as any).showPicker === 'function') {
+      (input as any).showPicker();
+    } else {
+      input.focus();
+      input.click();
+    }
+  };
+
+  const handleDatePicked = (value: string) => {
+    if (!value) return;
+    const [year, month, day] = value.split('-');
+    setDate(`${year}년 ${Number(month)}월 ${Number(day)}일`);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -370,13 +388,30 @@ export default function Contact() {
 
               <div>
                 <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">희망 일정</label>
-                <input
-                  type="text"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  placeholder="대략적으로"
-                  className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    placeholder="대략적으로"
+                    className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg pl-4 pr-11 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
+                  />
+                  <button
+                    type="button"
+                    onClick={openDatePicker}
+                    aria-label="달력에서 날짜 선택"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-lime-300 transition-colors cursor-pointer"
+                  >
+                    <Calendar size={18} />
+                  </button>
+                  <input
+                    ref={dateInputRef}
+                    type="date"
+                    onChange={(e) => handleDatePicked(e.target.value)}
+                    className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+                    tabIndex={-1}
+                  />
+                </div>
               </div>
 
               <div>
