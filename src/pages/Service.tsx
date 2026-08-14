@@ -59,7 +59,7 @@ export default function Service() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-4 sticky top-32"
           >
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight font-sans">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight font-sans whitespace-pre-line">
               {settings.serviceProcessTitle || 'Process'}
             </h1>
             {settings.serviceSubText && (

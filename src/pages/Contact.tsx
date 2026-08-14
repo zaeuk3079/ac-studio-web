@@ -187,8 +187,8 @@ export default function Contact() {
           transition={{ duration: 0.8 }}
           className="text-center mb-14"
         >
-          <span className="text-xs font-mono font-bold tracking-widest text-stone-400 uppercase">{settings.contactSubText || 'Contact'}</span>
-          <h1 className="font-serif text-3xl sm:text-4xl text-white mt-2">{settings.contactTitle || '견적문의'}</h1>
+          <span className="text-xs font-mono font-bold tracking-widest text-stone-400 uppercase whitespace-pre-line">{settings.contactSubText || 'Contact'}</span>
+          <h1 className="font-serif text-3xl sm:text-4xl text-white mt-2 whitespace-pre-line">{settings.contactTitle || '견적문의'}</h1>
         </motion.div>
 
         {/* 상품 구성 (Pricing / Packages) */}
@@ -254,12 +254,12 @@ export default function Contact() {
                   </div>
                   {pkg.featuresFirst ? (
                     <>
-                      <div className="mt-4">{featuresList}</div>
+                      <div className="mt-3 min-h-[92px]">{featuresList}</div>
                       <div className="mt-5 pt-5 border-t border-white/10">{taglineDescription}</div>
                     </>
                   ) : (
                     <>
-                      <div className="mt-3">{taglineDescription}</div>
+                      <div className="mt-3 min-h-[92px]">{taglineDescription}</div>
                       <div className="mt-5 pt-5 border-t border-white/10 flex-1 flex flex-col">{featuresList}</div>
                     </>
                   )}
@@ -312,7 +312,7 @@ export default function Contact() {
             className="bg-white/5 p-12 rounded-2xl shadow-sm border border-white/10 flex flex-col justify-between"
           >
             <div>
-              <h2 className="font-serif text-3xl text-white mb-8">{settings.contactMessageTitle}</h2>
+              <h2 className="font-serif text-3xl text-white mb-8 whitespace-pre-line">{settings.contactMessageTitle}</h2>
               <p className="text-stone-400 font-light leading-relaxed mb-12 whitespace-pre-line">
                 {settings.contactMessageText}
               </p>
@@ -384,7 +384,7 @@ export default function Contact() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="bg-white/5 p-10 md:p-12 rounded-2xl shadow-sm border border-white/10 w-full"
           >
-            <h2 className="font-serif text-3xl text-white mb-2">{settings.contactFormTitle || '상담 신청'}</h2>
+            <h2 className="font-serif text-3xl text-white mb-2 whitespace-pre-line">{settings.contactFormTitle || '상담 신청'}</h2>
             <p className="text-stone-400 font-light text-sm mb-8 leading-relaxed whitespace-pre-line">
               {settings.contactFormDescription || '원하시는 촬영 조건과 목적을 기재해 주시면, 검토 후 이메일 또는 연락처로 신속히 안내해 드리겠습니다.'}
             </p>

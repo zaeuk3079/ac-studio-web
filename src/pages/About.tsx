@@ -30,7 +30,7 @@ export default function About() {
             className="flex flex-col justify-center"
           >
             <h1
-              className="mb-8 font-black"
+              className="mb-8 font-black whitespace-pre-line"
               style={{
                 fontSize: settings.aboutTextFontSize ? `${settings.aboutTextFontSize}px` : undefined,
                 letterSpacing: settings.aboutTextLetterSpacing !== undefined ? `${settings.aboutTextLetterSpacing}px` : undefined,
