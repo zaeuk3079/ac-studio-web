@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useCMS } from '../store/CMSContext';
 import { motion } from 'motion/react';
-import { Mail, Phone, MapPin, Instagram, MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck } from 'lucide-react';
+import { MessageCircle, Send, Clock, Sparkles, Wallet, CalendarCheck } from 'lucide-react';
 import { ContactPackage } from '../store/CMSContext';
 
 const DEFAULT_PACKAGES: ContactPackage[] = [
@@ -64,40 +64,41 @@ const DEFAULT_PACKAGES: ContactPackage[] = [
   },
 ];
 
-// 정책 안내 그룹 (보정&납품 / 비용관련 / 예약&결제)
-const POLICY_GROUPS = [
-  {
-    icon: Sparkles,
-    title: '보정 & 납품',
-    items: [
-      '원본은 촬영 다음 날 전달됩니다',
-      '정밀 보정본은 셀렉 완료일로부터 +7일 이내 전달됩니다',
-      '리터칭 수정 3회까지 무료, 그 이후 50,000원 (촬영비에 포함되어 있는 리터칭 비용과 별개)',
-      '촬영·보정만 제공하며, 텍스트·레이아웃 디자인은 포함되지 않습니다',
-    ],
-  },
-  {
-    icon: Wallet,
-    title: '비용 관련',
-    items: [
-      '출장 촬영: 서울/경기 100,000원, 그 외 지역 협의',
-      '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
-      '부가세 별도',
-    ],
-  },
-  {
-    icon: CalendarCheck,
-    title: '예약 & 결제',
-    items: [
-      '계약금 50% 입금 시 예약이 확정됩니다',
-      '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
-      '촬영 7일 전까지 일정 변경·취소가 가능합니다',
-    ],
-  },
-];
-
 export default function Contact() {
   const { settings } = useCMS();
+
+  // 정책 안내 그룹 (보정&납품 / 비용관련 / 예약&결제)
+  const policyGroups = [
+    {
+      icon: Sparkles,
+      title: '보정 & 납품',
+      items: [
+        '원본은 촬영 다음 날 전달됩니다',
+        '정밀 보정본은 셀렉 완료일로부터 +7일 이내 전달됩니다',
+        '리터칭 수정 3회까지 무료, 그 이후 50,000원 (촬영비에 포함되어 있는 리터칭 비용과 별개)',
+        '촬영·보정만 제공하며, 텍스트·레이아웃 디자인은 포함되지 않습니다',
+      ],
+    },
+    {
+      icon: Wallet,
+      title: '비용 관련',
+      items: [
+        '출장 촬영: 서울/경기 100,000원, 그 외 지역 협의',
+        '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
+        settings.contactExtensionText || '촬영 연장은 시간당 150,000원입니다.',
+        '부가세 별도',
+      ],
+    },
+    {
+      icon: CalendarCheck,
+      title: '예약 & 결제',
+      items: [
+        '계약금 50% 입금 시 예약이 확정됩니다',
+        '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
+        '촬영 7일 전까지 일정 변경·취소가 가능합니다',
+      ],
+    },
+  ];
 
   // Form states
   const [name, setName] = useState('');
@@ -109,13 +110,6 @@ export default function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-
-  const getInstagramHandle = (url: string) => {
-    if (!url) return '@puffstudio';
-    const parts = url.split('/').filter(Boolean);
-    const handle = parts[parts.length - 1];
-    return handle ? `@${handle}` : '@puffstudio';
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,40 +263,9 @@ export default function Contact() {
               );
             })}
           </div>
-          <p className="text-center text-[11px] text-stone-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-center text-[11px] text-stone-500 max-w-2xl mx-auto leading-relaxed">
             * 하프데이 · 풀데이는 따로 컷 수 제한이 없으며, 연출 난이도에 따라 완성 가능한 컷 수가 달라질 수 있습니다.
           </p>
-
-          {/* Time extension */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-4 mb-5 flex items-center gap-3">
-            <Clock size={16} className="text-lime-300 shrink-0" />
-            <p className="text-sm text-stone-300 leading-relaxed whitespace-pre-line">
-              {settings.contactExtensionText || '촬영 연장은 시간당 150,000원입니다.'}
-            </p>
-          </div>
-
-          {/* Policy groups */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {POLICY_GROUPS.map((group) => {
-              const Icon = group.icon;
-              return (
-                <div key={group.title} className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-                    <Icon size={14} className="text-lime-300" />
-                    {group.title}
-                  </h3>
-                  <ul className="space-y-2.5">
-                    {group.items.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-1.5 text-xs text-stone-400 leading-relaxed">
-                        <span className="text-stone-600 mt-0.5 shrink-0">·</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
@@ -331,50 +294,26 @@ export default function Contact() {
                 </a>
               )}
 
-              <div className="space-y-8">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-lime-300/10 p-3 rounded-full text-lime-300">
-                    <Phone size={24} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold tracking-widest uppercase text-white mb-1">Phone</h3>
-                    <p className="text-stone-400 font-light">{settings.contactPhone || '010-1234-5678'}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-lime-300/10 p-3 rounded-full text-lime-300">
-                    <Mail size={24} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold tracking-widest uppercase text-white mb-1">Email</h3>
-                    <p className="text-stone-400 font-light">{settings.contactEmail || 'contact@puffstudio.com'}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-lime-300/10 p-3 rounded-full text-lime-300">
-                    <MapPin size={24} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold tracking-widest uppercase text-white mb-1">Studio Address</h3>
-                    <p className="text-stone-400 font-light whitespace-pre-line">
-                      {settings.address || settings.contactAddress || '서울특별시 강남구 역삼동 스튜디오'}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="bg-lime-300/10 p-3 rounded-full text-lime-300">
-                    <Instagram size={24} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold tracking-widest uppercase text-white mb-1">Instagram</h3>
-                    <a href={settings.instagramUrl || 'https://instagram.com/puffstudio'} target="_blank" rel="noopener noreferrer" className="text-stone-400 font-light hover:text-lime-300 transition-colors">
-                      {getInstagramHandle(settings.instagramUrl || 'https://instagram.com/puffstudio')}
-                    </a>
-                  </div>
-                </div>
+              <div className="space-y-4">
+                {policyGroups.map((group) => {
+                  const Icon = group.icon;
+                  return (
+                    <div key={group.title} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <Icon size={14} className="text-lime-300" />
+                        {group.title}
+                      </h3>
+                      <ul className="space-y-2.5">
+                        {group.items.map((item, idx) => (
+                          <li key={idx} className="flex items-start gap-1.5 text-xs text-stone-400 leading-relaxed">
+                            <span className="text-stone-600 mt-0.5 shrink-0">·</span>
+                            <span className="whitespace-pre-line">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </motion.div>
