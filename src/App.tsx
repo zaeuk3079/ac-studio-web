@@ -37,8 +37,6 @@ function ThemeApplier() {
   return (
     <style>
       {`
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
         :root {
           --font-serif: "${headingFont}", "Pretendard", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif !important;
           --font-sans: "${bodyFont}", "Pretendard", ui-sans-serif, system-ui, sans-serif !important;
