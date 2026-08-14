@@ -170,7 +170,7 @@ export default function Home() {
                   letterSpacing: `${settings.heroSubTextLetterSpacing ?? 1}px`,
                   fontFamily: settings.heroSubTextFontFamily || 'Pretendard',
                 }}
-                className="uppercase font-bold leading-tight mb-1.5 sm:mb-3 tracking-widest gradient-accent-text"
+                className="uppercase font-bold leading-tight mb-1.5 sm:mb-3 tracking-widest gradient-accent-text whitespace-pre-line"
               >
                 {settings.heroSubText}
               </motion.p>
@@ -235,7 +235,7 @@ export default function Home() {
         <div className="mb-16 mt-2">
           <div className="mb-8">
             <h1
-              className="uppercase font-black"
+              className="uppercase font-black whitespace-pre-line"
               style={{
                 fontSize: `clamp(28px, 5vw, ${settings.homePortfolioTitleFontSize || 48}px)`,
                 fontFamily: settings.homePortfolioTitleFontFamily || '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
@@ -253,7 +253,7 @@ export default function Home() {
                   fontFamily: '"Apple SD Gothic Neo", "AppleGothic", "Malgun Gothic", sans-serif',
                   color: settings.homePortfolioSubTextColor || undefined,
                 }}
-                className="font-medium mt-2 text-stone-400"
+                className="font-medium mt-2 text-stone-400 whitespace-pre-line"
               >
                 {settings.homePortfolioSubText}
               </p>

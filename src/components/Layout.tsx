@@ -46,7 +46,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="font-sans text-lg tracking-widest uppercase mb-4 text-white">{settings.footerTitle || settings.siteName}</h3>
+              <h3 className="font-sans text-lg tracking-widest uppercase mb-4 text-white whitespace-pre-line">{settings.footerTitle || settings.siteName}</h3>
               <p className="text-sm text-stone-400 leading-relaxed max-w-xs whitespace-pre-line">
                 {settings.footerText}
               </p>

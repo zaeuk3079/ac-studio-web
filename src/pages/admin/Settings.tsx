@@ -481,14 +481,14 @@ export default function Settings() {
             <div className="pt-6 border-t border-stone-200 space-y-4">
               <h3 className="text-base font-bold text-stone-900">Footer (모든 페이지 하단 영역)</h3>
               <div>
-                <label className="block text-sm font-medium text-stone-700 mb-2">Footer 제목 (비워두면 Site Name 사용)</label>
-                <input
-                  type="text"
+                <label className="block text-sm font-medium text-stone-700 mb-2">Footer 제목 (비워두면 Site Name 사용) — Enter로 줄바꿈 가능</label>
+                <textarea
                   name="footerTitle"
                   value={formData.footerTitle || ''}
                   onChange={handleChange}
                   placeholder="예: puff studio"
-                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors"
+                  rows={2}
+                  className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors resize-y"
                 />
               </div>
               <div>
@@ -668,25 +668,25 @@ export default function Settings() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Main Copy (메인 카피 문구)</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Main Copy (메인 카피 문구) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="heroText"
                     value={formData.heroText || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800 resize-y"
                     placeholder="예: CRAFTING VISUAL STORIES"
+                    rows={2}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Sub Copy (서브 카피 문구)</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Sub Copy (서브 카피 문구) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="heroSubText"
                     value={formData.heroSubText || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800 resize-y"
                     placeholder="예: 감각적인 순간을 담는 브랜드 포토그라피 & 비디오 스튜디오"
+                    rows={2}
                   />
                 </div>
               </div>
@@ -978,14 +978,14 @@ export default function Settings() {
               <h3 className="text-base font-semibold text-stone-800">Work 포트폴리오 섹션 타이틀 & 카피 편집</h3>
 
               <div>
-                <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 제목 (Title)</label>
-                <input
-                  type="text"
+                <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 제목 (Title) — Enter로 줄바꿈 가능</label>
+                <textarea
                   name="homePortfolioTitle"
                   value={formData.homePortfolioTitle || 'Work'}
                   onChange={handleChange}
-                  className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                   placeholder="Work"
+                  rows={2}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1051,14 +1051,14 @@ export default function Settings() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 서브 설명 카피 (Sub Copy)</label>
-                <input
-                  type="text"
+                <label className="block text-xs font-medium text-stone-700 mb-1">Work 섹션 서브 설명 카피 (Sub Copy) — Enter로 줄바꿈 가능</label>
+                <textarea
                   name="homePortfolioSubText"
                   value={formData.homePortfolioSubText || ''}
                   onChange={handleChange}
-                  className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                   placeholder="예: aging studio의 감각적인 대표 포트폴리오 작품입니다."
+                  rows={2}
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -1316,13 +1316,13 @@ export default function Settings() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">About Title (대제목)</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-stone-700 mb-2">About Title (대제목) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="aboutTitle"
                     value={formData.aboutTitle || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800 resize-y"
+                    rows={2}
                   />
                 </div>
                 <div>
@@ -1421,25 +1421,25 @@ export default function Settings() {
               <h3 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-3">Process 섹션 타이틀 설정</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-stone-700 mb-1">대형 타이틀 (기본: Process)</label>
-                  <input
-                    type="text"
+                  <label className="block text-xs font-medium text-stone-700 mb-1">대형 타이틀 (기본: Process) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="serviceProcessTitle"
                     value={formData.serviceProcessTitle || 'Process'}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                     placeholder="Process"
+                    rows={2}
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-stone-700 mb-1">서브 설명 카피</label>
-                  <input
-                    type="text"
+                  <label className="block text-xs font-medium text-stone-700 mb-1">서브 설명 카피 — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="serviceSubText"
                     value={formData.serviceSubText || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                     placeholder="예: aging studio의 촬영 프로세스 안내입니다."
+                    rows={2}
                   />
                 </div>
               </div>
@@ -1604,23 +1604,23 @@ export default function Settings() {
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Title (상단 대제목)</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Title (상단 대제목) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="contactTitle"
                     value={formData.contactTitle || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800 resize-y"
+                    rows={2}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Sub Title (상단 서브 타이틀)</label>
-                  <input
-                    type="text"
+                  <label className="block text-sm font-medium text-stone-700 mb-2">Contact Sub Title (상단 서브 타이틀) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="contactSubText"
                     value={formData.contactSubText || ''}
                     onChange={handleChange}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800"
+                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors font-medium text-stone-800 resize-y"
+                    rows={2}
                   />
                 </div>
               </div>
@@ -1656,14 +1656,14 @@ export default function Settings() {
                   <span className="text-xs font-normal text-stone-500">문의하기 페이지 좌측 카드 상단 문구에 반영됩니다.</span>
                 </h4>
                 <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">카드 제목 (Message Title)</label>
-                  <input
-                    type="text"
+                  <label className="block text-xs font-bold text-stone-700 mb-1">카드 제목 (Message Title) — Enter로 줄바꿈 가능</label>
+                  <textarea
                     name="contactMessageTitle"
                     value={formData.contactMessageTitle || ''}
                     onChange={handleChange}
                     placeholder="예: Let's Create Together"
-                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                    rows={2}
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                   />
                 </div>
                 <div>
@@ -1763,14 +1763,14 @@ export default function Settings() {
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1">폼 제목 (Form Title)</label>
-                    <input
-                      type="text"
+                    <label className="block text-xs font-bold text-stone-700 mb-1">폼 제목 (Form Title) — Enter로 줄바꿈 가능</label>
+                    <textarea
                       name="contactFormTitle"
                       value={formData.contactFormTitle || ''}
                       onChange={handleChange}
                       placeholder="예: 상담 신청"
-                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                      rows={2}
+                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                     />
                   </div>
                   <div>
