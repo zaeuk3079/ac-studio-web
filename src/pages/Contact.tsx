@@ -291,11 +291,11 @@ export default function Contact() {
                 </a>
               )}
 
-              <div className="space-y-4">
-                {policyGroups.map((group) => {
+              <div className="space-y-6">
+                {policyGroups.map((group, groupIdx) => {
                   const Icon = group.icon;
                   return (
-                    <div key={group.title} className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                    <div key={group.title} className={groupIdx > 0 ? 'pt-6 border-t border-white/10' : ''}>
                       <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
                         <Icon size={14} className="text-lime-300" />
                         {group.title}
