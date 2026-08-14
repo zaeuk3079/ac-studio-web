@@ -105,7 +105,6 @@ export default function Contact() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [date, setDate] = useState(''); // 희망 일정
-  const [budget, setBudget] = useState(''); // 촬영 예산
   const [message, setMessage] = useState(''); // 촬영 목적 및 내용 (자유 서술)
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -144,7 +143,6 @@ export default function Contact() {
           email,
           category: 'INQUIRY',
           date,
-          budget: budget || '협의/미정',
           message
         })
       });
@@ -157,7 +155,6 @@ export default function Contact() {
         setPhone('');
         setEmail('');
         setDate('');
-        setBudget('');
         setMessage('');
       } else {
         setSubmitStatus('error');
@@ -365,27 +362,15 @@ export default function Contact() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">희망 일정</label>
-                  <input
-                    type="text"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    placeholder="대략적으로"
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">예산</label>
-                  <input
-                    type="text"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    placeholder="예: 50만원 선, 협의 가능"
-                    className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-semibold tracking-wider uppercase text-stone-300 mb-2">희망 일정</label>
+                <input
+                  type="text"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  placeholder="대략적으로"
+                  className="w-full bg-white/5 border border-white/10 text-white placeholder:text-stone-500 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-lime-300/30 focus:border-lime-300/50 transition-colors"
+                />
               </div>
 
               <div>
