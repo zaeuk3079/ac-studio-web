@@ -190,7 +190,7 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1 }}
-          className="mb-20"
+          className="mb-10"
         >
           {/* Package cards (4th card = 컷 당 촬영 단가표) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
@@ -263,9 +263,6 @@ export default function Contact() {
               );
             })}
           </div>
-          <p className="text-center text-[11px] text-stone-500 max-w-2xl mx-auto leading-relaxed">
-            * 하프데이 · 풀데이는 따로 컷 수 제한이 없으며, 연출 난이도에 따라 완성 가능한 컷 수가 달라질 수 있습니다.
-          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
