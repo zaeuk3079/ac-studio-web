@@ -243,23 +243,25 @@ export default function Contact() {
                     </span>
                   )}
                   <h3 className="text-lg font-bold text-white">{pkg.name}</h3>
-                  <div className="mt-2 flex items-baseline gap-2 min-h-[28px]">
-                    {pkg.price && <span className="text-xl font-black gradient-accent-text">{pkg.price}</span>}
-                    {pkg.duration && (
-                      <span className="text-xs text-stone-400 flex items-center gap-1">
-                        <Clock size={12} />
-                        {pkg.duration}
-                      </span>
-                    )}
-                  </div>
+                  {(pkg.price || pkg.duration) && (
+                    <div className="mt-2 flex items-baseline gap-2 min-h-[28px]">
+                      {pkg.price && <span className="text-xl font-black gradient-accent-text">{pkg.price}</span>}
+                      {pkg.duration && (
+                        <span className="text-xs text-stone-400 flex items-center gap-1">
+                          <Clock size={12} />
+                          {pkg.duration}
+                        </span>
+                      )}
+                    </div>
+                  )}
                   {pkg.featuresFirst ? (
                     <>
-                      <div className="mt-3 min-h-[92px]">{featuresList}</div>
+                      <div className={`${pkg.price || pkg.duration ? 'mt-3' : 'mt-2'} min-h-[92px]`}>{featuresList}</div>
                       <div className="mt-5 pt-5 border-t border-white/10">{taglineDescription}</div>
                     </>
                   ) : (
                     <>
-                      <div className="mt-3 min-h-[92px]">{taglineDescription}</div>
+                      <div className={`${pkg.price || pkg.duration ? 'mt-3' : 'mt-2'} min-h-[92px]`}>{taglineDescription}</div>
                       <div className="mt-5 pt-5 border-t border-white/10 flex-1 flex flex-col">{featuresList}</div>
                     </>
                   )}
