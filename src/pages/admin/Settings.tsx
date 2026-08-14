@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useCMS, SiteSettings, ContactPackage } from '../../store/CMSContext';
+import { useCMS, SiteSettings, ContactPackage, ContactPolicyGroup } from '../../store/CMSContext';
 import { motion } from 'motion/react';
 import { Save, Home, Image as ImageIcon, Phone, Palette, Download, Globe, Move, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 import { compressImage, compressBase64String, uploadImageToCloudCDN } from '../../utils/imageUtils';
@@ -61,6 +61,38 @@ const DEFAULT_CONTACT_PACKAGES: ContactPackage[] = [
     ],
     highlight: false,
     featuresFirst: true,
+  },
+];
+
+const DEFAULT_POLICY_GROUPS: ContactPolicyGroup[] = [
+  {
+    id: 'retouch',
+    title: '보정 & 납품',
+    items: [
+      '원본은 촬영 다음 날 전달됩니다',
+      '정밀 보정본은 셀렉 완료일로부터 +7일 이내 전달됩니다',
+      '리터칭 수정 3회까지 무료, 그 이후 50,000원 (촬영비에 포함되어 있는 리터칭 비용과 별개)',
+      '촬영·보정만 제공하며, 텍스트·레이아웃 디자인은 포함되지 않습니다',
+    ],
+  },
+  {
+    id: 'cost',
+    title: '비용 관련',
+    items: [
+      '출장 촬영: 서울/경기 100,000원, 그 외 지역 협의',
+      '소품·재료비는 실비로 청구드립니다 (영수증 첨부)',
+      '촬영 연장은 시간당 150,000원입니다.',
+      '부가세 별도',
+    ],
+  },
+  {
+    id: 'booking',
+    title: '예약 & 결제',
+    items: [
+      '계약금 50% 입금 시 예약이 확정됩니다',
+      '잔금은 보정본 납품 후 7일 이내 결제해 주시면 됩니다 (세금계산서 발행 가능)',
+      '촬영 7일 전까지 일정 변경·취소가 가능합니다',
+    ],
   },
 ];
 
@@ -1666,43 +1698,16 @@ export default function Settings() {
                     className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 resize-y"
                   />
                 </div>
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 mb-1">카드 설명 문구 (Message Text)</label>
-                  <textarea
-                    name="contactMessageText"
-                    value={formData.contactMessageText || ''}
-                    onChange={handleChange}
-                    rows={3}
-                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
-                  />
-                </div>
               </div>
 
               {/* Studio Contact Information Left Card Editor */}
               <div className="pt-6 border-t border-stone-200 space-y-4">
                 <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
-                  <span>📍 좌측 스튜디오 주소 & 연락처 정보 편집</span>
-                  <span className="text-xs font-normal text-stone-500">문의하기 페이지 좌측 안내 카드에 100% 반영됩니다.</span>
+                  <span>📍 연락처 정보 편집</span>
+                  <span className="text-xs font-normal text-stone-500">문의하기 페이지 카카오 버튼 및 하단 Footer에 반영됩니다.</span>
                 </h4>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1">스튜디오 주소 (Studio Address)</label>
-                    <textarea
-                      name="address"
-                      value={formData.address ?? formData.contactAddress ?? ''}
-                      onChange={(e) => {
-                        setFormData({
-                          ...formData,
-                          address: e.target.value,
-                          contactAddress: e.target.value
-                        });
-                      }}
-                      rows={2}
-                      placeholder="예: 서울특별시 강남구 역삼동 123-45 2층"
-                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
-                    />
-                  </div>
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">이메일 주소 (Email)</label>
                     <input
@@ -1714,9 +1719,6 @@ export default function Settings() {
                       className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
                     />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-stone-700 mb-1">전화번호 / 대표 연락처 (Phone)</label>
                     <input
@@ -1728,17 +1730,18 @@ export default function Settings() {
                       className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1">인스타그램 URL (Instagram Link)</label>
-                    <input
-                      type="text"
-                      name="instagramUrl"
-                      value={formData.instagramUrl || ''}
-                      onChange={handleChange}
-                      placeholder="https://instagram.com/puffstudio"
-                      className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
-                    />
-                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-stone-700 mb-1">인스타그램 URL (Instagram Link)</label>
+                  <input
+                    type="text"
+                    name="instagramUrl"
+                    value={formData.instagramUrl || ''}
+                    onChange={handleChange}
+                    placeholder="https://instagram.com/puffstudio"
+                    className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500"
+                  />
                 </div>
 
                 <div>
@@ -1949,16 +1952,49 @@ export default function Settings() {
                   ))}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-stone-700 mb-2">시간 연장 안내 문구 — Enter로 줄바꿈 가능</label>
-                  <textarea
-                    name="contactExtensionText"
-                    value={formData.contactExtensionText || ''}
-                    onChange={handleChange}
-                    placeholder="예: 촬영 연장은 시간당 150,000원입니다."
-                    rows={2}
-                    className="w-full border border-stone-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-burgundy-500/20 focus:border-burgundy-500 transition-colors text-sm resize-y"
-                  />
+              </div>
+
+              {/* 정책 안내 그룹 편집기 (보정&납품 / 비용관련 / 예약&결제) */}
+              <div className="pt-6 border-t border-stone-200 space-y-4">
+                <h4 className="text-base font-semibold text-stone-800 border-b border-stone-200 pb-2 flex items-center justify-between">
+                  <span>📋 정책 안내 (보정&납품 / 비용관련 / 예약&결제)</span>
+                  <span className="text-xs font-normal text-stone-500">문의하기 페이지 상담 신청 좌측에 반영됩니다.</span>
+                </h4>
+                <div className="space-y-6">
+                  {(formData.contactPolicyGroups && formData.contactPolicyGroups.length > 0 ? formData.contactPolicyGroups : DEFAULT_POLICY_GROUPS).map((group, gIdx) => (
+                    <div key={group.id} className="border border-stone-200 rounded-xl p-4 space-y-3 bg-stone-50">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">그룹 제목</label>
+                        <input
+                          type="text"
+                          value={group.title}
+                          onChange={(e) => {
+                            const base = formData.contactPolicyGroups && formData.contactPolicyGroups.length > 0 ? formData.contactPolicyGroups : DEFAULT_POLICY_GROUPS;
+                            const next = [...base];
+                            next[gIdx] = { ...next[gIdx], title: e.target.value };
+                            setFormData({ ...formData, contactPolicyGroups: next });
+                          }}
+                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-sm font-semibold bg-white text-stone-800"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-stone-600 mb-1">
+                          항목 목록 (줄바꿈으로 구분)
+                        </label>
+                        <textarea
+                          value={(group.items || []).join('\n')}
+                          onChange={(e) => {
+                            const base = formData.contactPolicyGroups && formData.contactPolicyGroups.length > 0 ? formData.contactPolicyGroups : DEFAULT_POLICY_GROUPS;
+                            const next = [...base];
+                            next[gIdx] = { ...next[gIdx], items: e.target.value.split('\n') };
+                            setFormData({ ...formData, contactPolicyGroups: next });
+                          }}
+                          rows={5}
+                          className="w-full border border-stone-300 rounded-lg px-3 py-2 text-xs font-medium bg-white text-stone-800 resize-y"
+                        />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
