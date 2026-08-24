@@ -26,12 +26,16 @@
     <meta name="twitter:description" content="puff studio - 상업 포토그래피 및 미디어 영상 제작 스튜디오" />
     <meta name="twitter:image" content="https://www.puff-studio.com/camera_white.jpg" />
 
-    <!-- 폰트 preconnect + 미리 로드 (인스타그램 인앱 브라우저 등에서 초기 렌더링 지연 방지) -->
+    <!-- 폰트 preconnect + 비동기 로드 (렌더링을 막지 않으면서 폰트를 미리 가져옴) -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" />
+    <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>
