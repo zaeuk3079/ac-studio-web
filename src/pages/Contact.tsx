@@ -55,9 +55,11 @@ const DEFAULT_PACKAGES: ContactPackage[] = [
     tagline: '보정 포함 단가입니다.',
     description: '패키지 없이 컷 단위로만 촬영이 필요할 때 이용해주세요.',
     features: [
-      '일반 누끼 — 40,000원',
-      '반사체 누끼 (거울·은박·유광 뚜껑 등) — 60,000원',
-      '제형·디테일컷 — 50,000원',
+      '일반 누끼컷 — 30,000원 (보정포함)',
+      '(단상자,무광제품 등)',
+      '반사체 누끼컷 — 50,000원 (보정포함)',
+      '(거울,은박,유광 뚜껑 등)',
+      '제형·디테일컷 — 50,000원 (보정포함)',
     ],
     highlight: false,
     featuresFirst: true,
@@ -220,13 +222,22 @@ export default function Contact() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
             {(settings.contactPackages && settings.contactPackages.length > 0 ? settings.contactPackages : DEFAULT_PACKAGES).map((pkg) => {
               const featuresList = (
-                <ul className="space-y-2 flex-1">
+                <ul className="flex-1">
                   {pkg.features.map((feat, idx) => {
+                    const trimmed = feat.trim();
+                    const isNote = trimmed.startsWith('(') && trimmed.endsWith(')');
                     const [label, price] = feat.split(' — ');
                     return (
-                      <li key={idx} className="flex items-start gap-1.5 text-xs text-stone-300">
-                        <span className="text-lime-300 mt-0.5 shrink-0">✓</span>
-                        {price ? (
+                      <li
+                        key={idx}
+                        className={`flex items-start gap-1.5 text-xs ${
+                          isNote ? 'text-stone-500 mt-0.5' : `text-stone-300 ${idx > 0 ? 'mt-2' : ''}`
+                        }`}
+                      >
+                        {!isNote && <span className="text-lime-300 mt-0.5 shrink-0 w-3.5 text-center">✓</span>}
+                        {isNote ? (
+                          <span className="leading-relaxed whitespace-pre-line pl-5">{feat}</span>
+                        ) : price ? (
                           <span className="leading-relaxed flex-1 flex items-baseline justify-between gap-2">
                             <span className="whitespace-pre-line">{label}</span>
                             <span className="text-lime-300 font-semibold whitespace-nowrap">{price}</span>
